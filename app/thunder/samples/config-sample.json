@@ -1,0 +1,16 @@
+{
+    "name"      : "Sample Plugin",
+    "version"   : "1.0.0",
+    "id"        : "sample-plugin-2025",
+    "author"    : "Sample User",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 1,
+    "routes"    : {
+                    "on":["all"],
+                    "off":[]
+                  },
+    "dependencies": {
+                    
+                  }
+}
