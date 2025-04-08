@@ -28,13 +28,13 @@ if((empty($_SERVER['SERVER_NAME']) && strpos(PHP_SAPI, 'cgi') !== 0) || (!empty(
 }else
 {
 	/** The name of your database */
-    define( 'DB_NAME', 'ALS_Admin_thunderphp_db');
+    define( 'DB_NAME', 'thunderphp');
 
     /** Database username */
-    define( 'DB_USER', 'ALS_Admin_tp');
+    define( 'DB_USER', 'mysql');
 
     /** Database password */
-    define( 'DB_PASSWORD', '1:Kt=@u;r?y&w}r+');
+    define( 'DB_PASSWORD', '');
 
     /** Database hostname */
     define( 'DB_HOST', 'localhost');
