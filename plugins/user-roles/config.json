@@ -1,0 +1,17 @@
+{
+    "name"      : "Users Roles",
+    "version"   : "1.0.0",
+    "id"        : "users-roles",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 4,
+    "routes"    : {
+                    "on":["admin"],
+                    "off":[]
+                  },
+    "dependencies": {
+                    "basic-auth":"1.0.0",
+                    "users-manager":"1.0.0"
+                  }
+}

@@ -1,0 +1,15 @@
+{
+    "name"      : "Basic Admin",
+    "id"        : "basic-admin",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 2,
+    "routes"    : {
+                    "on":["admin"],
+                    "off":["login","signup"]
+                  },
+    "dependencies": {
+                    
+                  }
+}

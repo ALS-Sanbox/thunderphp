@@ -1,0 +1,15 @@
+{
+    "name"      : "Page Not Found",
+    "id"        : "404",
+    "author"    : "Afro Bear",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 1,
+    "routes"    : {
+                    "on":["404"],
+                    "off":[]
+                  },
+    "dependencies": {
+                    
+                  }
+}
