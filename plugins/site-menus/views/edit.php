@@ -74,7 +74,15 @@
     </div>
 </form>
     </div>
-
+<style>
+    .preview-img {
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+    }
+    .preview-img.loaded {
+        opacity: 1;
+    }
+</style>
     <?php else: ?>
             <div class="alert alert-danger text-center">That record was not found!</div>
             <a href="<?= ROOT ?>/<?= $admin_route ?>/<?= $plugin_route ?>">
