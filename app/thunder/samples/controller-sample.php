@@ -3,15 +3,27 @@
 namespace App\Controllers;
 
 use App\Models\SampleModel;
+use App\Configs\TwigConfig;
 
 class SampleController
 {
+    private $twig;
+
+    public function __construct()
+    {
+        // Initialize Twig
+        $this->twig = TwigConfig::initialize();
+    }
+    
     // Render the index view
     public function index()
     {
         $model = new SampleModel();
         $data = $model->getAll(); // Fetch all records
         $this->render('index', ['data' => $data]);
+
+        // Render the Twig template
+        echo $this->twig->render('index.twig', $data);
     }
 
     // Handle creating new resources
