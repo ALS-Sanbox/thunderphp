@@ -1,51 +1,51 @@
 <?php
-namespace {NAMESPACE};
 
-defined('ROOT') or die("Direct script access denied");
+namespace App\Models;
 
-/**
- * {CLASS_NAME} model
- */
-class {CLASS_NAME} extends Model {
-    protected $table = '{TABLE_NAME}s';
+class SampleModel extends Model
+{
+    protected $table = 'samples';
     public $primary_key = 'id';
 
     // Allowed columns for insertion
     protected $allowedColumns = [
+        'name',
         'email',
         'date_created',
     ];
 
     // Allowed columns for updates
     protected $allowedUpdateColumns = [
+        'name',
         'email',
         'date_updated',
-        'date_deleted',
-        'deleted',
     ];
 
-    /**
-     * Validate insert data
-     */
+    // Validate insert data
     public function validate_insert(array $data): bool
     {
+        if (empty($data['name'])) {
+            $this->errors['name'] = "Name is required.";
+        } elseif (strlen($data['name']) < 3) {
+            $this->errors['name'] = "Name must be at least 3 characters.";
+        }
+
         if (empty($data['email'])) {
             $this->errors['email'] = "Email is required.";
         } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Invalid email format.";
         }
-    
-        if (empty($data['name']) || strlen($data['name']) < 3) {
-            $this->errors['name'] = "Name must be at least 3 characters long.";
-        }
-    
+
         return empty($this->errors);
     }
 
-    /**
-     * Validate update data
-     */
-    public function validate_update(array $data): bool {
+    // Validate update data
+    public function validate_update(array $data): bool
+    {
+        if (isset($data['name']) && strlen($data['name']) < 3) {
+            $this->errors['name'] = "Name must be at least 3 characters.";
+        }
+
         if (isset($data['email']) && !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Invalid email format.";
         }
@@ -53,30 +53,7 @@ class {CLASS_NAME} extends Model {
         return empty($this->errors);
     }
 
-    /**
-     * Insert user data
-     */
-    public function insert(array $data): bool {
-        if (!$this->validate_insert($data)) {
-            return false;
-        }
-
-        $data['date_created'] = date('Y-m-d H:i:s'); // Auto add creation date
-        return $this->create($data);
-    }
-
-    /**
-     * Update user data
-     */
-    public function update_user(int $id, array $data): bool {
-        if (!$this->validate_update($data)) {
-            return false;
-        }
-
-        $data['date_updated'] = date('Y-m-d H:i:s'); // Auto update modified date
-        return $this->update($id, $data);
-    }
-
+    // Batch insert records
     public function batchInsert(array $records): bool
     {
         foreach ($records as $record) {
@@ -84,6 +61,23 @@ class {CLASS_NAME} extends Model {
                 return false;
             }
         }
+
         return $this->createMultiple($records);
+    }
+
+    // Batch update records
+    public function batchUpdate(array $records): bool
+    {
+        foreach ($records as $record) {
+            if (!$this->validate_update($record)) {
+                return false;
+            }
+        }
+
+        foreach ($records as $record) {
+            $this->update($record['id'], $record);
+        }
+
+        return true;
     }
 }
