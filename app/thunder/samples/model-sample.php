@@ -27,13 +27,18 @@ class {CLASS_NAME} extends Model {
     /**
      * Validate insert data
      */
-    public function validate_insert(array $data): bool {
+    public function validate_insert(array $data): bool
+    {
         if (empty($data['email'])) {
             $this->errors['email'] = "Email is required.";
         } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Invalid email format.";
         }
-
+    
+        if (empty($data['name']) || strlen($data['name']) < 3) {
+            $this->errors['name'] = "Name must be at least 3 characters long.";
+        }
+    
         return empty($this->errors);
     }
 
@@ -70,5 +75,15 @@ class {CLASS_NAME} extends Model {
 
         $data['date_updated'] = date('Y-m-d H:i:s'); // Auto update modified date
         return $this->update($id, $data);
+    }
+
+    public function batchInsert(array $records): bool
+    {
+        foreach ($records as $record) {
+            if (!$this->validate_insert($record)) {
+                return false;
+            }
+        }
+        return $this->createMultiple($records);
     }
 }
