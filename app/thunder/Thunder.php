@@ -1,15 +1,19 @@
 <?php
 
 namespace Thunder;
+
 use Exception;
 
 class Thunder
 {
+    const VERSION = '1.0.0';
     const PLUGINS_DIR = 'plugins';
+    const MODELS_DIR = 'models';
+    const MIGRATIONS_DIR = 'migrations';
+    const SAMPLES_DIR = 'app/thunder/samples';
 
-    public function title(){
-        $VERSION = '1.0.0';
-
+    public function title()
+    {
         echo "
          ___________.__                      .___             __________  ___ _____________ 
          \\__    ___/|  |__  __ __  ____    __| _/___________  \\______   \\/   |   \\______   \\
@@ -18,11 +22,12 @@ class Thunder
            |____|   |___|  /____/|___|  /\\____ |\\___  >__|     |____|    \\___|_  /|____|    
                          \\/           \\/      \\/    \\/                         \\/  
 
-                               ThunderPHP v$VERSION Command Line Tool";
+                               ThunderPHP v" . self::VERSION . " Command Line Tool";
     }
 
-    public function help(){
-        $this-> title();
+    public function help()
+    {
+        $this->title();
 
         echo "
 
@@ -41,9 +46,10 @@ class Thunder
         ";
     }
 
-    public function makePlugin($args){
+    public function makePlugin($args)
+    {
         $name = $args[0] ?? 'UnnamedPlugin_' . time();
-        $folder = 'plugins' . DIRECTORY_SEPARATOR . $name;
+        $folder = $this->getPluginPath($name);
 
         if (file_exists($folder)) {
             throw new Exception("The plugin folder '$name' already exists.");
@@ -52,7 +58,7 @@ class Thunder
         echo "Generating plugin: $name\n";
 
         $this->createFolder($folder);
-        
+
         $folders = [
             'assets/css', 'assets/js', 'assets/fonts',
             'assets/images', 'controllers', 'views',
@@ -65,8 +71,6 @@ class Thunder
 
         echo "Plugin structure created successfully.\n\n";
 
-        $sampleFilesPath = FCPATH . "app" . DIRECTORY_SEPARATOR . "thunder" . DIRECTORY_SEPARATOR . "samples" . DIRECTORY_SEPARATOR;
-
         $filesToCopy = [
             'plugin-sample.php'     => 'plugin.php',
             'config-sample.json'    => 'config.json',
@@ -77,349 +81,174 @@ class Thunder
         ];
 
         foreach ($filesToCopy as $source => $destination) {
-            $sourcePath = $sampleFilesPath . $source;
+            $sourcePath = $this->getSamplePath($source);
             $destinationPath = $folder . DIRECTORY_SEPARATOR . $destination;
-
-            if (!file_exists($sourcePath)) {
-                echo "Base file not found: $sourcePath\n";
-                continue;
-            }
-
-            if (!copy($sourcePath, $destinationPath)) {
-                throw new Exception("Failed to copy file: $sourcePath to $destinationPath");
-            }
-
-            echo "- Copied $source to $destinationPath\n";
+            $this->copySampleFile($sourcePath, $destinationPath);
         }
     }
 
-
-    public function makeMigration($args){
-        $pluginName = $args[0] ?? null;
-        $tableName = $args[1] ?? null;
+    public function makeMigration($args)
+    {
+        [$pluginName, $tableName] = $args + [null, null];
 
         if (!$pluginName || !$tableName) {
-            die("Usage: php thunder make:migrate <plugin_name> <table_name>\n");
+            throw new Exception("Usage: php thunder make:migration <plugin_name> <table_name>");
         }
 
         if (!preg_match('/^[a-zA-Z0-9_]+$/', $tableName)) {
-            die("Error: Table name must contain only letters and numbers.\n");
+            throw new Exception("Error: Table name must contain only letters and numbers.");
         }
-        
+
         $className = ucfirst(strtolower($tableName));
+        $timestamp = date('Ymd_His');
+        $fileName = $timestamp . '_' . $className . '.php';
 
-        $formattedTableName = strtolower($tableName);
-
-        $timestamp = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
-
-        $pluginMigrationsFolder = 'plugins' . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'migrations';
-        $sampleMigrationFile = FCPATH . "app" . DIRECTORY_SEPARATOR . "thunder" . DIRECTORY_SEPARATOR . "samples" . DIRECTORY_SEPARATOR . "migration-sample.php";
-        $newMigrationFile = $pluginMigrationsFolder . DIRECTORY_SEPARATOR . $timestamp . '_' . $className . '.php';
-
-        $this->createFolder($pluginMigrationsFolder);
-
-        if (!file_exists($sampleMigrationFile)) {
-            die("Sample migration file not found: $sampleMigrationFile\n");
-        }
-
-        $migrationContent = file_get_contents($sampleMigrationFile);
-
-        $migrationContent = str_replace('{CLASS_NAME}', $className, $migrationContent);
-        $migrationContent = str_replace('{TABLE_NAME}', "'$formattedTableName'", $migrationContent);
-
-        file_put_contents($newMigrationFile, $migrationContent);
-
-        echo "\nMigration file created successfully: $newMigrationFile\n";
+        $this->generateFromTemplate(
+            $pluginName,
+            $tableName,
+            'migration-sample.php',
+            $this->getPluginPath($pluginName, self::MIGRATIONS_DIR),
+            [
+                '{CLASS_NAME}' => $className,
+                '{TABLE_NAME}' => "'" . strtolower($tableName) . "'"
+            ],
+            $fileName
+        );
     }
 
-    public function makeModel($args){
-        $pluginName = $args[0] ?? null;
-        $tableName = $args[1] ?? null;
+    public function makeModel($args)
+    {
+        [$pluginName, $tableName] = $args + [null, null];
 
         if (!$pluginName || !$tableName) {
-            die("\nUsage: php thunder make:model <plugin_name> <table_name>\n");
+            throw new Exception("Usage: php thunder make:model <plugin_name> <table_name>");
         }
 
         if (!preg_match('/^[a-zA-Z0-9_]+$/', $tableName)) {
-            die("\nError: Table name must contain only letters and numbers.\n");
+            throw new Exception("Error: Table name must contain only letters and numbers.");
         }
-        
+
         $className = ucfirst(strtolower($tableName));
+        $namespace = str_replace(" ", "", ucwords(str_replace("-", " ", $pluginName)));
 
-        $formattedTableName = strtolower($tableName);
-
-        $pluginmodelsFolder = 'plugins' . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'models';
-        $samplemodelFile = FCPATH . "app" . DIRECTORY_SEPARATOR . "thunder" . DIRECTORY_SEPARATOR . "samples" . DIRECTORY_SEPARATOR . "model-sample.php";
-        $newmodelFile = $pluginmodelsFolder . DIRECTORY_SEPARATOR . $className . '.php';
-
-        $this->createFolder($pluginmodelsFolder);
-
-        if (!file_exists($samplemodelFile)) {
-            die("\nSample model file not found: $samplemodelFile\n");
-        }
-
-        $modelContent = file_get_contents($samplemodelFile);
-
-        $modelContent = str_replace('{CLASS_NAME}', $className, $modelContent);
-        $modelContent = str_replace('{TABLE_NAME}', "'$formattedTableName'", $modelContent);
-
-        $namespace = str_replace("-"," ", $pluginName);
-        $namespace = ucwords($namespace);
-        $namespace = str_replace("","", $pluginName);
-        $modelContent = str_replace('{NAMESPACE}', $namespace, $modelContent);
-
-        file_put_contents($newmodelFile, $modelContent);
-
-        echo "model file created successfully: $newmodelFile\n";
+        $this->generateFromTemplate(
+            $pluginName,
+            $tableName,
+            'model-sample.php',
+            $this->getPluginPath($pluginName, self::MODELS_DIR),
+            [
+                '{CLASS_NAME}' => $className,
+                '{TABLE_NAME}' => "'" . strtolower($tableName) . "'",
+                '{NAMESPACE}'  => $namespace
+            ]
+        );
     }
 
-    public function deletePlugin($args){
+    public function deletePlugin($args)
+    {
         $name = $args[0] ?? null;
-    
-        if (!$name) {
-            die("Please specify the name of the plugin to delete.\n");
-        }
-    
-        $folder = 'plugins' . DIRECTORY_SEPARATOR . $name;
-    
-        if (!file_exists($folder)) {
-            die("The plugin '$name' does not exist.\n");
-        }
-    
-        echo "Deleting plugin: $name\n";
+        if (!$name) throw new Exception("Please specify the name of the plugin to delete.");
 
+        $folder = $this->getPluginPath($name);
+
+        if (!file_exists($folder)) {
+            throw new Exception("The plugin '$name' does not exist.");
+        }
+
+        echo "Deleting plugin: $name\n";
         $this->deleteFolder($folder);
-    
         echo "Plugin '$name' deleted successfully.\n";
     }
-    
-    public function deleteMigration($args){
+
+    public function deleteMigration($args)
+    {
         $name = $args[0] ?? null;
-    
-        if (!$name) {
-            die("Please specify the name of the migration to delete.\n");
-        }
-    
-        $folder = 'migrations';
-        $file = $folder . DIRECTORY_SEPARATOR . $name . '.php';
-    
-        if (!file_exists($file)) {
-            die("The migration '$name' does not exist.\n");
-        }
-    
-        echo "Deleting migration: $name\n";
+        if (!$name) throw new Exception("Please specify the name of the migration to delete.");
+
+        $file = self::MIGRATIONS_DIR . DIRECTORY_SEPARATOR . $name . '.php';
+        if (!file_exists($file)) throw new Exception("The migration '$name' does not exist.");
 
         unlink($file);
-        echo "- Deleted migration file: $file\n";
-    
-        echo "Migration '$name' deleted successfully.\n";
+        echo "Deleted migration: $file\n";
     }
-    
-    public function deleteModel($args){
+
+    public function deleteModel($args)
+    {
         $name = $args[0] ?? null;
-    
-        if (!$name) {
-            die("Please specify the name of the model to delete.\n");
-        }
-    
-        $folder = 'models';
-        $file = $folder . DIRECTORY_SEPARATOR . $name . '.php';
-    
-        if (!file_exists($file)) {
-            die("The model '$name' does not exist.\n");
-        }
-    
-        echo "Deleting model: $name\n";
+        if (!$name) throw new Exception("Please specify the name of the model to delete.");
+
+        $file = self::MODELS_DIR . DIRECTORY_SEPARATOR . $name . '.php';
+        if (!file_exists($file)) throw new Exception("The model '$name' does not exist.");
 
         unlink($file);
-        echo "- Deleted model file: $file\n";
-    
-        echo "Model '$name' deleted successfully.\n";
+        echo "Deleted model: $file\n";
     }
-    
-    public function doMigrate(array $args)
+
+    // --- Shared helpers below ---
+
+    private function getSamplePath($filename)
     {
-        $pluginName = $args[0] ?? null;
-        $migrationFile = $args[1] ?? null;
-
-        $this->validatePluginAndMigration($pluginName, $migrationFile);
-
-        $pluginMigrationsFolder = self::PLUGINS_DIR . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'migrations';
-
-        if ($migrationFile) {
-            $this->runSingleMigration($pluginMigrationsFolder, $migrationFile);
-        } else {
-            $this->runAllMigrations($pluginMigrationsFolder);
-        }
+        return FCPATH . DIRECTORY_SEPARATOR . self::SAMPLES_DIR . DIRECTORY_SEPARATOR . $filename;
     }
 
-    private function validatePluginAndMigration($pluginName, $migrationFile = null)
+    private function getPluginPath($pluginName, $subPath = '')
     {
-        if (!$pluginName) {
-            die("Usage: php thunder do:migrate <plugin_name> [migration_file]\n");
-        }
-
-        $pluginMigrationsFolder = self::PLUGINS_DIR . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'migrations';
-
-        if (!is_dir($pluginMigrationsFolder)) {
-            die("Error: Migration folder not found for plugin '$pluginName'.\n");
-        }
-
-        if ($migrationFile && !file_exists($pluginMigrationsFolder . DIRECTORY_SEPARATOR . $migrationFile)) {
-            die("Error: Migration file '$migrationFile' not found.\n");
-        }
+        $base = self::PLUGINS_DIR . DIRECTORY_SEPARATOR . $pluginName;
+        return $subPath ? $base . DIRECTORY_SEPARATOR . $subPath : $base;
     }
 
-    private function runSingleMigration($pluginMigrationsFolder, $migrationFile)
+    private function copySampleFile($source, $destination)
     {
-        echo "Running migration: $migrationFile\n";
-        require_once $pluginMigrationsFolder . DIRECTORY_SEPARATOR . $migrationFile;
-        $this->executeMigration($migrationFile);
+        if (!file_exists($source)) {
+            echo "Base file not found: $source\n";
+            return;
+        }
+
+        if (!copy($source, $destination)) {
+            throw new Exception("Failed to copy file: $source to $destination");
+        }
+
+        echo "- Copied " . basename($source) . " to $destination\n";
     }
 
-    private function runAllMigrations($pluginMigrationsFolder)
+    private function generateFromTemplate($pluginName, $tableName, $templateName, $destinationDir, $replacements, $customFileName = null)
     {
-        $migrations = glob($pluginMigrationsFolder . DIRECTORY_SEPARATOR . '*.php');
+        $this->createFolder($destinationDir);
+        $templatePath = $this->getSamplePath($templateName);
 
-        if (empty($migrations)) {
-            die("No migration files found in '$pluginMigrationsFolder'.\n");
+        if (!file_exists($templatePath)) {
+            throw new Exception("Sample file not found: $templatePath");
         }
 
-        sort($migrations);
+        $content = file_get_contents($templatePath);
 
-        echo "Running all migrations:\n";
-        foreach ($migrations as $migration) {
-            echo "Running migration: " . basename($migration) . "\n";
-            require_once $migration;
-            $this->executeMigration(basename($migration));
+        foreach ($replacements as $key => $value) {
+            $content = str_replace($key, $value, $content);
         }
 
-        echo "All migrations completed successfully.\n";
+        $fileName = $customFileName ?? ucfirst(strtolower($tableName)) . '.php';
+        $fullPath = $destinationDir . DIRECTORY_SEPARATOR . $fileName;
+        file_put_contents($fullPath, $content);
+
+        echo ucfirst(pathinfo($templateName, PATHINFO_FILENAME)) . " created successfully: $fullPath\n";
     }
-
-    public function doRefresh($args = [])
-    {
-        $pluginName = $args[0] ?? null;
-        $migrationFile = $args[1] ?? null;
-        
-        echo "\nRolling back migrations...\n";
-        $this->doRollback([$pluginName, $migrationFile]);
-        
-        echo "\nMigrations rolled back. Running fresh migrations...\n";
-        $this->doMigrate([$pluginName, $migrationFile]);
-        
-        echo "\nDatabase refresh complete.\n";
-    }
-
-    public function doRollback(array $args)
-    {
-        $pluginName = $args[0] ?? null;
-        $migrationFile = $args[1] ?? null;
-
-        $this->validatePluginAndMigration($pluginName, $migrationFile);
-
-        $pluginMigrationsFolder = self::PLUGINS_DIR . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'migrations';
-
-        if ($migrationFile) {
-            $this->runSingleRollback($pluginMigrationsFolder, $migrationFile);
-        } else {
-            $this->runAllRollbacks($pluginMigrationsFolder);
-        }
-    }
-
-    private function runSingleRollback($pluginMigrationsFolder, $migrationFile)
-    {
-        echo "\nRolling back migration: $migrationFile\n";
-        require_once $pluginMigrationsFolder . DIRECTORY_SEPARATOR . $migrationFile;
-        $this->executeRollback($migrationFile);
-    }
-
-    private function runAllRollbacks($pluginMigrationsFolder)
-    {
-        $migrations = glob($pluginMigrationsFolder . DIRECTORY_SEPARATOR . '*.php');
-
-        if (empty($migrations)) {
-            die("\nNo migration files found in '$pluginMigrationsFolder'.\n");
-        }
-
-        sort($migrations);
-
-        echo "\nRolling back all migrations:\n";
-        foreach ($migrations as $migration) {
-            echo "\nRolling back migration: " . basename($migration) . "\n";
-            require_once $migration;
-            $this->executeRollback(basename($migration));
-        }
-
-        echo "\nAll migrations rolled back successfully.\n";
-    }
-
-    private function executeMigration($migrationFile)
-    {
-        // Strip off the timestamp (e.g., '20250130_163917_')
-        $className = pathinfo($migrationFile, PATHINFO_FILENAME);
-        $className = preg_replace('/^\d{8}_\d{6}_/', '', $className); // Remove timestamp prefix
-
-        if (!class_exists($className)) {
-            die("\nError: Class '$className' not found in migration file '$migrationFile'.\n");
-        }
-
-        $migrationInstance = new $className();
-
-        if (!method_exists($migrationInstance, 'up')) {
-            die("\nError: Migration class '$className' does not have an 'up' method.\n");
-        }
-
-        $migrationInstance->up();
-        echo "\nMigration '$className' applied successfully.\n";
-    }
-
-
-    private function executeRollback($migrationFile)
-    {
-        // Strip off the timestamp (e.g., '20250130_163917_')
-        $className = pathinfo($migrationFile, PATHINFO_FILENAME);
-        $className = preg_replace('/^\d{8}_\d{6}_/', '', $className); // Remove timestamp prefix
-
-        if (!class_exists($className)) {
-            die("Error: Class '$className' not found in migration file '$migrationFile'.\n");
-        }
-
-        $migrationInstance = new $className();
-
-        if (!method_exists($migrationInstance, 'down')) {
-            die("Error: Migration class '$className' does not have a 'down' method.\n");
-        }
-
-        $migrationInstance->down();
-        echo "Migration '$className' rolled back successfully.\n";
-    }
-
 
     private function createFolder($path)
     {
-        if (!mkdir($path, 0777, true) && !is_dir($path)) {
-            echo("Directory already exists: $path");
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
         }
     }
 
     private function deleteFolder($folder)
     {
-        $items = array_diff(scandir($folder), ['.', '..']);
-    
+        $items = array_diff(scandir($folder), ['.', '.']);
         foreach ($items as $item) {
-            $itemPath = $folder . DIRECTORY_SEPARATOR . $item;
-    
-            if (is_dir($itemPath)) {
-                $this->deleteFolder($itemPath);
-            } else {
-                unlink($itemPath);
-                echo "- Deleted file: $itemPath\n";
-            }
+            $path = $folder . DIRECTORY_SEPARATOR . $item;
+            is_dir($path) ? $this->deleteFolder($path) : unlink($path);
         }
-    
+
         rmdir($folder);
         echo "- Deleted folder: $folder\n";
     }
-
 }
