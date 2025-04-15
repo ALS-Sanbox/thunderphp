@@ -1,0 +1,16 @@
+{
+    "name"      : "Page Manager",
+    "version"   : "1.0.0",
+    "id"        : "page-manager",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 1,
+    "routes"    : {
+                    "on":["all"],
+                    "off":["login","signup","home","logout"]
+                  },
+    "dependencies": {
+
+                  }
+}
