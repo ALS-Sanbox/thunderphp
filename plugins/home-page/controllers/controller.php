@@ -1,2 +1,0 @@
-<?php
-// controllers/controller.php
