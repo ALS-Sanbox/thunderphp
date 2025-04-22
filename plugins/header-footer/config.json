@@ -1,0 +1,16 @@
+{
+    "name"      : "Header Footer",
+    "version"   : "1.0.0",
+    "id"        : "header-footer",
+    "author"    : "Afro Bear",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 3,
+    "routes"    : {
+                    "on":["all"],
+                    "off":["admin"]
+                  },
+    "dependencies": {
+                    
+                  }
+}

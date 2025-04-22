@@ -1,0 +1,16 @@
+{
+    "name"      : "Basic Post Plugin",
+    "version"   : "1.0.0",
+    "id"        : "basic-post-plugin-2025",
+    "author"    : "H Ford",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 1,
+    "routes"    : {
+                    "on":["all"],
+                    "off":[]
+                  },
+    "dependencies": {
+                    
+                  }
+}

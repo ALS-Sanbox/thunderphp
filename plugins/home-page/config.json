@@ -1,0 +1,16 @@
+{
+    "name"      : "Home Page",
+    "version"   : "1.0.0",
+    "id"        : "home-page",
+    "author"    : "Afro Bear",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 3,
+    "routes"    : {
+                    "on":["home"],
+                    "off":[]
+                  },
+    "dependencies": {
+                    
+                  }
+}
