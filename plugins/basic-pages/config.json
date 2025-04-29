@@ -1,14 +1,14 @@
 {
-    "name"      : "Basic Post Plugin",
+    "name"      : "Basic Pages Plugin",
     "version"   : "1.0.0",
-    "id"        : "basic-post-plugin-2025",
-    "author"    : "H Ford",
+    "id"        : "basic-pages",
+    "author"    : "Afro Lion",
     "thumbnail" : "",
     "active"    : true,
     "index"     : 1,
     "routes"    : {
                     "on":["all"],
-                    "off":[]
+                    "off":["login","signup","home","logout"]
                   },
     "dependencies": {
                     

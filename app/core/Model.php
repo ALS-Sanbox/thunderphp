@@ -96,7 +96,15 @@ class Model extends Database {
         return !empty($rows) ? $rows[0] : false;
     }
 
-    public function create(array $data) {
+    public function create(array $data): bool
+    {
+        dd([
+            'raw_data' => $data,
+            'table' => $this->table,
+            'allowedColumns' => $this->allowedColumns,
+            'filtered_data' => array_intersect_key($data, array_flip($this->allowedColumns)),
+        ]);
+        
         $data = array_intersect_key($data, array_flip($this->allowedColumns));
         if (empty($data)) return false;
 
@@ -105,8 +113,13 @@ class Model extends Database {
         $placeholders = implode(", ", array_map(fn($key) => ":$key", $keys));
 
         $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
-        $this->query($sql, $data);
-        return $this->lastInsertId();
+        $success = $this->query($sql, $data);
+
+        if ($success) {
+            $this->insert_id = $this->lastInsertId();
+        }
+
+        return (bool) $success;
     }
 
     public function update($id, array $data) {
@@ -136,26 +149,31 @@ class Model extends Database {
         return null;
     }
 
-    public function insert(array $data)
-	{
-		if(!empty($this->allowedColumns))
-		{
-			foreach ($data as $key => $value) {
-				if(!in_array($key, $this->allowedColumns))
-				{
-					unset($data[$key]);
-				}
-			}
-		}
+    public function makeSlug(string $string, string $separator = '-'): string
+    {
+        $slug = strtolower($string);
+        $slug = strip_tags($slug);
+        $slug = preg_replace('/[^a-z0-9]+/i', $separator, $slug);
+        $slug = preg_replace('/' . preg_quote($separator, '/') . '+/', $separator, $slug);
+        $slug = trim($slug, $separator);
 
-		if(!empty($data))
-		{
-			$keys = array_keys($data);
+        $originalSlug = $slug;
+        $i = 1;
+    
+        // Ensure uniqueness
+        while ($this->slugExists($slug)) {
+            $slug = $originalSlug . $separator . $i;
+            $i++;
+        }
+        
+        return $slug;
+    }
 
-			$query = "insert into $this->table (".implode(",", $keys).") values (:".implode(",:", $keys).")";
-			return $this->query($query,$data);
-		}
+    protected function slugExists(string $slug): bool
+    {
+        $sql = "SELECT COUNT(*) as count FROM {$this->table} WHERE slug = ?";
+        $result = $this->fetch($sql, [$slug]);
 
-		return false;
-	}
+        return is_object($result) && isset($result->count) && $result->count > 0;
+    }
 }

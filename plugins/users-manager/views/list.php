@@ -1,5 +1,13 @@
 <?php if(user_can('view_users')):?>
 <div class="table-responsive">
+    <!-- Search Form -->
+    <form class="input-group my-3 mx-auto" method="get" action="">
+        <input placeholder="Search" type="text" name="search" class="form-control" value="<?= esc($_GET['search'] ?? '') ?>">
+        <button class="input-group-text bg-primary text-white" id="basic-addon1">
+            Search
+        </button>
+    </form>
+
     <table class="table table-striped table-bordered">
         <tr class="text-center">
             <th>#</th>

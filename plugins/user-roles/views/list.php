@@ -1,29 +1,21 @@
 <?php if(user_can('view_users')): ?>
 
 <?php 
-if(!isset($_POST['role_id'])){
-    $_POST['role_id']= 1;
-}
+    if(!isset($_POST['role_id'])){
+        $_POST['role_id']= 1;
+    }
 
-$selectedRoleId = $_GET['role_id'] ?? $_POST['role_id'];
+    $selectedRoleId = $_GET['role_id'] ?? $_POST['role_id'];
 
-// Get role details
-$roleData = $user_roles->find($selectedRoleId);
-$roleName = $roleData->role ?? '';
-$roleActive = $roleData->disabled ?? 1;
-$permissions->limit = 10000;
-$permData = $permissions->where(['role_id' => $selectedRoleId, 'disabled' => 0]);
-$activePermissionsArray = array_column($permData, 'permission');
+    // Get role details
+    $roleData = $user_roles->find($selectedRoleId);
+    $roleName = $roleData->role ?? '';
+    $roleActive = $roleData->disabled ?? 1;
+    $permissions->limit = 10000;
+    $permData = $permissions->where(['role_id' => $selectedRoleId, 'disabled' => 0]);
+    $activePermissionsArray = array_column($permData, 'permission');
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>User Role Editor</title>
-</head>
-<body>
 
 <link rel="stylesheet" type="text/css" href="<?=plugin_http_path('assets/css/style.css')?>">
 
@@ -207,9 +199,6 @@ $activePermissionsArray = array_column($permData, 'permission');
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="<?= plugin_http_path('assets/js/plugin.js') ?>"></script>
-
-</body>
-</html>
 
 <?php else: ?>
 <div class="alert alert-danger">Access Denied</div>

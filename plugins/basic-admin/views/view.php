@@ -114,6 +114,9 @@
   <symbol id="menu" viewBox="0 0 16 16">
   <path d="M1.5 0A1.5 1.5 0 0 0 0 1.5v2A1.5 1.5 0 0 0 1.5 5h13A1.5 1.5 0 0 0 16 3.5v-2A1.5 1.5 0 0 0 14.5 0zm1 2h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m9.927.427A.25.25 0 0 1 12.604 2h.792a.25.25 0 0 1 .177.427l-.396.396a.25.25 0 0 1-.354 0zM0 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm1 3v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2zm14-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2zM2 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/>
   </symbol>
+  <symbol id="page" viewBox="0 0 16 16">
+  <path d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V9H2V2a2 2 0 0 1 2-2m5.5 1.5v2a1 1 0 0 0 1 1h2zM2 12h12v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zM.5 10a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1z"/>
+  </symbol>
 </svg>
 
 <header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
@@ -180,70 +183,7 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2"><?=esc($section_title)?></h1>
         </div>
-        <div class="container-fluid">
-	<div class="row text-center">
-		<div class="col-md-3">
-			<div class="card">
-				<h3 class="card-header">
-        <i class="bi bi-person-gear"></i>
-				</h3>
-				<div class="card-body">
-					<p class="card-text">
-						30
-					</p>
-				</div>
-				<div class="card-footer">
-					ADMIN
-				</div>
-			</div>
-		</div>
-		<div class="col-md-3">
-			<div class="card">
-				<h3 class="card-header">
-        <i class="bi bi-person-square"></i>
-				</h3>
-				<div class="card-body">
-					<p class="card-text">
-						2
-					</p>
-				</div>
-				<div class="card-footer">
-					USERS
-				</div>
-			</div>
-		</div>
-		<div class="col-md-3">
-			<div class="card">
-				<h3 class="card-header">
-        <i class="bi bi-file-earmark"></i>
-				</h3>
-				<div class="card-body">
-					<p class="card-text">
-						6
-					</p>
-				</div>
-				<div class="card-footer">
-					PAGES
-				</div>
-			</div>
-		</div>
-		<div class="col-md-3">
-			<div class="card">
-				<h3 class="card-header">
-        <i class="bi bi-postcard-heart"></i>
-				</h3>
-				<div class="card-body">
-					<p class="card-text">
-						20
-					</p>
-				</div>
-				<div class="card-footer">
-					POST
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+
         <?php if ($msg = message()): ?>
             <div class="alert text-center <?= ($msg['type'] === 'success') ? 'alert-success' : 'alert-danger' ?>">
                 <?= esc($msg['text']) ?>

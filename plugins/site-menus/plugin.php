@@ -85,11 +85,11 @@ add_action('controller', function(){
     $vars = get_value();
     $admin_route = $vars['admin_route'];
     $plugin_route = $vars['plugin_route'];
-    
+
     if(URL(1) == $vars['plugin_route'] && $req->posted()){
         $ses = new \Core\Session;
         $menus = new \siteMenus\Menu;
-        
+    
         $id = URL(3) ?? null;
 
         if($id){

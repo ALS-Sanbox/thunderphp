@@ -124,7 +124,6 @@ add_action('basic-admin_main_content', function(){
                 require plugin_path('views/view.php');
                 break;
             default:
-                $siteusers->limit = 30;
                 $limit = 30;
                 $pager = new \core\Pager($limit);
                 $offset = $pager->offset;

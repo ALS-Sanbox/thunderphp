@@ -1,7 +1,7 @@
 <?php if(user_can('view_menus')):?>
 <div class="table-responsive">
     <form class="input-group my-3 mx-auto">
-        <input placeholder="Search by title" type="text" class="form-control" value="">
+        <input placeholder="Search" type="text" class="form-control" value="">
         <button class="input-group-text bg-primary text-white" id="basic-addon1">
             Search
         </button>
