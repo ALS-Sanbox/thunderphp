@@ -31,8 +31,8 @@ add_filter('permissions', function($permissions){
 
     $permissions[] =  'view_pages';
     $permissions[] =  'add_pages';
-    $permissions[] =  'edit_pages';
-    $permissions[] =  'delete_pages';
+    $permissions[] =  'edit_page';
+    $permissions[] =  'delete_page';
 
     return $permissions;
 });
@@ -42,19 +42,22 @@ add_action('controller', function(){
     $req = new \Core\Request;
     $vars = get_value();
     $page = new \BasicPages\Pages;
+    $content = new \BasicPages\Content;
     $admin_route = $vars['admin_route'];
     $plugin_route = $vars['plugin_route'];
     $user_id = $ses->user('id');
-    
+      
     if(URL(1) == $plugin_route && $req->posted()){
-        $ses = new \Core\Session;
-
+        $id = URL(3) ?? null;
+        if($id){
+            $page::$query_id = 'get-users';
+            $row = $page->find(URL(3)) ?: '';
+        }
         switch (URL(2)) {
             case 'add':
                 require plugin_path('controllers/add_controller.php');
                 break;
             case 'edit':
-                dd('here');
                 require plugin_path('controllers/edit_controller.php');
                 break;
             case 'delete':
@@ -63,6 +66,18 @@ add_action('controller', function(){
             default:
                 break;
         }
+    }
+});
+
+/** Displays the view fiel */
+add_action('view', function(){
+    $vars = get_value();
+    $page = new \BasicPages\Pages;
+    
+    $row = $page->first(['slug'=>page()]);
+
+    if($row){
+        require plugin_path('views/frontend/view.php');
     }
 });
 
@@ -75,6 +90,13 @@ add_action('basic-admin_main_content', function(){
     $user_id = $ses->user('id');
 
     if (page() == $admin_route && URL(1) == $plugin_route) {
+
+        $id = URL(3) ?? null;
+        if($id){
+            $pages::$query_id = 'get-users';
+            $row = $pages->find(URL(3)) ?: '';
+        }
+
         switch (URL(2)) {
             case 'add':
                 $all_items = $pages->query("select * from pages");

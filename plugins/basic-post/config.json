@@ -1,0 +1,16 @@
+{
+    "name"      : "Basic Post Plugin",
+    "version"   : "1.0.0",
+    "id"        : "basic-post",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 1,
+    "routes"    : {
+                    "on":["all"],
+                    "off":["login","signup","logout"]
+                  },
+    "dependencies": {
+                    
+                  }
+}

@@ -388,3 +388,7 @@ function get_image(?string $path = '', string $type = 'post') {
         default  => ROOT . '/assets/images/no_image.jpg',
     };
 }
+
+function class_path($folder, $class_name):string {
+    return 'plugins/' . $folder . '/' . $class_name . '.php';
+}

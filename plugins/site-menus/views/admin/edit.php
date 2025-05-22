@@ -1,4 +1,4 @@
-<?php if(user_can('add_menu')):?>
+<?php if(user_can('edit_menu')):?>
 
 <script src="<?=plugin_http_path('assets/js/plugin.js')?>"></script>
 

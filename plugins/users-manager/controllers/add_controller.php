@@ -25,7 +25,7 @@ if(csrf_verify($req->post('_token')) && $files_ok && $user->validate_insert($pos
 
     $user->insert($postdata);
 
-    message("Record added successfully!", "success");
+    message("Page added successfully!", "success");
     redirect($admin_route . '/' . $plugin_route . '/view/' . $user->insert_id);
 }
 

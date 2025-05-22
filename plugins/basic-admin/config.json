@@ -1,6 +1,7 @@
 {
     "name"      : "Basic Admin",
     "id"        : "basic-admin",
+    "version"   : "1.0.0",
     "author"    : "Afro Lion",
     "thumbnail" : "",
     "active"    : true,

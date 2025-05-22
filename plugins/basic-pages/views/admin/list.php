@@ -36,7 +36,7 @@
                     <tr class="align-middle text-center">
                         <td><?= esc($row->id ?? 'N/A') ?></td>
                         <td class="text-start">
-                            <a href="<?= ROOT ?>/<?= $admin_route ?>/<?= $plugin_route ?>/view/<?= $row->id ?>">
+                            <a target="_blank" href="<?= ROOT ?>/<?= $row->slug ?>">
                                 <?= esc($row->title ?? 'N/A') ?>
                             </a>
                         </td>
@@ -47,7 +47,7 @@
                         <td><?= esc($row->date_created ?? '-') ?></td>
                         <td>
                             <?php if(user_can('view_page')): ?>
-                                <a href="<?= ROOT ?>/<?= $admin_route ?>/<?= $plugin_route ?>/view/<?= $row->id ?>">
+                                <a target="_blank" href="<?= ROOT ?>/<?= $row->slug ?>">
                                     <button class="btn btn-sm btn-primary">
                                     <i class="bi bi-eye-fill"></i> View
                                     </button>
@@ -61,11 +61,10 @@
                                 </a>
                             <?php endif; ?>
                             <?php if(user_can('delete_page')): ?>
-                                <a href="<?= ROOT ?>/<?= $admin_route ?>/<?= $plugin_route ?>/delete/<?= $row->id ?>" onclick="return confirm('Are you sure you want to delete this page?');">
-                                    <button class="btn btn-sm btn-danger">
-                                        <i class="bi bi-trash3-fill"></i> Delete
-                                    </button>
-                                </a>
+                                <a href="<?=ROOT?>/<?=$admin_route?>/<?=$plugin_route?>/delete/<?=$row->id?>">
+                                <button class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash3-fill"></i> Delete
+                                </button></a>
                             <?php endif; ?>
                         </td>
                     </tr>

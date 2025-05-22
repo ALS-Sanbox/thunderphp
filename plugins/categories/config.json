@@ -1,0 +1,16 @@
+{
+    "name"      : "Categories",
+    "version"   : "1.0.0",
+    "id"        : "categories",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 5,
+    "routes"    : {
+                    "on":["admin"],
+                    "off":[]
+                  },
+    "dependencies": {
+                    "basic-admin":"1.0.0"
+                  }
+}

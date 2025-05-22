@@ -2,6 +2,7 @@
 
 namespace Core;
 use GdImage;
+
 defined('ROOT') or die("Direct script access denied");
 
 class Image {
@@ -29,6 +30,15 @@ class Image {
             case IMAGETYPE_GIF:
                 $this->image = imagecreatefromgif($filename);
                 break;
+            case IMAGETYPE_WEBP:
+                if (!function_exists('imagecreatefromwebp')) {
+                    throw new \Exception("WebP not supported on this server.");
+                }
+                $this->image = imagecreatefromwebp($filename);
+                break;
+            case IMAGETYPE_TIFF_II:
+            case IMAGETYPE_TIFF_MM:
+                throw new \Exception("TIFF format is not supported by GD. Use Imagick instead.");
             default:
                 throw new \Exception("Unsupported image format.");
         }
@@ -41,8 +51,7 @@ class Image {
 
         $newImage = imagecreatetruecolor($width, $height);
 
-        // Preserve transparency for PNG and GIF images
-        if ($this->imageType === IMAGETYPE_PNG || $this->imageType === IMAGETYPE_GIF) {
+        if (in_array($this->imageType, [IMAGETYPE_PNG, IMAGETYPE_GIF, IMAGETYPE_WEBP])) {
             $transparentColor = imagecolorallocatealpha($newImage, 0, 0, 0, 127);
             imagefill($newImage, 0, 0, $transparentColor);
             imagealphablending($newImage, false);
@@ -68,11 +77,11 @@ class Image {
         if ($this->image === null) {
             throw new \Exception("Image not loaded.");
         }
-    
+
         if (empty($filename)) {
             $filename = $this->getDirectory() . '/' . basename($this->filename);
         }
-        
+
         switch ($this->imageType) {
             case IMAGETYPE_JPEG:
                 imagejpeg($this->image, $filename, $quality);
@@ -83,11 +92,17 @@ class Image {
             case IMAGETYPE_GIF:
                 imagegif($this->image, $filename);
                 break;
+            case IMAGETYPE_WEBP:
+                if (!function_exists('imagewebp')) {
+                    throw new \Exception("WebP not supported on this server.");
+                }
+                imagewebp($this->image, $filename, $quality);
+                break;
             default:
                 throw new \Exception("Unsupported image format.");
         }
     }
-    
+
     public function convertFormat(string $filename = "", string $newFormat): void {
         if ($this->image === null) {
             throw new \Exception("Image not loaded.");
@@ -97,8 +112,8 @@ class Image {
             $pathInfo = pathinfo($this->filename);
             $filename = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '.' . $newFormat;
         }
-    
-        switch ($newFormat) {
+
+        switch (strtolower($newFormat)) {
             case 'jpeg':
             case 'jpg':
                 imagejpeg($this->image, $filename);
@@ -108,6 +123,12 @@ class Image {
                 break;
             case 'gif':
                 imagegif($this->image, $filename);
+                break;
+            case 'webp':
+                if (!function_exists('imagewebp')) {
+                    throw new \Exception("WebP not supported on this server.");
+                }
+                imagewebp($this->image, $filename);
                 break;
             default:
                 throw new \Exception("Unsupported format.");
@@ -124,11 +145,11 @@ class Image {
         }
 
         $result = copy($this->getFilename(), $destination);
-    
+
         if (!$result) {
             throw new \Exception("Failed to copy image to $destination.");
         }
-    
+
         return true;
     }
 
@@ -137,7 +158,6 @@ class Image {
             throw new \Exception("Image not loaded.");
         }
 
-        // Set the appropriate header based on image type
         switch ($this->imageType) {
             case IMAGETYPE_JPEG:
                 header('Content-Type: image/jpeg');
@@ -151,13 +171,19 @@ class Image {
                 header('Content-Type: image/gif');
                 imagegif($this->image);
                 break;
+            case IMAGETYPE_WEBP:
+                if (!function_exists('imagewebp')) {
+                    throw new \Exception("WebP not supported on this server.");
+                }
+                header('Content-Type: image/webp');
+                imagewebp($this->image, null, $quality);
+                break;
             default:
                 throw new \Exception("Unsupported image format.");
         }
 
         exit();
     }
-    
 
     public function __destruct() {
         if ($this->image !== null) {
@@ -173,42 +199,36 @@ class Image {
         if (empty($filename)) {
             $filename = $this->generateThumbnailFilename();
         }
-        
+
         if (file_exists($filename)) {
             $this->image = $this->load($filename);
             return;
         }
-    
+
         $originalWidth = imagesx($this->image);
         $originalHeight = imagesy($this->image);
-    
         $aspectRatio = $originalWidth / $originalHeight;
-    
+
         if ($thumbHeight == 0) {
             $thumbHeight = (int)($thumbWidth / $aspectRatio);
         } else {
             $thumbWidth = (int)($thumbHeight * $aspectRatio);
         }
-    
+
         $thumbnail = imagecreatetruecolor($thumbWidth, $thumbHeight);
-    
-        if ($this->imageType === IMAGETYPE_PNG || $this->imageType === IMAGETYPE_GIF) {
+
+        if (in_array($this->imageType, [IMAGETYPE_PNG, IMAGETYPE_GIF, IMAGETYPE_WEBP])) {
             $transparentColor = imagecolorallocatealpha($thumbnail, 0, 0, 0, 127);
             imagefill($thumbnail, 0, 0, $transparentColor);
             imagealphablending($thumbnail, false);
             imagesavealpha($thumbnail, true);
         }
-    
+
         imagecopyresampled($thumbnail, $this->image, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);
-    
         $this->image = $thumbnail;
-    
-        // Save the thumbnail image
         $this->save($filename);
     }
-    
-    
-    
+
     private function generateThumbnailFilename(): string {
         $pathInfo = pathinfo($this->getFilename());
         return $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_thumbnail.' . $pathInfo['extension'];
@@ -217,42 +237,53 @@ class Image {
     public function getFilename(): string {
         return $this->filename;
     }
-    
+
     public function getDirectory(): string {
-        return dirname($this->filename);  // Get the directory part of the original filename
+        return dirname($this->filename);
     }
-    
+
+    public static function extractImagesFromContent(string $content, string $folder): array {
+        if (!is_dir($folder)) {
+            mkdir($folder, 0755, true);
+        }
+
+        preg_match_all('/<img[^>]+src="data:image\/[^;]+;base64,([^"]+)"[^>]+data-filename="([^"]+)"/', $content, $matches, PREG_SET_ORDER);
+        $savedPaths = [];
+
+        foreach ($matches as $match) {
+            $base64 = $match[1];
+            $originalFilename = $match[2];
+            $timestamp = time();
+            $newFilename = $timestamp . rand(0, 1000) . '_' . $originalFilename;
+            $savePath = rtrim($folder, '/') . '/' . $newFilename;
+
+            $imageData = base64_decode($base64);
+            $tmpFile = tempnam(sys_get_temp_dir(), 'img_');
+            file_put_contents($tmpFile, $imageData);
+
+            try {
+                $img = new self();
+                $img->load($tmpFile);
+                $originalWidth = imagesx($img->image);
+                $originalHeight = imagesy($img->image);
+                $newWidth = 1000;
+                $newHeight = (int)($originalHeight * ($newWidth / $originalWidth));
+
+                $img->resize($newWidth, $newHeight);
+                $img->save($savePath);
+
+                $savedPaths[] = [
+                    'originalFilename' => $originalFilename,
+                    'savedPath' => $savePath,
+                    'originalTag' => $match[0],
+                ];
+            } catch (\Exception $e) {
+                // Log or handle
+            } finally {
+                unlink($tmpFile);
+            }
+        }
+
+        return $savedPaths;
+    }
 }
-
-/* Example usage
-try {
-    $image = new Image();
-    $image->load("example.jpg");  // Load an image
-
-    // Resize the image to 800x600
-    $image->resize(800, 600);
-
-    // Crop the image (x, y, width, height)
-    $image->crop(0, 0, 20, 50);
-
-    // Save as a new file
-    $image->save("resized_and_cropped.jpg");
-
-    // Convert image format to PNG
-    $image->convertFormat("converted_image.png", "png");
-
-    // Create a thumbnail with a width of 150px (height will be scaled accordingly)
-    $image->createThumbnail(150);
-
-    // Resize to 150x100 (will stretch or crop if needed)
-    $image->createThumbnail(150, 100);  
-
-    // Output the image to browser
-    // $image->output();
-
-    // Copy the loaded image to a new location
-    $image->copy("copied_example.jpg");
-
-} catch (\Exception $e) {
-    echo "Error: " . $e->getMessage();
-}*/

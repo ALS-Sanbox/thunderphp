@@ -17,11 +17,11 @@ class Pages extends Migration {
         $this->addColumn('keywords varchar(255) DEFAULT NULL');
         $this->addColumn('slug varchar(255) NOT NULL');
         $this->addColumn('content mediumtext DEFAULT NULL');
-        $this->addColumn('categories varchar(255) DEFAULT NULL'); // <-- added line
+        $this->addColumn('advancedcontent mediumtext DEFAULT NULL');
+        $this->addColumn('categories varchar(255) DEFAULT NULL');
         $this->addColumn('views int(10) unsigned NOT NULL DEFAULT 0');
-        $this->addColumn('image varchar(1024) DEFAULT NULL');
-        $this->addColumn('date datetime DEFAULT NULL');
         $this->addColumn('disabled tinyint(1) unsigned NOT NULL DEFAULT 0');
+        $this->addColumn('advanced tinyint(1) unsigned NOT NULL DEFAULT 0');
         $this->addColumn('date_updated datetime DEFAULT NULL');
         $this->addColumn('date_created datetime DEFAULT NULL');
         $this->addColumn('date_deleted datetime DEFAULT NULL');

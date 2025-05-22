@@ -97,14 +97,7 @@ class Model extends Database {
     }
 
     public function create(array $data): bool
-    {
-        dd([
-            'raw_data' => $data,
-            'table' => $this->table,
-            'allowedColumns' => $this->allowedColumns,
-            'filtered_data' => array_intersect_key($data, array_flip($this->allowedColumns)),
-        ]);
-        
+    {       
         $data = array_intersect_key($data, array_flip($this->allowedColumns));
         if (empty($data)) return false;
 

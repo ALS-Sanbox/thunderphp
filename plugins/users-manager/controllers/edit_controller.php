@@ -1,5 +1,4 @@
 <?php
-dd($row);
 
 if(user_can('edit_user')) {
 
