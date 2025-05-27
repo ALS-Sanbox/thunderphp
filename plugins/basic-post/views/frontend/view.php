@@ -1,1 +1,1 @@
-<?= $row->advanced ? $row->advancedcontent : $row->content ?>
+<?= $row->content ?>

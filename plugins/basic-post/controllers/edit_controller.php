@@ -2,51 +2,55 @@
 if (user_can('edit_page')) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $postdata = $req->post();
-        $filedata = $req->files();
-        $files_ok = true;
-        $page_id = $row->id;
-        $existing = $page->find($page_id); 
-        $useAdvanced = !empty($postdata['advanced']) && $postdata['advanced'] == '1';
-
+        $post_id = $row->id;
+        $existing = $posts->find($post_id); 
+        
         if (!$existing) {
             message("Page not found", "fail");
             return;
         }
 
-        $old_content = $existing->content;
-
-        if (!$useAdvanced) {
-            $postdata['column1_content'] = $content->extract_images($postdata['column1_content'] ?? '');
-            $new_content = $postdata['column1_content'];
-        } else {
-            $new_content = $existing->content;
-        }
         if (csrf_verify($postdata['_token'])) {
             $submitted_slug = trim($postdata['slug'] ?? '');
             $original_slug = $existing->slug;
             
-            $data = [
+            $new_data = [
                 'title' => trim($postdata['title'] ?? $existing->title),
                 'description' => trim($postdata['description'] ?? $existing->description),
                 'slug' => ($submitted_slug && $submitted_slug !== $original_slug) 
-                ? $page->makeSlug($submitted_slug) 
-                : $original_slug,
+                    ? $posts->makeSlug($submitted_slug) 
+                    : $original_slug,
                 'keywords' => trim($postdata['keywords'] ?? $existing->keywords),
-                'categories' => trim($postdata['categories'] ?? $existing->categories),
+                'categories' => isset($postdata['categories']) ? json_encode($postdata['categories']) : json_encode([]),
                 'views' => (int)($postdata['views'] ?? $existing->views),
-                'content' => !$useAdvanced ? $new_content : $existing->content,
-                'advancedcontent' => ($useAdvanced && !empty($postdata['advancedcontent'])) ? $postdata['advancedcontent'] : $existing->advancedcontent,
-                'advanced'        => $useAdvanced ? 1 : 0,
+                'content' => trim($postdata['content'] ?? $existing->content),
                 'disabled' => !empty($postdata['active']) ? 0 : 1,
-                'date_updated' => date("Y-m-d H:i:s")
             ];
-            
-            if ($page->validate_update($data)) {
-                $content->delete_unsued_images($old_content, $new_content);
-                $page->update_page($page_id, $data);
-                message("Page updated successfully!", "success");
+
+            // Prepare current data for comparison
+            $current_data = [
+                'title' => $existing->title,
+                'description' => $existing->description,
+                'slug' => $existing->slug,
+                'keywords' => $existing->keywords,
+                'categories' => $existing->categories,
+                'views' => (int)$existing->views,
+                'content' => $existing->content,
+                'disabled' => (int)$existing->disabled,
+            ];
+
+            // Check if data has changed
+            if ($new_data != $current_data) {
+                $new_data['date_updated'] = date("Y-m-d H:i:s");
+
+                if ($posts->validate_update($new_data)) {
+                    $posts->update_post($post_id, $new_data);
+                    message("Page updated successfully!", "success");
+                } else {
+                    message(implode(' ', $posts->errors), 'fail');
+                }
             } else {
-                message(implode(' ', $page->errors), 'fail');
+                message("No changes detected.", "info");
             }
         } else {
             $info['errors'] = "Invalid CSRF token or file error";

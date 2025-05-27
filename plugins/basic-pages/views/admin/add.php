@@ -1,6 +1,7 @@
 <?php if(user_can('add_page')): ?>
-  <link rel="stylesheet" href="<?=plugin_http_path('assets/css/summernote-lite.min.css')?>">
-  <script src="<?=plugin_http_path('assets/js/summernote-lite.min.js')?>"></script>
+  <link rel="stylesheet" href="<?=plugin_http_path('assets/css/style.css')?>">
+  <link rel="stylesheet" href="<?=ROOT?>/assets/summernote/summernote-lite.min.css">
+  <script src="<?=ROOT?>/assets/summernote/summernote-lite.min.js"></script>
 
 <!-- Progress Bar Container -->
 <div class="progress my-3 d-none" style="height: 25px;">
@@ -9,12 +10,6 @@
     0%
   </div>
 </div>
-<style>
-  .note-editable {
-    background-color: #f8f9fa !important;
-    color: #000 !important;
-  }
-</style>
 
 <!-- Basic Page -->
 <div class="container-fluid mt-4 border rounded-2 p-2">
@@ -58,8 +53,28 @@
             <input type="text" class="form-control" id="keywords" name="keywords" placeholder="Enter keywords">
           </div>
           <div class="mb-3">
-            <label for="categories" class="form-label">Catagories</label>
-            <input type="text" class="form-control" id="categories" name="categories" placeholder="Categories">
+            <label for="categories" class="form-label">Categories</label>
+            <div class="categories-container">
+              <?php
+                $query = "select * from categories where disabled = 0";
+                $categories = $pages->query($query);
+              ?>
+              <?php if (!empty($categories)) : $num = 0 ?>
+                <?php foreach ($categories as $category): $num++ ?>
+                  <div class="scrollable-permissions form-check">
+                    <input 
+                      type="checkbox" 
+                      class="form-check-input" 
+                      id="check<?=$num?>" 
+                      name="categories[]" 
+                      value="<?= esc($category->id) ?>">
+                    <label class="form-check-label" for="check<?=$num?>" style="cursor:pointer;">
+                      <?= esc(str_replace("_", " ", $category->category)) ?>
+                    </label>
+                  </div>
+                <?php endforeach; ?>
+              <?php endif ?>
+            </div>
           </div>
           <div class="mb-3">
             <label for="views" class="form-label">Views</label>

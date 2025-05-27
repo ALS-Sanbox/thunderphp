@@ -32,7 +32,7 @@ if (user_can('edit_page')) {
                 ? $page->makeSlug($submitted_slug) 
                 : $original_slug,
                 'keywords' => trim($postdata['keywords'] ?? $existing->keywords),
-                'categories' => trim($postdata['categories'] ?? $existing->categories),
+                'categories' => isset($postdata['categories']) ? json_encode($postdata['categories']) : json_encode([]),
                 'views' => (int)($postdata['views'] ?? $existing->views),
                 'content' => !$useAdvanced ? $new_content : $existing->content,
                 'advancedcontent' => ($useAdvanced && !empty($postdata['advancedcontent'])) ? $postdata['advancedcontent'] : $existing->advancedcontent,

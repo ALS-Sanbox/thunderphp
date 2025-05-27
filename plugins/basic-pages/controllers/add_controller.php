@@ -18,10 +18,10 @@ if (user_can('add_page')) {
                 'title'           => trim($postdata['title'] ?? ''),
                 'description'     => trim($postdata['description'] ?? ''),
                 'slug'            => $postdata['slug']
-                    ? $page->makeSlug(trim($postdata['slug']))
-                    : $page->makeSlug(trim($postdata['title'])),
+                ? $page->makeSlug(trim($postdata['slug']))
+                : $page->makeSlug(trim($postdata['title'])),
                 'keywords'        => trim($postdata['keywords'] ?? ''),
-                'categories'      => trim($postdata['categories'] ?? ''),
+                'categories' => isset($postdata['categories']) ? json_encode($postdata['categories']) : json_encode([]),
                 'views'           => (int)($postdata['views'] ?? 0),
                 'content'         => $postdata['column1_content'] ?? '',
                 'advancedcontent' => $postdata['advancedcontent'] ?? '',
@@ -29,7 +29,6 @@ if (user_can('add_page')) {
                 'advanced'        => $useAdvanced ? 1 : 0,
                 'date_created'    => date("Y-m-d H:i:s"),
             ];
-
             if ($page->validate_insert($data)) {
                 $page->insert($data);
                 message("Page added successfully!", "success");

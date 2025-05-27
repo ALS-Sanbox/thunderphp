@@ -2,5 +2,34 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+}
+
+.note-editable {
+background-color: #f8f9fa !important;
+color: #000 !important;
+}
+
+.categories-container {
+max-height: 300px;
+overflow-y: auto;
+border: 1px solid;
+border-radius: 10px;
+padding: 10px;
+border-color: var(--bs-border-color);
+}
+
+.scrollable-permissions {
+padding: 8px;
+transition: background-color 0.3s;
+}
+
+.scrollable-permissions:hover {
+background-color: #e2e6ea;
+border-radius: 10px;
+color:rgb(37, 37, 37) ;
+}
+
+.scrollable-permissions input[type="checkbox"] {
+margin-left: 10px;
+margin-right: 10px;
 }

@@ -1,6 +1,8 @@
 <?php if(user_can('edit_page')): ?>
-  <link rel="stylesheet" href="<?=plugin_http_path('assets/css/summernote-lite.min.css')?>">
-  <script src="<?=plugin_http_path('assets/js/summernote-lite.min.js')?>"></script>
+  <link rel="stylesheet" href="<?=plugin_http_path('assets/css/style.css')?>">
+  <link rel="stylesheet" href="<?=ROOT?>/assets/summernote/summernote-lite.min.css">
+  <script src="<?=ROOT?>/assets/summernote/summernote-lite.min.js"></script>
+  
 <!-- Progress Bar Container -->
 <div class="progress my-3 d-none" style="height: 25px;">
   <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
@@ -8,30 +10,23 @@
     0%
   </div>
 </div>
-<style>
-  .note-editable {
-    background-color: #f8f9fa !important;
-    color: #000 !important;
-  }
-</style>
 
-<!-- Basic Page -->
+<!-- Basic Posts -->
 <div class="container-fluid mt-4 border rounded-2 p-2">
   <div id="details">
     <h4>Edit Details</h4>
     <form method="post" action="" id="pageForm" enctype="multipart/form-data">
-      <!-- Page Buttons -->
+      <!-- Posts Buttons -->
 <div class="d-flex justify-content-between mb-3">
-  <button id="showEditorBtn" class="btn btn-primary" type="button">Advanced Editor</button>
-  <button id="showDetailsBtn" class="btn btn-primary" style="display: none;" type="button">Page Details</button>
-  <button id="savePageBtn" class="btn btn-danger">Save Page</button>
+  <button id="showDetailsBtn" class="btn btn-primary" style="display: none;" type="button">Posts Details</button>
+  <button id="savePageBtn" class="btn btn-danger">Save Posts</button>
 </div>
       <input type="hidden" name="_token" value="<?= csrf() ?>">
       
       <div id="basic-container" class="row mx-auto">
         <!-- Left Column -->
         <div class="col-md-8 border px-0">
-            <textarea name="column1_content" class="summernote form-control border-0 w-100 bg-white"><?= esc($row->content ?? '') ?></textarea>
+            <textarea name="content" class="summernote form-control border-0 w-100 bg-white"><?= esc($row->content ?? '') ?></textarea>
         </div>
         <!-- Right Column -->
         <div class="col-md-4">
@@ -53,8 +48,32 @@
             <input type="text" class="form-control" id="keywords" name="keywords" value="<?= esc($row->keywords ?? '') ?>">
           </div>
           <div class="mb-3">
-            <label for="categories" class="form-label">Catagories</label>
-            <input type="text" class="form-control" id="categories" name="categories" value="<?= esc($row->categories ?? '') ?>">
+            <label class="form-label">Categories</label>
+            <div class="categories-container">
+            <?php
+              $query = "select * from categories where disabled = 0";
+              $categories = $pages->query($query);
+              $selected_categories = json_decode($row->categories ?? '[]');
+              if (!empty($categories)) : $num = 0;
+                foreach ($categories as $category): $num++;
+            ?>
+              <div class="scrollable-permissions form-check">
+                <input 
+                  type="checkbox" 
+                  class="form-check-input" 
+                  id="check<?=$num?>" 
+                  name="categories[]" 
+                  value="<?= esc($category->id) ?>" 
+                  <?= in_array($category->id, $selected_categories) ? 'checked' : '' ?>>
+                <label class="form-check-label" for="check<?=$num?>" style="cursor:pointer;">
+                  <?= esc(str_replace("_", " ", $category->category)) ?>
+                </label>
+              </div>
+            <?php
+                endforeach;
+              endif;
+            ?>
+            </div>
           </div>
           <div class="mb-3">
             <label for="views" class="form-label">Views</label>
@@ -65,17 +84,7 @@
           <input class="form-check-input" type="checkbox" id="active" name="active" <?= ($row->disabled == 0) ? 'checked' : '' ?>>
             <label class="form-check-label" for="active">Active</label>
           </div>
-          <div class="form-check form-switch mb-3">
-            <input type="hidden" name="advanced" value="0">
-            <input class="form-check-input" type="checkbox" id="advanced" name="advanced" value="1" <?= ($row->advanced == 1) ? 'checked' : '' ?>>
-            <label class="form-check-label" for="advanced">Use Advanced Editor</label>
         </div>
-        </div>
-      </div>
-      
-      <!-- GrapesJS Editor -->
-      <div id="gjs-container" style="display: none;">
-        <div id="gjs"></div>
       </div>
     </form>
   </div>

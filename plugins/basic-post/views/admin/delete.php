@@ -1,22 +1,22 @@
-<?php if(user_can('delete_page')):?>
+<?php if(user_can('delete_post')):?>
     <?php if (!empty($row) && !empty($row->id)): ?>
         <div class="container card shadow mt-6 p-4">
-            <form action="delete_page.php" method="post" class="text-center">
-                <p>Are you sure you want to delete this Page?</p>
+            <form action="delete_post.php" method="post" class="text-center">
+                <p>Are you sure you want to delete this Post?</p>
                 <table class="table text-center">
                     <tr>
                         <td><strong><?= esc($row->title ?? 'N/A') ?></strong></td>
                     </tr>
                 </table>
                 <br>
-                <input type="hidden" name="page_id" value="<?= esc($row->id) ?>">
+                <input type="hidden" name="post_id" value="<?= esc($row->id) ?>">
                 <input type="hidden" name="_token" value="<?= csrf() ?>">
                 <button type="submit" name="confirm" class="btn btn-danger"><i class="bi bi-trash3-fill"></i> Confirm</button>
                 <button type="button" onclick="window.history.back();" class="btn btn-secondary">Cancel</button>
             </form>
         </div>
         <?php else: ?>
-            <div class="alert alert-danger text-center"><?= esc($row->id) ?> That Page was not found!</div>
+            <div class="alert alert-danger text-center"><?= esc($row->id) ?> That Post was not found!</div>
             <a href="<?= ROOT ?>/<?= $admin_route ?>/<?= $plugin_route ?>">
                 <button class="btn btn-sm btn-success">
                     <i class="bi bi-arrow-bar-left"></i> Back

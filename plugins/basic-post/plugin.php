@@ -41,7 +41,8 @@ add_action('controller', function(){
     $ses = new \Core\Session;
     $req = new \Core\Request;
     $vars = get_value();
-    $page = new \BasicPosts\Posts;
+    $posts = new \BasicPosts\Posts;
+    $pages = new \BasicPages\Pages;
     $content = new \BasicPosts\Content;
     $admin_route = $vars['admin_route'];
     $plugin_route = $vars['plugin_route'];
@@ -50,8 +51,8 @@ add_action('controller', function(){
     if(URL(1) == $plugin_route && $req->posted()){
         $id = URL(3) ?? null;
         if($id){
-            $page::$query_id = 'get-users';
-            $row = $page->find(URL(3)) ?: '';
+            $pages::$query_id = 'get-users';
+            $row = $posts->find(URL(3)) ?: '';
         }
         switch (URL(2)) {
             case 'add':
@@ -72,9 +73,9 @@ add_action('controller', function(){
 /** Displays the view fiel */
 add_action('view', function(){
     $vars = get_value();
-    $page = new \BasicPosts\Posts;
+    $posts = new \BasicPosts\Posts;
     
-    $row = $page->first(['slug'=>page()]);
+    $row = $posts->first(['slug'=>page()]);
 
     if($row){
         require plugin_path('views/frontend/view.php');
@@ -84,7 +85,8 @@ add_action('view', function(){
 add_action('basic-admin_main_content', function(){
     $ses = new \Core\Session;
     $vars = get_value();
-    $pages = new \BasicPosts\Posts;
+    $posts = new \BasicPosts\Posts;
+    $pages = new \BasicPages\Pages;
     $admin_route = $vars['admin_route'];
     $plugin_route = $vars['plugin_route'];
     $user_id = $ses->user('id');
@@ -94,16 +96,16 @@ add_action('basic-admin_main_content', function(){
         $id = URL(3) ?? null;
         if($id){
             $pages::$query_id = 'get-users';
-            $row = $pages->find(URL(3)) ?: '';
+            $row = $posts->find(URL(3)) ?: '';
         }
 
         switch (URL(2)) {
             case 'add':
-                $all_items = $pages->query("select * from pages");
+                $all_items = $posts->query("select * from posts");
                 require plugin_path('views/admin/add.php');
                 break;
             case 'edit':
-                $all_items = $pages->query("select * from pages");
+                $all_items = $posts->query("select * from posts");
                 require plugin_path('views/admin/edit.php');
                 break;
             case 'delete':
@@ -114,17 +116,17 @@ add_action('basic-admin_main_content', function(){
 				$pager = new \core\Pager($limit);
 				$offset = $pager->offset;
 
-				$pages->limit = $limit;
-				$pages->offset = $offset;
-				$pages->order = 'asc';
-				$pages::$query_id = 'get-posts';
+				$posts->limit = $limit;
+				$posts->offset = $offset;
+				$posts->order = 'asc';
+				$posts::$query_id = 'get-posts';
 
 				if (!empty($_GET['find'])) {
 					$find = '%' . trim($_GET['find']) . '%';
-					$query = "SELECT * FROM pages WHERE (title like :find) ORDER BY list_order ASC LIMIT $limit OFFSET $offset";
-					$rows = $pages->query($query, ['find' => $find]);
+					$query = "SELECT * FROM posts WHERE (title like :find) ORDER BY list_order ASC LIMIT $limit OFFSET $offset";
+					$rows = $posts->query($query, ['find' => $find]);
 				} else {
-					$rows = $pages->findAll();
+					$rows = $posts->findAll();
 				}
 
 				require plugin_path('views/admin/list.php');
@@ -138,14 +140,14 @@ add_filter('basic-admin_before_admin_links', function($links){
 
         $vars = get_value();
     
-        $page_link = (object)[
+        $post_link = (object)[
             'title'       => 'Posts',
             'link'        => ROOT . '/' . $vars['admin_route']. '/' .$vars['plugin_route'],
             'icon'        => 'postcard',
             'parent'      => 0,
         ];
     
-        $links[] = $page_link;
+        $links[] = $post_link;
     }
         return $links;
 });
