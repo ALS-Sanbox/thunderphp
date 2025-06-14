@@ -52,7 +52,7 @@
             <div class="categories-container">
             <?php
               $query = "select * from categories where disabled = 0";
-              $categories = $pages->query($query);
+              $categories = $posts->query($query);
               $selected_categories = json_decode($row->categories ?? '[]');
               if (!empty($categories)) : $num = 0;
                 foreach ($categories as $category): $num++;
@@ -81,8 +81,13 @@
           </div>
           <div class="form-check form-switch mb-3">
             <input type="hidden" name="active" value="0">
-          <input class="form-check-input" type="checkbox" id="active" name="active" <?= ($row->disabled == 0) ? 'checked' : '' ?>>
+			<input class="form-check-input" type="checkbox" id="active" name="active" <?= ($row->disabled == 0) ? 'checked' : '' ?>>
             <label class="form-check-label" for="active">Active</label>
+          </div>
+          <div class="form-check form-switch mb-3">
+            <input type="hidden" name="porp" value="0">
+			<input class="form-check-input" type="checkbox" id="porp" name="porp" <?= ($row->porp == 1) ? 'checked' : '' ?>>
+            <label class="form-check-label" for="porp">Page(off) or Post(on)</label>
           </div>
         </div>
       </div>

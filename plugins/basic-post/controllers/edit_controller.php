@@ -1,5 +1,5 @@
 <?php
-if (user_can('edit_page')) {
+if (user_can('edit_post')) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $postdata = $req->post();
         $post_id = $row->id;
@@ -13,7 +13,6 @@ if (user_can('edit_page')) {
         if (csrf_verify($postdata['_token'])) {
             $submitted_slug = trim($postdata['slug'] ?? '');
             $original_slug = $existing->slug;
-            
             $new_data = [
                 'title' => trim($postdata['title'] ?? $existing->title),
                 'description' => trim($postdata['description'] ?? $existing->description),
@@ -25,6 +24,7 @@ if (user_can('edit_page')) {
                 'views' => (int)($postdata['views'] ?? $existing->views),
                 'content' => trim($postdata['content'] ?? $existing->content),
                 'disabled' => !empty($postdata['active']) ? 0 : 1,
+				'porp' => !empty($postdata['porp']) ? 1 : 0,
             ];
 
             // Prepare current data for comparison
@@ -37,6 +37,7 @@ if (user_can('edit_page')) {
                 'views' => (int)$existing->views,
                 'content' => $existing->content,
                 'disabled' => (int)$existing->disabled,
+				'porp' => (int)$existing->porp,
             ];
 
             // Check if data has changed
@@ -45,7 +46,7 @@ if (user_can('edit_page')) {
 
                 if ($posts->validate_update($new_data)) {
                     $posts->update_post($post_id, $new_data);
-                    message("Page updated successfully!", "success");
+                    message("Post updated successfully!", "success");
                 } else {
                     message(implode(' ', $posts->errors), 'fail');
                 }

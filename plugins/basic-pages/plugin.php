@@ -73,7 +73,6 @@ add_action('controller', function(){
 add_action('view', function(){
     $vars = get_value();
     $page = new \BasicPages\Pages;
-    
     $row = $page->first(['slug'=>page()]);
 
     if($row){

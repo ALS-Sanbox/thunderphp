@@ -32,9 +32,10 @@
     grapesScript.onload = function () {
       const pluginScripts = [
         'grapesjs-blocks-basic.min.js',
-        'grapesjs-preset-webpage.min.js',
         'grapesjs-plugin-forms.min.js',
         'grapesjs-navbar.min.js',
+        'grapesjs-custom-code.min.js',
+        'grapesjs-preset-webpage.min.js',
       ];
 
       let loadedPlugins = 0;
@@ -66,39 +67,47 @@
 
   let grapesEditor;
 
-  function initGrapesEditor() {
-    grapesEditor = grapesjs.init({
-      container: '#gjs',
-      fromElement: true,
-      height: '100vh',
-      width: 'auto',
-      plugins: [
-        'gjs-blocks-basic',
-        'grapesjs-preset-webpage',
-        'grapesjs-plugin-forms',
-        'grapesjs-navbar',
-      ],
-    assets: {
-      storageType: 'self',
-      upload: editImagePath, // e.g. '/admin/plugin/basicpages/upload'
-      uploadName: 'files',
-      onUpload: async ({ files }) => {
-        const body = new FormData();
-        for (const file of files) {
-          body.append('files[]', file);
-        }
+	function initGrapesEditor() {
+	  grapesEditor = grapesjs.init({
+		container: '#gjs',
+		fromElement: true,
+		height: '100vh',
+		width: 'auto',
+		showOffsets: true,
+        allowScripts: true,
+		plugins: [
+		  'gjs-blocks-basic',
+		  'grapesjs-plugin-forms',
+		  'grapesjs-custom-code',
+		  'grapesjs-navbar',
+ 		  'grapesjs-preset-webpage',
+		],
+		pluginsOpts: {
+		  'grapesjs-custom-code': {
+			modalTitle: 'Edit Custom Code',
+		  },
+		},
+		assets: {
+		  storageType: 'self',
+		  uploadName: 'files',
+		  onUpload: async ({ files }) => {
+			const body = new FormData();
+			for (const file of files) {
+			  body.append('files[]', file);
+			}
 
-        const response = await fetch(editImagePath, {
-          method: 'POST',
-          body,
-        });
+			const response = await fetch(editImagePath, {
+			  method: 'POST',
+			  body,
+			});
 
-        const result = await response.json();
-        return result.data; // should be [{src: 'url1'}, {src: 'url2'}, ...]
-      },
-    }
-    });
-  }
+			const result = await response.json();
+			return result.data; // should be [{src: 'url1'}, {src: 'url2'}, ...]
+		  },
+		}
+	  });
+	}
+
 
   document.addEventListener('DOMContentLoaded', function () {
 

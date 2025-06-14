@@ -20,6 +20,7 @@ class Posts extends Migration {
         $this->addColumn('categories varchar(255) DEFAULT NULL');
         $this->addColumn('views int(10) unsigned NOT NULL DEFAULT 0');
         $this->addColumn('disabled tinyint(1) unsigned NOT NULL DEFAULT 0');
+		$this->addColumn('pop tinyint(1) unsigned NOT NULL DEFAULT 1');
         $this->addColumn('date_updated datetime DEFAULT NULL');
         $this->addColumn('date_created datetime DEFAULT NULL');
         $this->addColumn('date_deleted datetime DEFAULT NULL');

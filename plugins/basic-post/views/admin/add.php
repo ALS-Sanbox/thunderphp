@@ -24,7 +24,7 @@
       <div id="basic-container" class="row mx-auto">
         <!-- Left Column -->
         <div class="col-md-8 border px-0">
-          <textarea name="column1_content" class="summernote form-control border-0 w-100">
+          <textarea name="content" class="summernote form-control border-0 w-100">
 
           </textarea>
         </div>
@@ -79,6 +79,10 @@
           <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="active" name="active">
             <label class="form-check-label" for="active">Active</label>
+          </div>
+		  <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="porp" name="porp">
+            <label class="form-check-label" for="porp">Page(off) or Post(on)</label>
           </div>
         </div>
       </div>

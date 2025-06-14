@@ -1,6 +1,6 @@
 <?php
-
-if (user_can('add_page')) {
+ 
+if (user_can('add_post')) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $postdata = $req->post();
 
@@ -15,14 +15,15 @@ if (user_can('add_page')) {
                 'keywords'        => trim($postdata['keywords'] ?? ''),
                 'categories' => isset($postdata['categories']) ? json_encode($postdata['categories']) : json_encode([]),
                 'views'           => (int)($postdata['views'] ?? 0),
-                'content'         => $postdata['column1_content'] ?? '',
+                'content'         => $postdata['content'] ?? '',
                 'disabled'        => !empty($postdata['active']) ? 0 : 1,
+				'porp'        => !empty($postdata['porp']) ? 1 : 0,
                 'date_created'    => date("Y-m-d H:i:s"),
             ];
 
             if ($posts->validate_insert($data)) {
                 $posts->insert($data);
-                message("Page added successfully!", "success");
+                message("Post added successfully!", "success");
                 redirect($admin_route . '/' . $plugin_route);
             } else {
                 message(implode(' ', $posts->errors), 'fail');

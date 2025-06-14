@@ -21,6 +21,7 @@ class Posts extends Model {
         'categories',
         'views',
         'disabled',
+		'porp',
         'date_created',
     ];
 
@@ -35,6 +36,7 @@ class Posts extends Model {
         'categories',
         'views',
         'disabled',
+		'porp',
         'date_updated',
         'date_deleted',
     ];
