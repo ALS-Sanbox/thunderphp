@@ -181,6 +181,107 @@ function load_plugins($plugin_folders) {
     return $loaded;
 }
 
+function load_settings(PDO $db, string $env = 'production'): array {
+    $stmt = $db->prepare("SELECT `key`, `value`, `type` FROM settings WHERE environment = :env");
+    $stmt->execute(['env' => $env]);
+
+    $settings = [];
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $key = $row['key'];
+        $value = $row['value'];
+        $type = $row['type'];
+
+        // Cast to the right type
+        switch ($type) {
+            case 'integer':
+                $value = (int) $value;
+                break;
+            case 'boolean':
+                $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                break;
+            case 'float':
+                $value = (float) $value;
+                break;
+            case 'json':
+                $value = json_decode($value, true);
+                break;
+            case 'string':
+            default:
+                $value = (string) $value;
+        }
+
+        $settings[$key] = $value;
+    }
+
+    return $settings;
+}
+
+function set_setting(string $key, mixed $value, string $type = 'string', string $env = 'production'): bool {
+    global $db, $SETTINGS;
+
+    if (!isset($db)) {
+        throw new Exception("Database connection (\$db) is not available.");
+    }
+
+    // Encode the value if it's an array or object for JSON
+    $db_value = match ($type) {
+        'json'    => json_encode($value),
+        'boolean' => $value ? '1' : '0',
+        default   => (string) $value,
+    };
+
+    // Insert or update
+    $stmt = $db->prepare("
+        INSERT INTO settings (`key`, `value`, `type`, `environment`)
+        VALUES (:key, :value, :type, :env)
+        ON DUPLICATE KEY UPDATE
+            `value` = VALUES(`value`),
+            `type` = VALUES(`type`),
+            `environment` = VALUES(`environment`)
+    ");
+
+    $success = $stmt->execute([
+        'key'   => $key,
+        'value' => $db_value,
+        'type'  => $type,
+        'env'   => $env,
+    ]);
+
+    // Update the in-memory $SETTINGS array
+    if ($success) {
+        switch ($type) {
+            case 'integer':
+                $SETTINGS[$key] = (int) $value;
+                break;
+            case 'boolean':
+                $SETTINGS[$key] = (bool) $value;
+                break;
+            case 'float':
+                $SETTINGS[$key] = (float) $value;
+                break;
+            case 'json':
+                $SETTINGS[$key] = is_string($value) ? json_decode($value, true) : $value;
+                break;
+            default:
+                $SETTINGS[$key] = (string) $value;
+        }
+    }
+
+    return $success;
+}
+
+function setting(string $key = '', $default = null): mixed {
+    global $SETTINGS;
+
+    if ($key === '') {
+        return $SETTINGS;
+    }
+
+    return $SETTINGS[$key] ?? $default;
+}
+
+
 function add_action(string $hook, mixed $func, int $priority = 10): bool {
     global $ACTIONS;
 

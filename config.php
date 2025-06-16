@@ -1,7 +1,5 @@
 <?php
 
-define('DEBUG', true);
-
 define('APP_NAME', 'ThunderPHP');
 define('APP_DESCRIPTION', 'An Plugin Based PHP Framework, Everything here is an Plugin.');
 

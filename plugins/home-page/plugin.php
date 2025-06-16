@@ -10,6 +10,9 @@
  */
 
 
+
 add_action('view', function(){
+    $siteName = setting('site_name');
+    $siteDesc = setting('site_description');
     require plugin_path('views/view.php');
 });
