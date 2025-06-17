@@ -1,0 +1,14 @@
+{
+    "name"      : "Settings",
+    "version"   : "1.0.0",
+    "id"        : "settings",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 8,
+    "routes"    : {
+                    "on":["admin"],
+                    "off":[]
+                  },
+    "dependencies": { }
+}

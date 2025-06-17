@@ -49,7 +49,7 @@ add_action('view', function(){
     $dashboard_link = (object)[
         'title'       => 'Dashboard',
         'link'        => ROOT . '/' . $vars['admin_plugin_route'],
-        'icon'        => 'house-fill',
+        'icon'        => 'dashboard',
         'parent'      => 0,
     ];
 
@@ -57,8 +57,17 @@ add_action('view', function(){
 
     $links = do_filter(plugin_id().'_before_admin_links', $links);
 
+	$home_link = (object)[
+        'title'       => 'Home',
+        'link'        => 'home',
+        'link'        => ROOT ,
+        'icon'        => 'house-fill',
+        'parent'      => 0,
+    ];
+    $bottom_links[] = $home_link;
+	
     $setting_link = (object)[
-        'title'       => 'Setting',
+        'title'       => 'Settings',
         'link'        => 'settings',
         'link'        => ROOT . '/' . $vars['admin_plugin_route'].'/'.'settings',
         'icon'        => 'gear-wide-connected',

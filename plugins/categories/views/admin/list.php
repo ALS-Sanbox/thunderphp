@@ -7,7 +7,6 @@
             Search
         </button>
     </form>
-
     <table class="table table-striped table-bordered">
         <tr class="text-center">
             <th>#</th>

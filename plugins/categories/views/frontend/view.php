@@ -5,7 +5,6 @@
         <h4 class="mb-4">View Category</h4>
         <div class="row">
             <div class="col-md-12">
-
                 <div class="mb-3">
                     <label class="form-label fw-bold">Category Name</label>
                     <p class="form-control-plaintext"><?= esc($row->category ?? '-') ?></p>
