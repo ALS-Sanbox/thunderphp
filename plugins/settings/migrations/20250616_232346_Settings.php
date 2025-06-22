@@ -9,32 +9,32 @@ defined('FCPATH') or die("Direct script access denied");
  */
 class Settings extends Migration {
     public function up() {
-        $this->addColumn('id int(11) NOT NULL AUTO_INCREMENT');
-        $this->addColumn('`key` varchar(255) NOT NULL');
-        $this->addColumn('`value` text NOT NULL');
-        $this->addColumn("`type` enum('string','int','bool','json','float') NOT NULL DEFAULT 'string'");
-        $this->addColumn("`environment` varchar(50) NOT NULL DEFAULT 'production'");
-        $this->addColumn("`updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()");
+        $this->addColumn('id int unsigned auto_increment');
+        $this->addColumn('`key` varchar(255) not null');
+        $this->addColumn('`value` text not null');
+        $this->addColumn("`type` enum('string','int','bool','json','float') not null default 'string'");
+        $this->addColumn("`environment` varchar(50) not null default 'production'");
+        $this->addColumn("updated_at timestamp null default current_timestamp() on update current_timestamp()");
 
         $this->addPrimaryKey('id');
-        $this->addKey('key');
-        $this->addKey('type');
-        $this->addKey('environment');
+        $this->addKey('`key`');
+        $this->addKey('`type`');
+        $this->addKey('`environment`');
 
         $this->createTable('settings');
-		
-		// Insert sample settings data
-        $this->db->query("
-            INSERT INTO settings (`id`, `key`, `value`, `type`, `environment`, `updated_at`) VALUES
-            (1, 'site_name', 'Thunder PHP', 'string', 'production', '2025-06-17 07:04:13'),
-            (2, 'site_description', 'A clone of wordpress', 'string', 'production', '2025-06-17 07:04:13'),
-            (3, 'debug_mode', '1', 'bool', 'production', '2025-06-17 07:04:13'),
-            (4, 'max_upload_size', '10', 'int', 'production', '2025-06-17 07:04:13'),
-            (5, 'pagination_limit', '25', 'int', 'production', '2025-06-17 07:04:13'),
-            (6, 'site_homepage', 'home', 'string', 'production', '2025-06-17 07:04:13'),
-            (7, 'site_url', 'Https://your-site.com', 'string', 'production', '2025-06-17 07:04:13'),
-            (8, 'admin_email', 'admin@your-site.com', 'string', 'production', '2025-06-17 07:04:13')
-        ");
+
+        $this->addData([
+            ['key' => 'site_name',         'value' => 'Thunder PHP',        'type' => 'string', 'environment' => 'production'],
+            ['key' => 'site_description',  'value' => 'A clone of wordpress','type' => 'string', 'environment' => 'production'],
+            ['key' => 'debug_mode',        'value' => '1',                  'type' => 'bool',   'environment' => 'production'],
+            ['key' => 'max_upload_size',   'value' => '10',                 'type' => 'int',    'environment' => 'production'],
+            ['key' => 'pagination_limit',  'value' => '25',                 'type' => 'int',    'environment' => 'production'],
+            ['key' => 'site_homepage',     'value' => 'home',               'type' => 'string', 'environment' => 'production'],
+            ['key' => 'site_url',          'value' => 'https://your-site.com', 'type' => 'string', 'environment' => 'production'],
+            ['key' => 'admin_email',       'value' => 'admin@your-site.com','type' => 'string', 'environment' => 'production'],
+        ]);
+
+        $this->insert('settings');
     }
 
     public function down() {
