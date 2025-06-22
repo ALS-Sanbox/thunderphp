@@ -19,6 +19,14 @@ class Permission_roles extends Migration {
         $this->addKey('permission');
 
         $this->createTable('permission_roles');
+
+        $this->addData([
+        'role_id'       =>'1',
+        'permission'    =>'all',
+        'disabled'      =>'0',
+        ]);
+        
+         $this->insert('permission_roles');
     }
 
     public function down() {
