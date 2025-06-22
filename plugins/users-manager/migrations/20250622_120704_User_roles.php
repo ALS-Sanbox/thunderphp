@@ -17,7 +17,14 @@ class User_roles extends Migration {
         $this->addKey('role');
         $this->addKey('disabled');
 
-        $this->createTable('user_roles');         
+        $this->createTable('user_roles');
+        
+        $this->addData([
+        'role'       =>'admin',
+        'disabled'      =>'0',
+        ]);
+        
+         $this->insert('user_roles');
     }
 
     public function down() {
