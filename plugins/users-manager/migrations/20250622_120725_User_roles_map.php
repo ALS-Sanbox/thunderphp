@@ -20,6 +20,14 @@ class User_roles_map extends Migration {
         $this->addKey('disabled');
 
         $this->createTable('user_roles_map');
+
+        $this->addData([
+        'role_id'       =>'1',
+        'user_id'       =>'1',
+        'disabled'      =>'0',
+        ]);
+        
+         $this->insert('user_roles_map');
     }
 
     public function down() {
