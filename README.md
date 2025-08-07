@@ -28,10 +28,11 @@ All functionality is encapsulated within plugins, ensuring modularity, easy cust
 - **`users-managers`**: Manages user-related features.
 - **`user-roles`**: Handle user roles and permissions, allowing for a more fine-grained control over user access within the application.
 - **`menu`**: Designed to manage dynamic menus across the site, making it easy to create and update navigation structures.
-
+- **`pages`**: A simple page management system, allowing the creation and organization of static pages such as About, Contact, etc.
+- **`advanced pages`**: A page management system, allowing the creation and organization of static pages through code with abilty to add css and js.
+- **`categories`**: This plugin will organize content by categories, making it easier to classify and display posts, products, or any other categorized content.
+- **`posts`**: A plugin that facilitates the creation and management of posts, typically used for blogs or news sections.
 
 ## Future Plans and Plugins
 - **`slider`**: This plugin will provide the ability to create and manage image sliders, commonly used for homepages or featured content sections.
-- **`pages`**: A simple page management system, allowing the creation and organization of static pages such as About, Contact, etc.
-- **`categories`**: This plugin will organize content by categories, making it easier to classify and display posts, products, or any other categorized content.
-- **`posts`**: A plugin that facilitates the creation and management of posts, typically used for blogs or news sections.
+
