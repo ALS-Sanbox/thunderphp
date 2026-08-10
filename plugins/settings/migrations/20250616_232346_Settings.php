@@ -23,7 +23,7 @@ class Settings extends Migration {
 
         $this->createTable('settings');
 
-        $this->addData([
+        $defaultSettings = [
             ['key' => 'site_name',         'value' => 'Thunder PHP',        'type' => 'string', 'environment' => 'production'],
             ['key' => 'site_description',  'value' => 'A clone of wordpress','type' => 'string', 'environment' => 'production'],
             ['key' => 'debug_mode',        'value' => '1',                  'type' => 'bool',   'environment' => 'production'],
@@ -32,7 +32,11 @@ class Settings extends Migration {
             ['key' => 'site_homepage',     'value' => 'home',               'type' => 'string', 'environment' => 'production'],
             ['key' => 'site_url',          'value' => 'https://your-site.com', 'type' => 'string', 'environment' => 'production'],
             ['key' => 'admin_email',       'value' => 'admin@your-site.com','type' => 'string', 'environment' => 'production'],
-        ]);
+        ];
+
+        foreach ($defaultSettings as $row) {
+            $this->addData($row);
+        }
 
         $this->insert('settings');
     }
