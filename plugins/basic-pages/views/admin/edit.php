@@ -97,7 +97,7 @@
       
       <!-- GrapesJS Editor -->
       <div id="gjs-container" style="display: none;">
-        <div id="gjs"></div>
+        <div id="gjs"><?= $row->advancedcontent ?? '' ?></div>
       </div>
     </form>
   </div>
