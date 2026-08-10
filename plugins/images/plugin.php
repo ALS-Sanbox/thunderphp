@@ -53,7 +53,14 @@ add_action('controller', function () {
     $plugin_route = $vars['plugin_route'];
     $user_id = (new \Core\Session)->user('id');
 
-    if (URL(1) === $vars['plugin_route'] && $req->posted()) {
+    if (URL(1) !== $vars['plugin_route']) return;
+
+    if (URL(2) === 'json') {
+        require plugin_path('controllers/json_controller.php');
+        return;
+    }
+
+    if ($req->posted()) {
         switch (URL(2)) {
             case 'add':
                 require plugin_path('controllers/add_controller.php');

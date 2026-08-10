@@ -1,7 +1,9 @@
 <?php if(user_can('add_post')): ?>
   <link rel="stylesheet" href="<?=plugin_http_path('assets/css/style.css')?>">
   <link rel="stylesheet" href="<?=ROOT?>/assets/summernote/summernote-lite.min.css">
+  <link rel="stylesheet" href="<?=ROOT?>/assets/summernote/image-library.css">
   <script src="<?=ROOT?>/assets/summernote/summernote-lite.min.js"></script>
+  <script src="<?=ROOT?>/assets/summernote/image-library.js"></script>
 
 <!-- Progress Bar Container -->
 <div class="progress my-3 d-none" style="height: 25px;">
@@ -89,6 +91,10 @@
 <!-- JS Loader -->
 <script>
   const pluginBasePath = "<?= plugin_http_path('assets/js/') ?>";
+  window.imageLibraryUrls = {
+    listUrl: "<?= ROOT ?>/<?= $admin_route ?>/images/json",
+    uploadUrl: "<?= ROOT ?>/<?= $admin_route ?>/images/add",
+  };
 
   // Character counter for description field
   document.getElementById('description').addEventListener('input', function () {
