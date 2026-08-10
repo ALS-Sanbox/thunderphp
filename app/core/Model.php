@@ -78,11 +78,11 @@ class Model extends Database {
         $query = "SELECT * FROM {$this->table} WHERE ";
 
         foreach ($where_array as $key => $value) {
-            $query .= "$key = :$key AND ";
+            $query .= "`$key` = :$key AND ";
         }
 
         foreach ($where_not_array as $key => $value) {
-            $query .= "$key != :$key AND ";
+            $query .= "`$key` != :$key AND ";
         }
 
         $query = rtrim($query, ' AND ');
@@ -102,17 +102,19 @@ class Model extends Database {
         if (empty($data)) return false;
 
         $keys = array_keys($data);
-        $columns = implode(", ", $keys);
+        $columns = implode(", ", array_map(fn($key) => "`$key`", $keys));
         $placeholders = implode(", ", array_map(fn($key) => ":$key", $keys));
 
         $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
-        $success = $this->query($sql, $data);
+        $this->query($sql, $data);
 
-        if ($success) {
-            $this->insert_id = $this->lastInsertId();
+        if ($this->has_error) {
+            return false;
         }
 
-        return (bool) $success;
+        $this->insert_id = $this->lastInsertId();
+
+        return $this->affected_rows > 0;
     }
 
     public function update($id, array $data) {
@@ -120,7 +122,7 @@ class Model extends Database {
         $data = array_intersect_key($data, array_flip($allowedCols));
         if (empty($data)) return false;
 
-        $setPart = implode(", ", array_map(fn($key) => "$key = :$key", array_keys($data)));
+        $setPart = implode(", ", array_map(fn($key) => "`$key` = :$key", array_keys($data)));
         $data['id'] = $id;
 
         $sql = "UPDATE {$this->table} SET $setPart WHERE {$this->primary_key} = :id";
