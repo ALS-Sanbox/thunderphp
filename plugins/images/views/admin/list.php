@@ -23,7 +23,7 @@
       <?php foreach ($rows as $row): ?>
         <div class="col-6 col-md-4 col-lg-3">
           <div class="card h-100 image-card">
-            <img src="<?= esc(ROOT . '/' . $row->path) ?>" class="card-img-top image-thumb" alt="<?= esc($row->original_name ?? $row->filename) ?>">
+            <img src="<?= esc(ROOT . '/' . $row->path) ?>" class="card-img-top image-thumb image-preview-trigger" alt="<?= esc($row->original_name ?? $row->filename) ?>" role="button" data-bs-toggle="modal" data-bs-target="#imagePreviewModal" data-full-src="<?= esc(ROOT . '/' . $row->path) ?>" data-name="<?= esc($row->original_name ?? $row->filename) ?>">
             <div class="card-body">
               <p class="small text-truncate mb-1" title="<?= esc($row->original_name ?? $row->filename) ?>"><?= esc($row->original_name ?? $row->filename) ?></p>
               <div class="input-group input-group-sm mb-2">
@@ -53,6 +53,20 @@
   </div>
 
   <?= $pager->display() ?>
+</div>
+
+<div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered image-preview-dialog">
+    <div class="modal-content">
+      <div class="modal-header py-2">
+        <h6 class="modal-title" id="imagePreviewLabel">Preview</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center p-2">
+        <img src="" id="imagePreviewImg" class="image-preview-full" alt="">
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="<?=plugin_http_path('assets/js/plugin.js')?>"></script>

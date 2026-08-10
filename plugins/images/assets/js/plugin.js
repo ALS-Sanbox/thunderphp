@@ -15,4 +15,15 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+    const previewModal = document.getElementById('imagePreviewModal');
+    if (previewModal) {
+        previewModal.addEventListener('show.bs.modal', function (event) {
+            const trigger = event.relatedTarget;
+            if (!trigger) return;
+
+            previewModal.querySelector('#imagePreviewImg').src = trigger.getAttribute('data-full-src');
+            previewModal.querySelector('#imagePreviewLabel').textContent = trigger.getAttribute('data-name') || 'Preview';
+        });
+    }
 });
