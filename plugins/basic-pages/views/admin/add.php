@@ -1,9 +1,9 @@
 <?php if(user_can('add_page')): ?>
   <link rel="stylesheet" href="<?=plugin_http_path('assets/css/style.css')?>">
   <link rel="stylesheet" href="<?=ROOT?>/assets/summernote/summernote-lite.min.css">
-  <link rel="stylesheet" href="<?=ROOT?>/assets/summernote/image-library.css">
+  <link rel="stylesheet" href="<?=ROOT?>/assets/summernote/image-library.css?v=2">
   <script src="<?=ROOT?>/assets/summernote/summernote-lite.min.js"></script>
-  <script src="<?=ROOT?>/assets/summernote/image-library.js"></script>
+  <script src="<?=ROOT?>/assets/summernote/image-library.js?v=2"></script>
 
 <!-- Progress Bar Container -->
 <div class="progress my-3 d-none" style="height: 25px;">
@@ -123,7 +123,7 @@
     
   });
 </script>
-<script src="<?= plugin_http_path('assets/js/plugin.js') ?>"></script>
+<script src="<?= plugin_http_path('assets/js/plugin.js') . '?v=2' ?>"></script>
 
 <?php else: ?>
 <div id="denied" class="card text-center shadow-lg border-danger d-flex justify-content-center align-items-center mx-auto" style="max-width: 400px;">
