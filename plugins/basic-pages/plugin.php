@@ -157,32 +157,3 @@ add_filter('basic-admin_before_admin_links', function($links){
         return $links;
 });
 
-add_filter('after_query',function($data)
-{
-	if(empty($data['result']))
-		return $data;
-
-        if(false && $data['query_id'] == 'get-pages')
-        {
-            foreach ($data['result'] as $key => $row) {
-                $query = "SELECT * FROM user_roles WHERE disabled = 0 AND  id IN (SELECT role_id FROM user_roles_map WHERE disabled = 0 AND user_id = :user_id)";
-                $roles = $role_map->query($query, ['user_id' => $row->id]);
-            
-                if ($roles)
-                    $data['result'][$key]->roles = array_column($roles, 'role');
-            
-                $user_roles_map = new \UserManager\User_roles_map;
-                $role_ids = $user_roles_map->where(['user_id' => $row->id]);
-            
-                if ($role_ids) {
-                    $data['result'][$key]->role_ids = array_column($role_ids, 'role_id');
-                }
-            }
-
-            usort($data['result'], function($a, $b) {
-                return $a->id <=> $b->id;
-            });
-        }
-
-	return $data;
-});

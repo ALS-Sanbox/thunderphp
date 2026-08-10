@@ -153,26 +153,6 @@ add_action('basic-admin_main_content', function(){
     }
 });
 
-add_filter('user_permisions', function($permissions){
-    $ses = new \Core\Session;
-
-    if($ses->is_logged_in()){
-        $vars = get_value();
-        $db = new \Core\Database;
-
-        $query = "select * from " . $vars['optional_tables']['roles_table'];
-        $roles = $db->query($query);
-
-        if(is_array($roles)){
-
-        }else{
-            $permissions[] = 'all';
-        }
-    }
-
-    return $permissions;
-});
-
 add_filter('after_query',function($data)
 {
 	if(empty($data['result']))

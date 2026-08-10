@@ -12,12 +12,6 @@ function APP($key = '') {
     return $key !== '' ? ($APP[$key] ?? null) : $APP;
 }
 
-function show_plugins() {
-    global $APP;
-    $names = array_column($APP['plugins'] ?? [], 'name');
-    debug_dump($names ?? []);
-}
-
 function load_json_file(string $path) {
     if (!file_exists($path)) return null;
 
@@ -70,12 +64,6 @@ function get_caller_file(): string {
     return $caller['file'] ?? '';
 }
 
-function plugin_config(): ?object {
-    $path = get_plugin_dir(get_caller_file()) . 'config.json';
-    return load_json_file($path);
-}
-
-
 function split_url($url) {
     $parts = explode("/", trim($url, '/'));
 
@@ -98,22 +86,6 @@ function URL($key = '') {
     }
 
     return '';
-}
-
-function getPhpFiles($directory) {
-    $phpFiles = [];
-
-    $iterator = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS)
-    );
-
-    foreach ($iterator as $file) {
-        if ($file->isFile() && strtolower($file->getExtension()) == 'php') {
-            $phpFiles[] = $file->getPathname();
-        }
-    }
-
-    return $phpFiles;
 }
 
 function get_plugin_folders() {
@@ -447,17 +419,6 @@ function old_select(string $key, string $default = '', string $type = 'post'): s
     return old_value($key, $default, $type);
 }
 
-function old_checked(string $key, string $default = '', string $type = 'post'): string {
-    $value = old_value($key, $default, $type);
-    return (isset($_POST[$key]) || isset($_GET[$key]) || $value) ? 'checked' : '';
-}
-
-function save_old_values_to_session() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $_SESSION['old_values'] = $_POST;
-    }
-}
-
 function csrf() {
     $session = new \Core\Session();
     return $session->generateCSRFToken();
@@ -466,16 +427,6 @@ function csrf() {
 function csrf_verify($token) {
     $session = new \Core\Session();
     return $session->validateCSRFToken($token);
-}
-
-function plugin_exists($plugin_name) {
-    $plugin_dir = __DIR__ . '/plugins/' . $plugin_name;
-    return is_dir($plugin_dir);
-}
-
-function sort_plugins($plugins) {
-    sort($plugins, SORT_NATURAL | SORT_FLAG_CASE);
-    return $plugins;
 }
 
 function get_image(?string $path = '', string $type = 'post') {
@@ -488,8 +439,4 @@ function get_image(?string $path = '', string $type = 'post') {
         'female' => ROOT . '/assets/images/user_female.jpg',
         default  => ROOT . '/assets/images/no_image.jpg',
     };
-}
-
-function class_path($folder, $class_name):string {
-    return 'plugins/' . $folder . '/' . $class_name . '.php';
 }

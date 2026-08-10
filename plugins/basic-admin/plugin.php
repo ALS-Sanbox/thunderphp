@@ -19,17 +19,6 @@ add_filter('permissions', function($permissions){
     return $permissions;
 });
 
-add_action('before_controller', function(){
-    $vars = get_value();
-
-    if(false && page() == $vars['admin_plugin_route'] && !user_can('view_admin_page')){
-        message('Please Login as Admin!');
-        redirect('login');
-    }
-
-});
-
-
 add_action('controller', function(){
     do_action(plugin_id().'_controller');
 
