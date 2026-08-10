@@ -1,0 +1,16 @@
+{
+    "name"      : "Images",
+    "version"   : "1.0.0",
+    "id"        : "images",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 6,
+    "routes"    : {
+                    "on":["admin"],
+                    "off":[]
+                  },
+    "dependencies": {
+                    "basic-admin":"1.0.0"
+                  }
+}

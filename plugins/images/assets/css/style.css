@@ -1,0 +1,9 @@
+.image-card .image-thumb {
+    height: 150px;
+    object-fit: cover;
+    background: #f0f0f0;
+}
+
+.image-url {
+    font-size: 0.75rem;
+}
