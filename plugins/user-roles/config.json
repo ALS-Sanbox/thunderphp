@@ -4,7 +4,7 @@
     "id"        : "users-roles",
     "author"    : "Afro Lion",
     "thumbnail" : "",
-    "active"    : true,
+    "active"    : false,
     "index"     : 4,
     "routes"    : {
                     "on":["admin"],
