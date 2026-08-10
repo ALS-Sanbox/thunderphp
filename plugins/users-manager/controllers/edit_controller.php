@@ -7,36 +7,38 @@ if(user_can('edit_user')) {
         $filedata = $req->files();
         $postdata['id'] = $row->id;
         $files_ok = true;
+        $new_image = null;
 
         if (!empty($filedata['image']) && $filedata['image']['error'] != UPLOAD_ERR_NO_FILE) {
-
-            $req->delete_file($row->image);
-
-            $postdata['image'] = $req->upload_files('image');
+            $new_image = $req->upload_files('image');
 
             if (!empty($req->upload_errors)) {
                 $files_ok = false;
             }
-        } else {
-            $postdata['image'] = $_POST['currentImage'];
         }
 
+        unset($postdata['image'], $postdata['currentImage']);
+
         if ($csrf = csrf_verify($req->post('_token'))) {
-            
-            if (user_can('edit_user')) {
+
+            if (user_can('edit_user') && $files_ok) {
                 if (isset($postdata['password']) && empty($postdata['password'])) {
                     unset($postdata['password']);
                 } else if (!empty($postdata['password'])) {
                     $postdata['password'] = password_hash($postdata['password'], PASSWORD_DEFAULT);
                 }
 
+                if ($new_image) {
+                    $postdata['image'] = $new_image;
+                }
+
                 $postdata['date_updated'] = date('Y-m-d H:i:s');
                 unset($postdata['id']);
-                
+
                 $user->update($row->id, $postdata);
 
-                if (!empty($postdata['image']) && file_exists($row->image)) {
-                    unlink($row->image);
+                if ($new_image && !empty($row->image)) {
+                    $req->delete_file($row->image);
                 }
 
                 $user_id = $row->id;
@@ -66,6 +68,8 @@ if(user_can('edit_user')) {
 
                 message("Record edited successfully!", "success");
                 redirect($admin_route . '/' . $plugin_route . '/view/' . $row->id);
+            } elseif (!$files_ok) {
+                message(implode(' ', $req->upload_errors), 'fail');
             }
         } else {
             $user->errors['email'] = "Form Expired!";

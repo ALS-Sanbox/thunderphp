@@ -17,7 +17,7 @@
             <div class="mt-2 fw-bold"> 
                 <?= esc($row->first_name ?? 'N/A') ?> <?= esc($row->last_name ?? 'N/A') ?> 
             </div>
-            <input type="hidden" id="currentImage" name="currentImage" value="<?= esc(get_image($row->image)) ?>">
+            <input type="hidden" id="currentImage" value="<?= esc(get_image($row->image)) ?>">
             <input type="file" id="imageUpload" name="image" accept="image/*" class="d-none" onchange="previewFile()">
         </div>
 
