@@ -6,7 +6,9 @@
   if (!is_array($savedLayout) || empty($savedLayout['html'])) {
       $savedLayout = [
           'html' => '<div class="post-layout-wrapper" style="max-width:800px;margin:0 auto;padding:40px 20px;">'
-              . '<div class="post-content-block" style="padding:20px;border:2px dashed #999;background:#f8f9fa;">{{POST_CONTENT}}</div>'
+              . '<div class="post-title-block" style="padding:15px;border:2px dashed #999;background:#f8f9fa;font-size:2rem;font-weight:bold;">{{POST_TITLE}}</div>'
+              . '<div class="post-content-block" style="padding:20px;border:2px dashed #999;background:#f8f9fa;margin-top:10px;">{{POST_CONTENT}}</div>'
+              . '<div class="post-list-block" style="padding:20px;border:2px dashed #999;background:#f8f9fa;margin-top:10px;">{{POST_LIST}}</div>'
               . '</div>',
           'css'  => '',
       ];
@@ -17,7 +19,7 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h4 class="mb-0">Post Layout</h4>
-      <small class="text-muted">Design the template every post uses by default. Drag the "Post Content" block in to mark where each post's title and body will appear.</small>
+      <small class="text-muted">Design the template every post uses by default. Drag in "Post Title", "Post Content", and "Post List" to mark where each post's title, body, and a list of other posts will appear.</small>
     </div>
     <div>
       <button id="saveLayoutBtn" class="btn btn-danger">Save Layout</button>
@@ -65,10 +67,22 @@
     },
   });
 
+  layoutEditor.BlockManager.add('post-title', {
+    label: 'Post Title',
+    category: 'Post',
+    content: '<div class="post-title-block" style="padding:15px;border:2px dashed #999;background:#f8f9fa;font-size:2rem;font-weight:bold;">{{POST_TITLE}}</div>',
+  });
+
   layoutEditor.BlockManager.add('post-content', {
     label: 'Post Content',
     category: 'Post',
     content: '<div class="post-content-block" style="padding:20px;border:2px dashed #999;background:#f8f9fa;">{{POST_CONTENT}}</div>',
+  });
+
+  layoutEditor.BlockManager.add('post-list', {
+    label: 'Post List',
+    category: 'Post',
+    content: '<div class="post-list-block" style="padding:20px;border:2px dashed #999;background:#f8f9fa;">{{POST_LIST}}</div>',
   });
 
   document.getElementById('saveLayoutBtn').addEventListener('click', function () {

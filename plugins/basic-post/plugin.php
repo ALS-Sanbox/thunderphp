@@ -113,11 +113,37 @@ add_action('view', function () {
 		require plugin_path('views/frontend/blog.php');
 	} else {
 		$layout = setting('post_default_layout');
+		$layoutTokens = ['{{POST_TITLE}}', '{{POST_CONTENT}}', '{{POST_LIST}}'];
+		$hasLayoutToken = is_array($layout) && !empty($layout['html']) && array_reduce(
+			$layoutTokens,
+			fn($found, $token) => $found || strpos($layout['html'], $token) !== false,
+			false
+		);
 
-		if (is_array($layout) && !empty($layout['html']) && strpos($layout['html'], '{{POST_CONTENT}}') !== false) {
-			$postMarkup = '<h1>' . esc($row->title) . '</h1><div class="post-body">' . $row->content . '</div>';
+		if ($hasLayoutToken) {
+			$otherPosts = $posts->query(
+				"SELECT id, title, slug FROM posts WHERE disabled = 0 AND date_deleted IS NULL AND pop != 0 AND id != ? ORDER BY date_created DESC LIMIT 10",
+				[$row->id]
+			);
+
+			$postListMarkup = '<ul class="post-list">';
+			if (!empty($otherPosts)) {
+				foreach ($otherPosts as $otherPost) {
+					$postListMarkup .= '<li><a href="' . ROOT . '/' . esc($otherPost->slug) . '">' . esc($otherPost->title) . '</a></li>';
+				}
+			} else {
+				$postListMarkup .= '<li>No other posts yet.</li>';
+			}
+			$postListMarkup .= '</ul>';
+
+			$merged = str_replace(
+				$layoutTokens,
+				[esc($row->title), $row->content, $postListMarkup],
+				$layout['html']
+			);
+
 			echo '<style>' . ($layout['css'] ?? '') . '</style>';
-			echo str_replace('{{POST_CONTENT}}', $postMarkup, $layout['html']);
+			echo $merged;
 		} else {
 			require plugin_path('views/frontend/post.php');
 		}
