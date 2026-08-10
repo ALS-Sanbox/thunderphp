@@ -27,9 +27,9 @@ class Thunder
         echo "
 
         Database Commands:
-        - do:migrate    : Run pending migrations.
-        - do:refresh    : Rollback all migrations and rerun them.
-        - do:rollback   : Undo the last batch of migrations.
+        - do:migrate <plugin|all> [file] : Run migrations for a plugin, or 'all' to migrate every plugin.
+        - do:refresh <plugin|all> [file] : Rollback and rerun migrations for a plugin, or 'all'.
+        - do:rollback <plugin|all> [file]: Undo migrations for a plugin, or 'all'.
 
         Generator Commands:
         - make:plugin   : Generate a new plugin.
@@ -240,6 +240,16 @@ class Thunder
     public function doMigrate(array $args)
     {
         $pluginName = $args[0] ?? null;
+
+        if (!$pluginName) {
+            die("Usage: php thunder do:migrate <plugin_name>|all [migration_file]\n");
+        }
+
+        if ($pluginName === 'all') {
+            $this->migrateAllPlugins();
+            return;
+        }
+
         $migrationFile = $args[1] ?? null;
 
         $this->validatePluginAndMigration($pluginName, $migrationFile);
@@ -251,6 +261,30 @@ class Thunder
         } else {
             $this->runAllMigrations($pluginMigrationsFolder);
         }
+    }
+
+    private function getAllPluginNames()
+    {
+        $pluginDirs = glob(self::PLUGINS_DIR . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR);
+        return array_map('basename', $pluginDirs);
+    }
+
+    private function migrateAllPlugins()
+    {
+        echo "Running migrations for all plugins:\n";
+
+        foreach ($this->getAllPluginNames() as $pluginName) {
+            $pluginMigrationsFolder = self::PLUGINS_DIR . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'migrations';
+
+            if (!is_dir($pluginMigrationsFolder) || empty(glob($pluginMigrationsFolder . DIRECTORY_SEPARATOR . '*.php'))) {
+                continue;
+            }
+
+            echo "\n-- Plugin: $pluginName --\n";
+            $this->runAllMigrations($pluginMigrationsFolder);
+        }
+
+        echo "\nAll plugin migrations completed successfully.\n";
     }
 
     private function validatePluginAndMigration($pluginName, $migrationFile = null)
@@ -314,6 +348,16 @@ class Thunder
     public function doRollback(array $args)
     {
         $pluginName = $args[0] ?? null;
+
+        if (!$pluginName) {
+            die("Usage: php thunder do:rollback <plugin_name>|all [migration_file]\n");
+        }
+
+        if ($pluginName === 'all') {
+            $this->rollbackAllPlugins();
+            return;
+        }
+
         $migrationFile = $args[1] ?? null;
 
         $this->validatePluginAndMigration($pluginName, $migrationFile);
@@ -325,6 +369,24 @@ class Thunder
         } else {
             $this->runAllRollbacks($pluginMigrationsFolder);
         }
+    }
+
+    private function rollbackAllPlugins()
+    {
+        echo "Rolling back migrations for all plugins:\n";
+
+        foreach ($this->getAllPluginNames() as $pluginName) {
+            $pluginMigrationsFolder = self::PLUGINS_DIR . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'migrations';
+
+            if (!is_dir($pluginMigrationsFolder) || empty(glob($pluginMigrationsFolder . DIRECTORY_SEPARATOR . '*.php'))) {
+                continue;
+            }
+
+            echo "\n-- Plugin: $pluginName --\n";
+            $this->runAllRollbacks($pluginMigrationsFolder);
+        }
+
+        echo "\nAll plugin migrations rolled back successfully.\n";
     }
 
     private function runSingleRollback($pluginMigrationsFolder, $migrationFile)
