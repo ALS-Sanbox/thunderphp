@@ -8,7 +8,7 @@
     if (currentLength > maxLength) {
       counter.classList.remove('text-muted');
       counter.classList.add('text-danger');
-    } else {pluginBasePath
+    } else {
       counter.classList.remove('text-danger');
       counter.classList.add('text-muted');
     }
@@ -24,11 +24,11 @@
 
     const grapesCss = document.createElement('link');
     grapesCss.rel = 'stylesheet';
-    grapesCss.href = pluginBasePath + 'grapes.min.css';
+    grapesCss.href = grapesBasePath + 'grapes.min.css';
     document.head.appendChild(grapesCss);
 
     const grapesScript = document.createElement('script');
-    grapesScript.src = pluginBasePath + 'grapes.min.js';
+    grapesScript.src = grapesBasePath + 'grapes.min.js';
     grapesScript.onload = function () {
       const pluginScripts = [
         'grapesjs-blocks-basic.min.js',
@@ -42,7 +42,7 @@
 
       pluginScripts.forEach((plugin) => {
         const pluginScript = document.createElement('script');
-        pluginScript.src = pluginBasePath + plugin;
+        pluginScript.src = grapesBasePath + plugin;
         pluginScript.onload = function () {
           loadedPlugins++;
           if (loadedPlugins === pluginScripts.length) {

@@ -30,6 +30,7 @@ add_filter('permissions', function ($permissions) {
         'add_post',
         'edit_post',
         'delete_post',
+        'manage_post_layout',
     ]);
 });
 
@@ -56,6 +57,9 @@ add_action('controller', function () {
                 break;
             case 'delete':
                 require plugin_path('controllers/delete_controller.php');
+                break;
+            case 'layout':
+                require plugin_path('controllers/layout_controller.php');
                 break;
         }
     }
@@ -108,7 +112,15 @@ add_action('view', function () {
 	if (page() === 'blog-post' || in_array(page(), $categories)) {
 		require plugin_path('views/frontend/blog.php');
 	} else {
-		require plugin_path('views/frontend/post.php');
+		$layout = setting('post_default_layout');
+
+		if (is_array($layout) && !empty($layout['html']) && strpos($layout['html'], '{{POST_CONTENT}}') !== false) {
+			$postMarkup = '<h1>' . esc($row->title) . '</h1><div class="post-body">' . $row->content . '</div>';
+			echo '<style>' . ($layout['css'] ?? '') . '</style>';
+			echo str_replace('{{POST_CONTENT}}', $postMarkup, $layout['html']);
+		} else {
+			require plugin_path('views/frontend/post.php');
+		}
 	}
 });
 
@@ -135,6 +147,9 @@ add_action('basic-admin_main_content', function () {
             break;
         case 'delete':
             require plugin_path('views/admin/delete.php');
+            break;
+        case 'layout':
+            require plugin_path('views/admin/layout.php');
             break;
         default:
             $limit = 10;

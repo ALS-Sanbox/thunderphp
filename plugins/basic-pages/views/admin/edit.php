@@ -103,7 +103,7 @@
 
 <!-- JS Loader -->
 <script>
-  const pluginBasePath = "<?= plugin_http_path('assets/js/') ?>";
+  const grapesBasePath = "<?= ROOT ?>/assets/grapesjs/";
   const editImagePath = "<?= plugin_http_path('uploads/') ?>";
   // Character counter for description field
   document.getElementById('description').addEventListener('input', function () {

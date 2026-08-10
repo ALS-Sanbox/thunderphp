@@ -97,7 +97,7 @@
 
 <!-- JS Loader -->
 <script>
-  const pluginBasePath = "<?= plugin_http_path('assets/js/') ?>";
+  const grapesBasePath = "<?= ROOT ?>/assets/grapesjs/";
 
   // Character counter for description field
   document.getElementById('description').addEventListener('input', function () {

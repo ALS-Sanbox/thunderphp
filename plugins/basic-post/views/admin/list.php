@@ -19,13 +19,22 @@
                 <th>Views</th>
                 <th>Active</th>
                 <th>Date Created</th>
-                <?php if(user_can('add_post')): ?>
+                <?php if(user_can('add_post') || user_can('manage_post_layout')): ?>
                     <th class="text-start">
-                        <a href="<?= ROOT ?>/<?= $admin_route ?>/<?= $plugin_route ?>/add">
-                            <button class="btn btn-bd-primary btn-sm">
-                                <i class="bi bi-plus-lg"></i> New post
-                            </button>
-                        </a>
+                        <?php if(user_can('manage_post_layout')): ?>
+                            <a href="<?= ROOT ?>/<?= $admin_route ?>/<?= $plugin_route ?>/layout">
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-layout-text-window"></i> Layout
+                                </button>
+                            </a>
+                        <?php endif; ?>
+                        <?php if(user_can('add_post')): ?>
+                            <a href="<?= ROOT ?>/<?= $admin_route ?>/<?= $plugin_route ?>/add">
+                                <button class="btn btn-bd-primary btn-sm">
+                                    <i class="bi bi-plus-lg"></i> New post
+                                </button>
+                            </a>
+                        <?php endif; ?>
                     </th>
                 <?php endif; ?>
             </tr>
