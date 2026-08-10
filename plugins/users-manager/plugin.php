@@ -128,7 +128,7 @@ add_action('basic-admin_main_content', function(){
                 $find = !empty($_GET['find']) ? '%' . trim($_GET['find']) . '%' : null;
 
                 if ($find) {
-                    $total_row = $siteusers->fetch("SELECT COUNT(*) as count FROM siteusers WHERE (first_name LIKE :find || last_name LIKE :find)", ['find' => $find]);
+                    $total_row = $siteusers->fetch("SELECT COUNT(*) as count FROM siteusers WHERE (first_name LIKE :find1 || last_name LIKE :find2)", ['find1' => $find, 'find2' => $find]);
                     $total_count = $total_row ? (int) $total_row->count : 0;
                 } else {
                     $total_count = $siteusers->totalCount();
@@ -142,8 +142,8 @@ add_action('basic-admin_main_content', function(){
                 $siteusers::$query_id = 'get-users';
 
                 if ($find) {
-                    $query = "SELECT * FROM siteusers WHERE (first_name LIKE :find || last_name LIKE :find) LIMIT $limit OFFSET $offset";
-                    $rows = $siteusers->query($query, ['find' => $find]);
+                    $query = "SELECT * FROM siteusers WHERE (first_name LIKE :find1 || last_name LIKE :find2) LIMIT $limit OFFSET $offset";
+                    $rows = $siteusers->query($query, ['find1' => $find, 'find2' => $find]);
                 }else {
                     $rows = $siteusers->findAll();
                 }
