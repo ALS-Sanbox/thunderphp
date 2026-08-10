@@ -47,14 +47,24 @@ class Migration extends \Core\Database {
 
     public function insert(string $table) {
         if (!empty($this->data) && is_array($this->data)) {
+            $hadError = false;
+
             foreach ($this->data as $row) {
                 $keys = array_keys($row);
-                $columns_string = implode(",", $keys);
+                $columns_string = '`' . implode('`,`', $keys) . '`';
                 $values_string = implode(",", array_fill(0, count($keys), '?'));
                 $query = "INSERT INTO $table ($columns_string) VALUES ($values_string)";
                 $this->query($query, array_values($row));
+
+                if (!empty($this->error)) {
+                    $hadError = true;
+                    echo "\nError inserting row into $table! The error was: " . $this->error;
+                }
             }
-            echo "\nData inserted successfully in table: $table";
+
+            if (!$hadError) {
+                echo "\nData inserted successfully in table: $table";
+            }
         } else {
             echo "\nRow data not found! No data inserted in table: $table";
         }
