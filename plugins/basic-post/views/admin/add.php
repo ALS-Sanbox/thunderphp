@@ -77,7 +77,7 @@
             <label class="form-check-label" for="active">Active</label>
           </div>
 		  <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" id="pop" name="pop">
+            <input class="form-check-input" type="checkbox" id="pop" name="pop" checked>
             <label class="form-check-label" for="pop">Page(off) or Post(on)</label>
           </div>
         </div>
