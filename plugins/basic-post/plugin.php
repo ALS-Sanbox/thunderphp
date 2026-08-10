@@ -146,7 +146,7 @@ add_action('basic-admin_main_content', function () {
 
             if (!empty($_GET['find'])) {
                 $find = '%' . trim($_GET['find']) . '%';
-                $query = "SELECT * FROM posts WHERE title LIKE :find ORDER BY list_order ASC LIMIT $limit OFFSET $offset";
+                $query = "SELECT * FROM posts WHERE title LIKE :find ORDER BY id ASC LIMIT $limit OFFSET $offset";
                 $rows = $posts->query($query, ['find' => $find]);
             } else {
                 $rows = $posts->findAll();

@@ -16,9 +16,9 @@ set_value([
         'users_table'       => 'siteusers',
     ],
     'optional_tables'       =>[
-        'roles_table'       => 'users_roles',
-        'permissions_table' => 'permissions_roles',
-        'roles_map_table'   => 'users_roles_map',
+        'roles_table'       => 'user_roles',
+        'permissions_table' => 'permission_roles',
+        'roles_map_table'   => 'user_roles_map',
     ],
 ]);
 
@@ -134,7 +134,7 @@ add_action('basic-admin_main_content', function(){
 
                 if (!empty($_GET['find'])) {
                     $find = '%' . trim($_GET['find']) . '%';
-                    $query = "SELECT * FROM users WHERE (first_name LIKE :find || last_name LIKE :find) LIMIT $limit OFFSET $offset";
+                    $query = "SELECT * FROM siteusers WHERE (first_name LIKE :find || last_name LIKE :find) LIMIT $limit OFFSET $offset";
                     $rows = $siteusers->query($query, ['find' => $find]);
                 }else {
                     $rows = $siteusers->findAll();

@@ -120,7 +120,7 @@ add_action('basic-admin_main_content', function(){
 
 				if (!empty($_GET['find'])) {
 					$find = '%' . trim($_GET['find']) . '%';
-					$query = "SELECT * FROM pages WHERE (title like :find) ORDER BY list_order ASC LIMIT $limit OFFSET $offset";
+					$query = "SELECT * FROM pages WHERE (title like :find) ORDER BY id ASC LIMIT $limit OFFSET $offset";
 					$rows = $pages->query($query, ['find' => $find]);
 				} else {
 					$rows = $pages->findAll();
