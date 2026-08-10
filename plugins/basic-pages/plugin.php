@@ -30,7 +30,7 @@ if(!$db->tableExists($table)){
 add_filter('permissions', function($permissions){
 
     $permissions[] =  'view_pages';
-    $permissions[] =  'add_pages';
+    $permissions[] =  'add_page';
     $permissions[] =  'edit_page';
     $permissions[] =  'delete_page';
 
@@ -76,6 +76,7 @@ add_action('view', function(){
     $row = $page->first(['slug'=>page()]);
 
     if($row){
+        $page->incrementViews($row->id);
         require plugin_path('views/frontend/view.php');
     }
 });

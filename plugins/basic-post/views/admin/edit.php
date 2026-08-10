@@ -1,4 +1,4 @@
-<?php if(user_can('edit_page')): ?>
+<?php if(user_can('edit_post')): ?>
   <link rel="stylesheet" href="<?=plugin_http_path('assets/css/style.css')?>">
   <link rel="stylesheet" href="<?=ROOT?>/assets/summernote/summernote-lite.min.css">
   <script src="<?=ROOT?>/assets/summernote/summernote-lite.min.js"></script>
@@ -76,8 +76,8 @@
             </div>
           </div>
           <div class="mb-3">
-            <label for="views" class="form-label">Views</label>
-            <input type="number" class="form-control" id="views" name="views" value="<?= esc($row->views ?? '') ?>">
+            <label class="form-label">Views</label>
+            <input type="text" class="form-control" value="<?= esc($row->views ?? '0') ?>" disabled readonly>
           </div>
           <div class="form-check form-switch mb-3">
             <input type="hidden" name="active" value="0">
@@ -85,9 +85,9 @@
             <label class="form-check-label" for="active">Active</label>
           </div>
           <div class="form-check form-switch mb-3">
-            <input type="hidden" name="porp" value="0">
-			<input class="form-check-input" type="checkbox" id="porp" name="porp" <?= ($row->porp == 1) ? 'checked' : '' ?>>
-            <label class="form-check-label" for="porp">Page(off) or Post(on)</label>
+            <input type="hidden" name="pop" value="0">
+			<input class="form-check-input" type="checkbox" id="pop" name="pop" <?= ($row->pop == 1) ? 'checked' : '' ?>>
+            <label class="form-check-label" for="pop">Page(off) or Post(on)</label>
           </div>
         </div>
       </div>

@@ -21,7 +21,6 @@ class Pages extends Model {
         'categories',
         'advancedcontent',
         'advanced',
-        'views',
         'image',
         'disabled',
         'date_created',
@@ -38,7 +37,6 @@ class Pages extends Model {
         'categories',
         'advancedcontent',
         'advanced',
-        'views',
         'image',
         'disabled',
         'date_updated',
@@ -61,10 +59,6 @@ class Pages extends Model {
             $this->errors['slug'] = "Slug can only contain lowercase letters, numbers, and dashes.";
         }
 
-        if (isset($data['views']) && !filter_var($data['views'], FILTER_VALIDATE_INT)) {
-            $this->errors['views'] = "Views must be a valid integer.";
-        }
-    
         return empty($this->errors);
     }
 
@@ -72,7 +66,7 @@ class Pages extends Model {
         $this->errors = [];
 
         $required = ['title', 'slug'];
-    
+
         foreach ($required as $field) {
             if (!isset($data[$field]) || trim($data[$field]) === '') {
                 $this->errors[$field] = ucfirst(str_replace('_', ' ', $field)) . " is required.";
@@ -83,10 +77,6 @@ class Pages extends Model {
             $this->errors['slug'] = "Slug can only contain lowercase letters, numbers, and dashes.";
         }
 
-        if (isset($data['views']) && !filter_var($data['views'], FILTER_VALIDATE_INT)) {
-            $this->errors['views'] = "Views must be a valid integer.";
-        }
-    
         return empty($this->errors);
     }
 
@@ -100,5 +90,10 @@ class Pages extends Model {
         $data = array_intersect_key($data, array_flip($this->allowedUpdateColumns));
 
         return $this->update($id, $data);
+    }
+
+    public function incrementViews(int $id): bool {
+        $this->query("UPDATE {$this->table} SET views = views + 1 WHERE id = ?", [$id]);
+        return $this->affected_rows > 0;
     }
 }

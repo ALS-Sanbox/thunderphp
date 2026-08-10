@@ -77,8 +77,8 @@
             </div>
           </div>
           <div class="mb-3">
-            <label for="views" class="form-label">Views</label>
-            <input type="number" class="form-control" id="views" name="views" value="<?= esc($row->views ?? '') ?>">
+            <label class="form-label">Views</label>
+            <input type="text" class="form-control" value="<?= esc($row->views ?? '0') ?>" disabled readonly>
           </div>
           <div class="form-check form-switch mb-3">
             <input type="hidden" name="active" value="0">

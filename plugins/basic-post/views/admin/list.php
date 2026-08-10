@@ -46,7 +46,7 @@
                         <td><?= esc($row->disabled ? 'no' : 'yes') ?></td>
                         <td><?= esc($row->date_created ?? '-') ?></td>
                         <td>
-                            <?php if(user_can('view_post')): ?>
+                            <?php if(user_can('view_posts')): ?>
                                 <a target="_blank" href="<?= ROOT ?>/<?= $row->slug ?>">
                                     <button class="btn btn-sm btn-primary">
                                     <i class="bi bi-eye-fill"></i> View

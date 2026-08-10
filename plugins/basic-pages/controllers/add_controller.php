@@ -22,7 +22,6 @@ if (user_can('add_page')) {
                 : $page->makeSlug(trim($postdata['title'])),
                 'keywords'        => trim($postdata['keywords'] ?? ''),
                 'categories' => isset($postdata['categories']) ? json_encode($postdata['categories']) : json_encode([]),
-                'views'           => (int)($postdata['views'] ?? 0),
                 'content'         => $postdata['column1_content'] ?? '',
                 'advancedcontent' => $postdata['advancedcontent'] ?? '',
                 'disabled'        => !empty($postdata['active']) ? 0 : 1,
@@ -30,9 +29,12 @@ if (user_can('add_page')) {
                 'date_created'    => date("Y-m-d H:i:s"),
             ];
             if ($page->validate_insert($data)) {
-                $page->insert($data);
-                message("Page added successfully!", "success");
-                redirect($admin_route . '/' . $plugin_route);
+                if ($page->insert($data)) {
+                    message("Page added successfully!", "success");
+                    redirect($admin_route . '/' . $plugin_route);
+                } else {
+                    message("Failed to save the page. Please try again.", "fail");
+                }
             } else {
                 message(implode(' ', $page->errors), 'fail');
             }

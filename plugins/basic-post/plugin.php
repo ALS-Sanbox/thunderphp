@@ -70,6 +70,8 @@ add_action('view', function () {
     $row = $posts->first(['slug' => page()]);
     if (!$row) return;
 
+    $posts->incrementViews($row->id);
+
     $categoryIds = json_decode($row->categories ?? '[]', true);
 
     if (is_array($categoryIds) && !empty($categoryIds)) {
@@ -85,7 +87,7 @@ add_action('view', function () {
 
 	// Filter out posts with title 'blog-post'
 	$allPosts = array_filter($allPosts, function($post) {
-		return strtolower(trim($post->porp)) !== '0';
+		return strtolower(trim((string) $post->pop)) !== '0';
 	});
 
 	foreach ($allPosts as $post) {

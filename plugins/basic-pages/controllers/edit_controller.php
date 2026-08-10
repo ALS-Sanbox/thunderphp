@@ -33,18 +33,20 @@ if (user_can('edit_page')) {
                 : $original_slug,
                 'keywords' => trim($postdata['keywords'] ?? $existing->keywords),
                 'categories' => isset($postdata['categories']) ? json_encode($postdata['categories']) : json_encode([]),
-                'views' => (int)($postdata['views'] ?? $existing->views),
                 'content' => !$useAdvanced ? $new_content : $existing->content,
                 'advancedcontent' => ($useAdvanced && !empty($postdata['advancedcontent'])) ? $postdata['advancedcontent'] : $existing->advancedcontent,
                 'advanced'        => $useAdvanced ? 1 : 0,
                 'disabled' => !empty($postdata['active']) ? 0 : 1,
                 'date_updated' => date("Y-m-d H:i:s")
             ];
-            
+
             if ($page->validate_update($data)) {
-                $content->delete_unsued_images($old_content, $new_content);
-                $page->update_page($page_id, $data);
-                message("Page updated successfully!", "success");
+                if ($page->update_page($page_id, $data)) {
+                    $content->delete_unsued_images($old_content, $new_content);
+                    message("Page updated successfully!", "success");
+                } else {
+                    message("Failed to update the page. Please try again.", "fail");
+                }
             } else {
                 message(implode(' ', $page->errors), 'fail');
             }

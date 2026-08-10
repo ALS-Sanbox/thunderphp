@@ -19,9 +19,8 @@ class Posts extends Model {
         'slug',
         'content',
         'categories',
-        'views',
         'disabled',
-		'porp',
+		'pop',
         'date_created',
     ];
 
@@ -34,9 +33,8 @@ class Posts extends Model {
         'slug',
         'content',
         'categories',
-        'views',
         'disabled',
-		'porp',
+		'pop',
         'date_updated',
         'date_deleted',
     ];
@@ -57,10 +55,6 @@ class Posts extends Model {
             $this->errors['slug'] = "Slug can only contain lowercase letters, numbers, and dashes.";
         }
 
-        if (isset($data['views']) && !filter_var($data['views'], FILTER_VALIDATE_INT)) {
-            $this->errors['views'] = "Views must be a valid integer.";
-        }
-    
         return empty($this->errors);
     }
 
@@ -68,7 +62,7 @@ class Posts extends Model {
         $this->errors = [];
 
         $required = ['title', 'slug'];
-    
+
         foreach ($required as $field) {
             if (!isset($data[$field]) || trim($data[$field]) === '') {
                 $this->errors[$field] = ucfirst(str_replace('_', ' ', $field)) . " is required.";
@@ -79,10 +73,6 @@ class Posts extends Model {
             $this->errors['slug'] = "Slug can only contain lowercase letters, numbers, and dashes.";
         }
 
-        if (isset($data['views']) && !filter_var($data['views'], FILTER_VALIDATE_INT)) {
-            $this->errors['views'] = "Views must be a valid integer.";
-        }
-    
         return empty($this->errors);
     }
 
@@ -96,5 +86,10 @@ class Posts extends Model {
         $data = array_intersect_key($data, array_flip($this->allowedUpdateColumns));
 
         return $this->update($id, $data);
+    }
+
+    public function incrementViews(int $id): bool {
+        $this->query("UPDATE {$this->table} SET views = views + 1 WHERE id = ?", [$id]);
+        return $this->affected_rows > 0;
     }
 }

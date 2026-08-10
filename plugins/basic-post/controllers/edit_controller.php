@@ -21,10 +21,9 @@ if (user_can('edit_post')) {
                     : $original_slug,
                 'keywords' => trim($postdata['keywords'] ?? $existing->keywords),
                 'categories' => isset($postdata['categories']) ? json_encode($postdata['categories']) : json_encode([]),
-                'views' => (int)($postdata['views'] ?? $existing->views),
                 'content' => trim($postdata['content'] ?? $existing->content),
                 'disabled' => !empty($postdata['active']) ? 0 : 1,
-				'porp' => !empty($postdata['porp']) ? 1 : 0,
+				'pop' => !empty($postdata['pop']) ? 1 : 0,
             ];
 
             // Prepare current data for comparison
@@ -34,10 +33,9 @@ if (user_can('edit_post')) {
                 'slug' => $existing->slug,
                 'keywords' => $existing->keywords,
                 'categories' => $existing->categories,
-                'views' => (int)$existing->views,
                 'content' => $existing->content,
                 'disabled' => (int)$existing->disabled,
-				'porp' => (int)$existing->porp,
+				'pop' => (int)$existing->pop,
             ];
 
             // Check if data has changed
@@ -45,8 +43,11 @@ if (user_can('edit_post')) {
                 $new_data['date_updated'] = date("Y-m-d H:i:s");
 
                 if ($posts->validate_update($new_data)) {
-                    $posts->update_post($post_id, $new_data);
-                    message("Post updated successfully!", "success");
+                    if ($posts->update_post($post_id, $new_data)) {
+                        message("Post updated successfully!", "success");
+                    } else {
+                        message("Failed to update the post. Please try again.", "fail");
+                    }
                 } else {
                     message(implode(' ', $posts->errors), 'fail');
                 }

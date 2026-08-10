@@ -72,17 +72,13 @@
               <?php endif ?>
             </div>
           </div>
-          <div class="mb-3">
-            <label for="views" class="form-label">Views</label>
-            <input type="number" class="form-control" id="views" name="views" placeholder="Enter views">
-          </div>
           <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="active" name="active">
             <label class="form-check-label" for="active">Active</label>
           </div>
 		  <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" id="porp" name="porp">
-            <label class="form-check-label" for="porp">Page(off) or Post(on)</label>
+            <input class="form-check-input" type="checkbox" id="pop" name="pop">
+            <label class="form-check-label" for="pop">Page(off) or Post(on)</label>
           </div>
         </div>
       </div>
