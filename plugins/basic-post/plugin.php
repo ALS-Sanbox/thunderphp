@@ -136,7 +136,16 @@ add_action('basic-admin_main_content', function () {
             break;
         default:
             $limit = 10;
-            $pager = new \core\Pager($limit);
+            $find = !empty($_GET['find']) ? '%' . trim($_GET['find']) . '%' : null;
+
+            if ($find) {
+                $total_row = $posts->fetch("SELECT COUNT(*) as count FROM posts WHERE title LIKE :find", ['find' => $find]);
+                $total_count = $total_row ? (int) $total_row->count : 0;
+            } else {
+                $total_count = $posts->totalCount();
+            }
+
+            $pager = new \core\Pager($limit, $total_count);
             $offset = $pager->offset;
 
             $posts->limit  = $limit;
@@ -144,8 +153,7 @@ add_action('basic-admin_main_content', function () {
             $posts->order  = 'asc';
             $posts::$query_id = 'get-posts';
 
-            if (!empty($_GET['find'])) {
-                $find = '%' . trim($_GET['find']) . '%';
+            if ($find) {
                 $query = "SELECT * FROM posts WHERE title LIKE :find ORDER BY id ASC LIMIT $limit OFFSET $offset";
                 $rows = $posts->query($query, ['find' => $find]);
             } else {

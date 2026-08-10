@@ -2,7 +2,7 @@
 <div class="table-responsive">
     <!-- Search Form -->
     <form class="input-group my-3 mx-auto" method="get" action="">
-        <input placeholder="Search by title" type="text" name="search" class="form-control" value="<?= esc($_GET['search'] ?? '') ?>">
+        <input placeholder="Search by title" type="text" name="find" class="form-control" value="<?= esc($_GET['find'] ?? '') ?>">
         <button class="input-group-text bg-primary text-white" id="basic-addon1">
             Search
         </button>

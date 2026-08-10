@@ -62,7 +62,7 @@ class Model extends Database {
     public function totalCount() {
         $sql = "SELECT COUNT(*) as total FROM {$this->table}";
         $result = $this->fetch($sql);
-        return $result ? $result['total'] : 0;
+        return $result ? (int) $result->total : 0;
     }
 
     public function find($id) {

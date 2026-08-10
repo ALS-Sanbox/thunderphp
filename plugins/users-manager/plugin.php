@@ -125,15 +125,23 @@ add_action('basic-admin_main_content', function(){
                 break;
             default:
                 $limit = 30;
-                $pager = new \core\Pager($limit);
+                $find = !empty($_GET['find']) ? '%' . trim($_GET['find']) . '%' : null;
+
+                if ($find) {
+                    $total_row = $siteusers->fetch("SELECT COUNT(*) as count FROM siteusers WHERE (first_name LIKE :find || last_name LIKE :find)", ['find' => $find]);
+                    $total_count = $total_row ? (int) $total_row->count : 0;
+                } else {
+                    $total_count = $siteusers->totalCount();
+                }
+
+                $pager = new \core\Pager($limit, $total_count);
                 $offset = $pager->offset;
 
                 $siteusers->limit = $limit;
                 $siteusers->offset = $offset;
                 $siteusers::$query_id = 'get-users';
 
-                if (!empty($_GET['find'])) {
-                    $find = '%' . trim($_GET['find']) . '%';
+                if ($find) {
                     $query = "SELECT * FROM siteusers WHERE (first_name LIKE :find || last_name LIKE :find) LIMIT $limit OFFSET $offset";
                     $rows = $siteusers->query($query, ['find' => $find]);
                 }else {

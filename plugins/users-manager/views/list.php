@@ -2,13 +2,14 @@
 <div class="table-responsive">
     <!-- Search Form -->
     <form class="input-group my-3 mx-auto" method="get" action="">
-        <input placeholder="Search" type="text" name="search" class="form-control" value="<?= esc($_GET['search'] ?? '') ?>">
+        <input placeholder="Search" type="text" name="find" class="form-control" value="<?= esc($_GET['find'] ?? '') ?>">
         <button class="input-group-text bg-primary text-white" id="basic-addon1">
             Search
         </button>
     </form>
 
     <table class="table table-striped table-bordered">
+        <thead>
         <tr class="text-center">
             <th>#</th>
             <th>Image</th>
@@ -26,9 +27,11 @@
             </th>
             <?php endif?>
         </tr>
+        </thead>
+        <tbody>
         <?php if (!empty($rows)): ?>
             <?php foreach ($rows as $row): ?>
-                <tr class="align-middle">
+                <tr class="align-middle text-center">
                     <td><?= esc($row->id ?? 'N/A') ?></td>
                     <td class="text-center">
                         <img src="<?= esc( get_image($row->image)) ?>" class="img-thumbnail" alt="User Image" style="width:50px;height:50px;object-fit: cover;">
@@ -67,8 +70,12 @@
                     </td>
                 </tr>
             <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="100%" class="text-center text-muted">No users found.</td>
+            </tr>
         <?php endif; ?>
-
+        </tbody>
     </table>
 </div>
 <?=$pager->display()?>

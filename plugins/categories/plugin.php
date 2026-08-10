@@ -105,15 +105,23 @@ add_action('basic-admin_main_content', function () {
                 break;
             default:
                 $limit = 30;
-                $pager = new \Core\Pager($limit);
+                $find = !empty($_GET['find']) ? '%' . trim($_GET['find']) . '%' : null;
+
+                if ($find) {
+                    $total_row = $cat->fetch("SELECT COUNT(*) as count FROM categories WHERE category LIKE :find", ['find' => $find]);
+                    $total_count = $total_row ? (int) $total_row->count : 0;
+                } else {
+                    $total_count = $cat->totalCount();
+                }
+
+                $pager = new \Core\Pager($limit, $total_count);
                 $offset = $pager->offset;
 
                 $cat->limit = $limit;
                 $cat->offset = $offset;
                 $cat::$query_id = 'get-categories';
 
-                if (!empty($_GET['find'])) {
-                    $find = '%' . trim($_GET['find']) . '%';
+                if ($find) {
                     $query = "SELECT * FROM categories WHERE category LIKE :find LIMIT $limit OFFSET $offset";
                     $rows = $cat->query($query, ['find' => $find]);
                 } else {

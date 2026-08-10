@@ -110,7 +110,16 @@ add_action('basic-admin_main_content', function(){
                 break;
             default:
                 $limit = 10;
-				$pager = new \core\Pager($limit);
+				$find = !empty($_GET['find']) ? '%' . trim($_GET['find']) . '%' : null;
+
+				if ($find) {
+					$total_row = $pages->fetch("SELECT COUNT(*) as count FROM pages WHERE (title like :find)", ['find' => $find]);
+					$total_count = $total_row ? (int) $total_row->count : 0;
+				} else {
+					$total_count = $pages->totalCount();
+				}
+
+				$pager = new \core\Pager($limit, $total_count);
 				$offset = $pager->offset;
 
 				$pages->limit = $limit;
@@ -118,8 +127,7 @@ add_action('basic-admin_main_content', function(){
 				$pages->order = 'asc';
 				$pages::$query_id = 'get-pages';
 
-				if (!empty($_GET['find'])) {
-					$find = '%' . trim($_GET['find']) . '%';
+				if ($find) {
 					$query = "SELECT * FROM pages WHERE (title like :find) ORDER BY id ASC LIMIT $limit OFFSET $offset";
 					$rows = $pages->query($query, ['find' => $find]);
 				} else {

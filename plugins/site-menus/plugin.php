@@ -144,7 +144,16 @@ add_action('basic-admin_main_content', function(){
                 break;
             default:
                 $limit = 25;
-				$pager = new \core\Pager($limit);
+				$find = !empty($_GET['find']) ? '%' . trim($_GET['find']) . '%' : null;
+
+				if ($find) {
+					$total_row = $menu->fetch("SELECT COUNT(*) as count FROM menus WHERE (title like :find)", ['find' => $find]);
+					$total_count = $total_row ? (int) $total_row->count : 0;
+				} else {
+					$total_count = $menu->totalCount();
+				}
+
+				$pager = new \core\Pager($limit, $total_count);
 				$offset = $pager->offset;
 
 				$menu->limit = $limit;
@@ -153,8 +162,7 @@ add_action('basic-admin_main_content', function(){
 				$menu->order_column = 'list_order';
 				$menu::$query_id = 'get-menus';
 
-				if (!empty($_GET['find'])) {
-					$find = '%' . trim($_GET['find']) . '%';
+				if ($find) {
 					$query = "SELECT * FROM menus WHERE (title like :find) ORDER BY list_order ASC LIMIT $limit OFFSET $offset";
 					$rows = $menu->query($query, ['find' => $find]);
 				} else {
