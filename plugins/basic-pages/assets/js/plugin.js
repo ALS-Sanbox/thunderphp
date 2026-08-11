@@ -110,6 +110,42 @@
 	  if (window.registerNavBlocks) {
 		window.registerNavBlocks(grapesEditor);
 	  }
+
+	  if (window.registerHeroBlocks) {
+		window.registerHeroBlocks(grapesEditor);
+	  }
+
+	  if (window.registerFooterBlocks) {
+		window.registerFooterBlocks(grapesEditor);
+	  }
+
+	  if (window.registerFeatureBlocks) {
+		window.registerFeatureBlocks(grapesEditor);
+	  }
+
+	  if (window.registerCtaBlocks) {
+		window.registerCtaBlocks(grapesEditor);
+	  }
+
+	  if (window.registerTestimonialBlocks) {
+		window.registerTestimonialBlocks(grapesEditor);
+	  }
+
+	  if (window.registerPricingBlocks) {
+		window.registerPricingBlocks(grapesEditor);
+	  }
+
+	  if (window.registerTeamBlocks) {
+		window.registerTeamBlocks(grapesEditor);
+	  }
+
+	  if (window.registerFaqBlocks) {
+		window.registerFaqBlocks(grapesEditor);
+	  }
+
+	  if (window.registerContactBlocks) {
+		window.registerContactBlocks(grapesEditor);
+	  }
 	}
 
 

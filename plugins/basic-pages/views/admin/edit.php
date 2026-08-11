@@ -5,6 +5,15 @@
   <script src="<?=ROOT?>/assets/summernote/summernote-lite.min.js"></script>
   <script src="<?=ROOT?>/assets/summernote/image-library.js?v=2"></script>
   <script src="<?=ROOT?>/assets/grapesjs/nav-blocks.js?v=1"></script>
+  <script src="<?=ROOT?>/assets/grapesjs/hero-blocks.js?v=1"></script>
+  <script src="<?=ROOT?>/assets/grapesjs/footer-blocks.js?v=1"></script>
+  <script src="<?=ROOT?>/assets/grapesjs/feature-blocks.js?v=1"></script>
+  <script src="<?=ROOT?>/assets/grapesjs/cta-blocks.js?v=1"></script>
+  <script src="<?=ROOT?>/assets/grapesjs/testimonial-blocks.js?v=1"></script>
+  <script src="<?=ROOT?>/assets/grapesjs/pricing-blocks.js?v=1"></script>
+  <script src="<?=ROOT?>/assets/grapesjs/team-blocks.js?v=1"></script>
+  <script src="<?=ROOT?>/assets/grapesjs/faq-blocks.js?v=1"></script>
+  <script src="<?=ROOT?>/assets/grapesjs/contact-blocks.js?v=1"></script>
   
 <!-- Progress Bar Container -->
 <div class="progress my-3 d-none" style="height: 25px;">
