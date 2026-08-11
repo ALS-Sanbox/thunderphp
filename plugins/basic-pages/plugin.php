@@ -63,6 +63,12 @@ add_action('controller', function(){
             case 'delete':
                 require plugin_path('controllers/delete_controller.php');
                 break;
+            case 'duplicate':
+                require plugin_path('controllers/duplicate_controller.php');
+                break;
+            case 'bulk':
+                require plugin_path('controllers/bulk_controller.php');
+                break;
             default:
                 break;
         }
@@ -111,10 +117,28 @@ add_action('basic-admin_main_content', function(){
                 break;
             default:
                 $limit = 10;
-				$find = !empty($_GET['find']) ? '%' . trim($_GET['find']) . '%' : null;
+				$search = trim($_GET['search'] ?? $_GET['find'] ?? '');
+				$status = $_GET['status'] ?? '';
 
-				if ($find) {
-					$total_row = $pages->fetch("SELECT COUNT(*) as count FROM pages WHERE (title like :find)", ['find' => $find]);
+				$where = [];
+				$params = [];
+
+				if ($search !== '') {
+					$where[] = '(title LIKE :find1 OR description LIKE :find2)';
+					$params['find1'] = '%' . $search . '%';
+					$params['find2'] = '%' . $search . '%';
+				}
+
+				if ($status === 'active') {
+					$where[] = 'disabled = 0';
+				} elseif ($status === 'inactive') {
+					$where[] = 'disabled = 1';
+				}
+
+				$whereSql = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
+
+				if ($where) {
+					$total_row = $pages->fetch("SELECT COUNT(*) as count FROM pages $whereSql", $params);
 					$total_count = $total_row ? (int) $total_row->count : 0;
 				} else {
 					$total_count = $pages->totalCount();
@@ -128,9 +152,9 @@ add_action('basic-admin_main_content', function(){
 				$pages->order = 'asc';
 				$pages::$query_id = 'get-pages';
 
-				if ($find) {
-					$query = "SELECT * FROM pages WHERE (title like :find) ORDER BY id ASC LIMIT $limit OFFSET $offset";
-					$rows = $pages->query($query, ['find' => $find]);
+				if ($where) {
+					$query = "SELECT * FROM pages $whereSql ORDER BY id ASC LIMIT $limit OFFSET $offset";
+					$rows = $pages->query($query, $params);
 				} else {
 					$rows = $pages->findAll();
 				}
