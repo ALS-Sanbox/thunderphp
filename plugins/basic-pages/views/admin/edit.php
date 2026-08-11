@@ -4,6 +4,7 @@
   <link rel="stylesheet" href="<?=ROOT?>/assets/summernote/image-library.css?v=2">
   <script src="<?=ROOT?>/assets/summernote/summernote-lite.min.js"></script>
   <script src="<?=ROOT?>/assets/summernote/image-library.js?v=2"></script>
+  <script src="<?=ROOT?>/assets/grapesjs/nav-blocks.js?v=1"></script>
   
 <!-- Progress Bar Container -->
 <div class="progress my-3 d-none" style="height: 25px;">

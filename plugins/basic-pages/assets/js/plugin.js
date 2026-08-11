@@ -106,6 +106,10 @@
 		  },
 		}
 	  });
+
+	  if (window.registerNavBlocks) {
+		window.registerNavBlocks(grapesEditor);
+	  }
 	}
 
 
