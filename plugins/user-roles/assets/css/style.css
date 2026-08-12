@@ -1,0 +1,19 @@
+/* assets/css/style.css */
+
+.scrollable-permissions {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.scrollable-permissions {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 equal-width columns */
+    gap: 20px; /* 20px space between each item */
+    align-items: center; /* Center items vertically */
+}
+
+.permission-item {
+    display: flex;
+    flex-direction: column; /* Stack the label and checkbox vertically */
+    align-items: flex-start; /* Align to the left */
+}
