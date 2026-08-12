@@ -208,7 +208,7 @@
                                             <!-- Duplicate -->
                                             <?php if(user_can('add_page')): ?>
                                                 <button type="button" class="btn btn-outline-info duplicate-btn" data-id="<?= $row->id ?>" data-title="<?= esc($row->title) ?>" title="Duplicate Page">
-                                                    <i class="bi bi-copy"></i>
+                                                    <i class="bi bi-files"></i>
                                                 </button>
                                             <?php endif; ?>
 
@@ -259,7 +259,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="duplicateModalLabel">
-                    <i class="bi bi-copy"></i> Duplicate Page
+                    <i class="bi bi-files"></i> Duplicate Page
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -282,7 +282,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-copy"></i> Create Duplicate
+                        <i class="bi bi-files"></i> Create Duplicate
                     </button>
                 </div>
             </form>

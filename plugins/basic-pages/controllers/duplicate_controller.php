@@ -18,7 +18,6 @@ if (user_can('add_page')) {
                 'content'         => $source->content,
                 'advancedcontent' => $source->advancedcontent,
                 'advanced'        => $source->advanced,
-                'image'           => $source->image,
                 'disabled'        => 1,
                 'date_created'    => date("Y-m-d H:i:s"),
             ];
@@ -26,7 +25,7 @@ if (user_can('add_page')) {
             if ($page->insert($data)) {
                 message("Page duplicated successfully!", "success");
             } else {
-                message("Failed to duplicate the page.", "fail");
+                message("Failed to duplicate the page." . (!empty($page->error) ? ' (' . $page->error . ')' : ''), "fail");
             }
         } else {
             message("Page to duplicate was not found.", "fail");

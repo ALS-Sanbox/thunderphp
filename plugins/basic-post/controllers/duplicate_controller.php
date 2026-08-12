@@ -24,7 +24,7 @@ if (user_can('add_post')) {
             if ($posts->insert($data)) {
                 message("Post duplicated successfully!", "success");
             } else {
-                message("Failed to duplicate the post.", "fail");
+                message("Failed to duplicate the post." . (!empty($posts->error) ? ' (' . $posts->error . ')' : ''), "fail");
             }
         } else {
             message("Post to duplicate was not found.", "fail");
