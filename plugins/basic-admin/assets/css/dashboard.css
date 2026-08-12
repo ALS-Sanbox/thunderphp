@@ -33,6 +33,26 @@
 }
 
 /*
+ * Table contrast (light theme)
+ * Bootstrap's default 5% stripe/border tint reads as almost pure white on
+ * this theme's white page background, making row and cell boundaries hard
+ * to see. Strengthen it specifically for light mode; dark mode already has
+ * enough contrast against its dark surface color.
+ */
+:root[data-bs-theme="light"] .table {
+  --bs-table-striped-bg: rgba(0, 0, 0, 0.055);
+  --bs-border-color: rgba(0, 0, 0, 0.175);
+}
+
+:root[data-bs-theme="light"] .table-bordered > :not(caption) > * {
+  border-color: rgba(0, 0, 0, 0.175);
+}
+
+:root[data-bs-theme="light"] .table-hover > tbody > tr:hover > * {
+  --bs-table-accent-bg: rgba(0, 0, 0, 0.09);
+}
+
+/*
  * Navbar
  */
 
