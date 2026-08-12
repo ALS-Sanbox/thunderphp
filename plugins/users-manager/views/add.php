@@ -31,9 +31,27 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="roles" class="form-label">Roles</label>
-                    <select class="form-select" id="roles" name="roles[]" multiple>
-                    </select>
+                    <label class="form-label">Roles</label>
+                    <?php
+                        $all_roles = $user_roles->query("SELECT * FROM user_roles WHERE disabled = 0");
+                    ?>
+                    <?php if (!empty($all_roles)) : $num = 0 ?>
+                        <?php foreach ($all_roles as $role) : $num++ ?>
+                            <div class="form-check col-md-6">
+                                <input
+                                    name="role_<?= $num ?>"
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    value="<?= $role->id ?>"
+                                    id="check-<?= $num ?>">
+                                <label class="form-check-label" for="check-<?= $num ?>" style="cursor: pointer;">
+                                    <?= esc($role->role) ?>
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-muted">No roles have been created yet.</p>
+                    <?php endif; ?>
                 </div>
                 
                 <div class="mb-3">

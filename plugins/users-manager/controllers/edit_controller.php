@@ -55,7 +55,7 @@ if(user_can('edit_user')) {
                     foreach ($roledata as $role_id) {
                         $result = $user_roles_map->first(['role_id' => $role_id, 'user_id' => $user_id]);
                         if ($result) {
-                            $user_roles_map->update($result->role_id, ['disabled' => 0]);
+                            $user_roles_map->update($result->id, ['disabled' => 0]);
                         } else {
                             $user_roles_map->insert([
                                 'role_id' => $role_id,
