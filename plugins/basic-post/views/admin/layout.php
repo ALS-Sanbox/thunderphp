@@ -45,6 +45,16 @@
 <script src="<?=ROOT?>/assets/grapesjs/grapesjs-navbar.min.js"></script>
 <script src="<?=ROOT?>/assets/grapesjs/grapesjs-custom-code.min.js"></script>
 <script src="<?=ROOT?>/assets/grapesjs/grapesjs-preset-webpage.min.js"></script>
+<script src="<?=ROOT?>/assets/grapesjs/nav-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/hero-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/footer-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/feature-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/cta-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/testimonial-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/pricing-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/team-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/faq-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/contact-blocks.js?v=1"></script>
 <script>
   const layoutEditor = grapesjs.init({
     container: '#gjs',
@@ -83,6 +93,21 @@
     label: 'Post List',
     category: 'Post',
     content: '<div class="post-list-block" style="padding:20px;border:2px dashed #999;background:#f8f9fa;">{{POST_LIST}}</div>',
+  });
+
+  [
+    'registerNavBlocks',
+    'registerHeroBlocks',
+    'registerFooterBlocks',
+    'registerFeatureBlocks',
+    'registerCtaBlocks',
+    'registerTestimonialBlocks',
+    'registerPricingBlocks',
+    'registerTeamBlocks',
+    'registerFaqBlocks',
+    'registerContactBlocks',
+  ].forEach(function (fn) {
+    if (window[fn]) window[fn](layoutEditor);
   });
 
   document.getElementById('saveLayoutBtn').addEventListener('click', function () {
