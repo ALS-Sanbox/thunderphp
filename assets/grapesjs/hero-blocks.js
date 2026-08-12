@@ -3,6 +3,7 @@
         editor.BlockManager.add('hero-basic', {
             label: 'Hero (Centered)',
             category: 'Hero',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="42" height="30" rx="1"/><line x1="16" y1="12" x2="32" y2="12"/><line x1="12" y1="18" x2="36" y2="18"/><rect x="18" y="24" width="12" height="5" rx="2"/></svg>',
             content: `
 <section class="gjs-hero gjs-hero-basic">
   <h1 class="gjs-hero-title">Build something people love</h1>
@@ -21,6 +22,7 @@
         editor.BlockManager.add('hero-split', {
             label: 'Hero (Split Image)',
             category: 'Hero',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="42" height="30" rx="1"/><line x1="8" y1="12" x2="19" y2="12"/><line x1="8" y1="18" x2="19" y2="18"/><rect x="8" y="23" width="9" height="5" rx="2"/><rect x="28" y="10" width="13" height="16" rx="1"/></svg>',
             content: `
 <section class="gjs-hero gjs-hero-split">
   <div class="gjs-hero-split-text">
@@ -51,6 +53,7 @@
         editor.BlockManager.add('hero-bg-image', {
             label: 'Hero (Background Image)',
             category: 'Hero',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="42" height="30" rx="1"/><circle cx="14" cy="13" r="3"/><path d="M3 26 L15 17 L23 24 L33 12 L45 22" stroke-linejoin="round"/><line x1="14" y1="30" x2="34" y2="30" stroke-width="3"/></svg>',
             content: `
 <section class="gjs-hero gjs-hero-bg" style="background-image: url('https://placehold.co/1600x800');">
   <div class="gjs-hero-bg-overlay">
@@ -73,6 +76,7 @@
         editor.BlockManager.add('hero-signup', {
             label: 'Hero (Email Signup)',
             category: 'Hero',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="42" height="30" rx="1"/><line x1="14" y1="12" x2="34" y2="12"/><rect x="10" y="19" width="18" height="6" rx="1"/><rect x="30" y="19" width="8" height="6" rx="1"/></svg>',
             content: `
 <section class="gjs-hero gjs-hero-signup">
   <h1 class="gjs-hero-title">Get early access</h1>
@@ -96,6 +100,7 @@
         editor.BlockManager.add('hero-stats', {
             label: 'Hero (With Stats)',
             category: 'Hero',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="42" height="30" rx="1"/><line x1="16" y1="9" x2="32" y2="9"/><rect x="18" y="13" width="12" height="4" rx="2"/><line x1="9" y1="24" x2="9" y2="28"/><line x1="24" y1="21" x2="24" y2="28"/><line x1="39" y1="25" x2="39" y2="28"/></svg>',
             content: `
 <section class="gjs-hero gjs-hero-stats">
   <h1 class="gjs-hero-title">Trusted by teams everywhere</h1>

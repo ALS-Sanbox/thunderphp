@@ -3,6 +3,7 @@
         editor.BlockManager.add('nav-basic', {
             label: 'Nav Menu',
             category: 'Navigation',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="42" height="8" rx="1"/><line x1="7" y1="10" x2="14" y2="10"/><line x1="26" y1="10" x2="31" y2="10"/><line x1="34" y1="10" x2="39" y2="10"/></svg>',
             content: `
 <nav class="gjs-nav gjs-nav-basic">
   <div class="gjs-nav-brand">Brand</div>
@@ -26,6 +27,7 @@
         editor.BlockManager.add('nav-sticky', {
             label: 'Sticky Nav Menu',
             category: 'Navigation',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="24" y1="2" x2="24" y2="7"/><path d="M20 5 L24 2 L28 5"/><rect x="3" y="9" width="42" height="8" rx="1"/><line x1="7" y1="13" x2="14" y2="13"/><line x1="34" y1="13" x2="39" y2="13"/></svg>',
             content: `
 <nav class="gjs-nav gjs-nav-basic gjs-nav-sticky">
   <div class="gjs-nav-brand">Brand</div>
@@ -44,6 +46,7 @@
         editor.BlockManager.add('nav-dropdown', {
             label: 'Dropdown / Multi-level Nav',
             category: 'Navigation',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="42" height="8" rx="1"/><line x1="7" y1="8" x2="14" y2="8"/><line x1="20" y1="8" x2="26" y2="8"/><rect x="18" y="14" width="16" height="12" rx="1"/><line x1="21" y1="18" x2="31" y2="18"/><line x1="21" y1="22" x2="31" y2="22"/></svg>',
             content: `
 <nav class="gjs-nav gjs-nav-dropdown">
   <div class="gjs-nav-brand">Brand</div>
@@ -86,6 +89,7 @@
         editor.BlockManager.add('nav-mega', {
             label: 'Mega Menu',
             category: 'Navigation',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="42" height="8" rx="1"/><line x1="7" y1="8" x2="14" y2="8"/><rect x="3" y="14" width="42" height="14" rx="1"/><line x1="7" y1="18" x2="7" y2="24"/><line x1="18" y1="18" x2="18" y2="24"/><line x1="29" y1="18" x2="29" y2="24"/></svg>',
             content: `
 <nav class="gjs-nav gjs-nav-mega">
   <div class="gjs-nav-brand">Brand</div>
@@ -133,6 +137,7 @@
         editor.BlockManager.add('nav-mobile', {
             label: 'Mobile / Hamburger Nav',
             category: 'Navigation',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="42" height="8" rx="1"/><line x1="7" y1="10" x2="13" y2="10"/><line x1="34" y1="8" x2="41" y2="8"/><line x1="34" y1="10" x2="41" y2="10"/><line x1="34" y1="12" x2="41" y2="12"/></svg>',
             content: `
 <nav class="gjs-nav gjs-nav-mobile" data-gjs-nav-open="false">
   <div class="gjs-nav-brand">Brand</div>

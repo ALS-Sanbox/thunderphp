@@ -3,6 +3,7 @@
         editor.BlockManager.add('testimonial-single', {
             label: 'Testimonial (Single Quote)',
             category: 'Testimonials',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 8c-3 0-5 2-5 5s2 4 4 4c0-3 1-5 3-6z" fill="currentColor" stroke="none"/><path d="M26 8c-3 0-5 2-5 5s2 4 4 4c0-3 1-5 3-6z" fill="currentColor" stroke="none"/><line x1="10" y1="24" x2="38" y2="24"/><circle cx="24" cy="31" r="3"/></svg>',
             content: `
 <section class="gjs-test gjs-test-single">
   <p class="gjs-test-quote">&ldquo;This completely changed how our team works. We shipped in weeks what used to take months.&rdquo;</p>
@@ -27,6 +28,7 @@
         editor.BlockManager.add('testimonial-grid', {
             label: 'Testimonial (Card Grid)',
             category: 'Testimonials',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="12" height="24" rx="1"/><rect x="18" y="5" width="12" height="24" rx="1"/><rect x="33" y="5" width="12" height="24" rx="1"/><circle cx="9" cy="24" r="2"/><circle cx="24" cy="24" r="2"/><circle cx="39" cy="24" r="2"/></svg>',
             content: `
 <section class="gjs-test gjs-test-grid">
   <div class="gjs-test-card">
@@ -57,6 +59,7 @@
         editor.BlockManager.add('testimonial-rating', {
             label: 'Testimonial (With Rating)',
             category: 'Testimonials',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" stroke="currentColor" stroke-width="2" stroke-linecap="round"><g fill="currentColor" stroke="none"><circle cx="8" cy="10" r="2"/><circle cx="16" cy="10" r="2"/><circle cx="24" cy="10" r="2"/><circle cx="32" cy="10" r="2"/><circle cx="40" cy="10" r="2"/></g><g fill="none"><line x1="10" y1="20" x2="38" y2="20"/><line x1="14" y1="26" x2="34" y2="26"/></g></svg>',
             content: `
 <section class="gjs-test gjs-test-rating">
   <div class="gjs-test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
@@ -83,6 +86,7 @@
         editor.BlockManager.add('testimonial-logos', {
             label: 'Testimonial (Trusted By / Logo Wall)',
             category: 'Testimonials',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="14" width="8" height="8" rx="1"/><rect x="14" y="14" width="8" height="8" rx="1"/><rect x="25" y="14" width="8" height="8" rx="1"/><rect x="36" y="14" width="9" height="8" rx="1"/></svg>',
             content: `
 <section class="gjs-test gjs-test-logos">
   <p class="gjs-test-logos-label">Trusted by teams at</p>

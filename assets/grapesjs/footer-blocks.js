@@ -3,6 +3,7 @@
         editor.BlockManager.add('footer-simple', {
             label: 'Footer (Simple)',
             category: 'Footer',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="14" width="42" height="10" rx="1"/><line x1="8" y1="19" x2="15" y2="19"/><line x1="26" y1="19" x2="31" y2="19"/><line x1="34" y1="19" x2="39" y2="19"/></svg>',
             content: `
 <footer class="gjs-footer gjs-footer-simple">
   <div class="gjs-footer-brand">Brand</div>
@@ -28,6 +29,7 @@
         editor.BlockManager.add('footer-columns', {
             label: 'Footer (Columns)',
             category: 'Footer',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="42" height="24" rx="1"/><line x1="14" y1="6" x2="14" y2="30"/><line x1="25" y1="6" x2="25" y2="30"/><line x1="36" y1="6" x2="36" y2="30"/><line x1="6" y1="12" x2="11" y2="12"/><line x1="17" y1="12" x2="22" y2="12"/><line x1="28" y1="12" x2="33" y2="12"/><line x1="39" y1="12" x2="42" y2="12"/></svg>',
             content: `
 <footer class="gjs-footer gjs-footer-columns">
   <div class="gjs-footer-cols">
@@ -73,6 +75,7 @@
         editor.BlockManager.add('footer-newsletter', {
             label: 'Footer (With Newsletter)',
             category: 'Footer',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="42" height="28" rx="1"/><rect x="10" y="10" width="18" height="6" rx="1"/><rect x="30" y="10" width="8" height="6" rx="1"/><line x1="10" y1="24" x2="38" y2="24"/></svg>',
             content: `
 <footer class="gjs-footer gjs-footer-newsletter">
   <div class="gjs-footer-nl-top">
@@ -116,6 +119,7 @@
         editor.BlockManager.add('footer-social', {
             label: 'Footer (Centered + Social)',
             category: 'Footer',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="42" height="28" rx="1"/><line x1="14" y1="12" x2="34" y2="12"/><circle cx="18" cy="21" r="3"/><circle cx="24" cy="21" r="3"/><circle cx="30" cy="21" r="3"/></svg>',
             content: `
 <footer class="gjs-footer gjs-footer-social">
   <div class="gjs-footer-brand">Brand</div>
@@ -149,6 +153,7 @@
         editor.BlockManager.add('footer-minimal', {
             label: 'Footer (Minimal)',
             category: 'Footer',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="15" width="42" height="8" rx="1"/><line x1="14" y1="19" x2="34" y2="19"/></svg>',
             content: `
 <footer class="gjs-footer gjs-footer-minimal">
   <span>&copy; 2026 Brand. All rights reserved.</span>

@@ -3,6 +3,7 @@
         editor.BlockManager.add('cta-simple', {
             label: 'CTA (Simple Banner)',
             category: 'CTA',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="42" height="30" rx="1"/><line x1="14" y1="13" x2="34" y2="13"/><line x1="17" y1="18" x2="31" y2="18"/><rect x="18" y="23" width="12" height="6" rx="3"/></svg>',
             content: `
 <section class="gjs-cta gjs-cta-simple">
   <h2>Ready to get started?</h2>
@@ -21,6 +22,7 @@
         editor.BlockManager.add('cta-two-buttons', {
             label: 'CTA (Two Buttons)',
             category: 'CTA',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="42" height="30" rx="1"/><line x1="14" y1="12" x2="34" y2="12"/><rect x="10" y="19" width="12" height="6" rx="3"/><rect x="26" y="19" width="12" height="6" rx="3"/></svg>',
             content: `
 <section class="gjs-cta gjs-cta-two">
   <h2>Start building today</h2>
@@ -45,6 +47,7 @@
         editor.BlockManager.add('cta-split', {
             label: 'CTA (Split with Image)',
             category: 'CTA',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="8" width="15" height="18" rx="1"/><line x1="23" y1="12" x2="43" y2="12"/><line x1="23" y1="17" x2="38" y2="17"/><rect x="23" y="21" width="12" height="5" rx="2"/></svg>',
             content: `
 <section class="gjs-cta gjs-cta-split">
   <div class="gjs-cta-split-media"><img src="https://placehold.co/480x320" alt=""></div>
@@ -70,6 +73,7 @@
         editor.BlockManager.add('cta-boxed', {
             label: 'CTA (Boxed Card)',
             category: 'CTA',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="5" width="32" height="26" rx="6"/><line x1="16" y1="14" x2="32" y2="14"/><rect x="18" y="20" width="12" height="6" rx="3"/></svg>',
             content: `
 <section class="gjs-cta gjs-cta-boxed-wrap">
   <div class="gjs-cta-boxed">
@@ -91,6 +95,7 @@
         editor.BlockManager.add('cta-bar', {
             label: 'CTA (Slim Bar)',
             category: 'CTA',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="15" width="42" height="8" rx="1"/><line x1="8" y1="19" x2="26" y2="19"/><line x1="31" y1="19" x2="40" y2="19"/></svg>',
             content: `
 <section class="gjs-cta gjs-cta-bar">
   <span class="gjs-cta-bar-text">New: real-time collaboration is here.</span>

@@ -3,6 +3,7 @@
         editor.BlockManager.add('feature-grid', {
             label: 'Feature Grid (Icons)',
             category: 'Features',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="4"/><line x1="5" y1="20" x2="15" y2="20"/><line x1="6" y1="25" x2="14" y2="25"/><circle cx="24" cy="10" r="4"/><line x1="19" y1="20" x2="29" y2="20"/><line x1="20" y1="25" x2="28" y2="25"/><circle cx="38" cy="10" r="4"/><line x1="33" y1="20" x2="43" y2="20"/><line x1="34" y1="25" x2="42" y2="25"/></svg>',
             content: `
 <section class="gjs-feat gjs-feat-grid">
   <div class="gjs-feat-item">
@@ -34,6 +35,7 @@
         editor.BlockManager.add('feature-cards', {
             label: 'Feature Cards (Image)',
             category: 'Features',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="12" height="24" rx="1"/><rect x="18" y="6" width="12" height="24" rx="1"/><rect x="33" y="6" width="12" height="24" rx="1"/></svg>',
             content: `
 <section class="gjs-feat gjs-feat-cards">
   <div class="gjs-feat-card">
@@ -72,6 +74,7 @@
         editor.BlockManager.add('feature-list', {
             label: 'Feature List (Checkmarks)',
             category: 'Features',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 9 L8 12 L13 6"/><line x1="18" y1="9" x2="42" y2="9"/><path d="M5 19 L8 22 L13 16"/><line x1="18" y1="19" x2="42" y2="19"/><path d="M5 29 L8 32 L13 26"/><line x1="18" y1="29" x2="42" y2="29"/></svg>',
             content: `
 <section class="gjs-feat gjs-feat-list">
   <h2>Everything you need</h2>
@@ -94,6 +97,7 @@
         editor.BlockManager.add('feature-alternating', {
             label: 'Feature (Alternating Rows)',
             category: 'Features',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="14" height="12" rx="1"/><line x1="21" y1="7" x2="42" y2="7"/><line x1="21" y1="12" x2="36" y2="12"/><line x1="6" y1="24" x2="27" y2="24"/><line x1="6" y1="29" x2="21" y2="29"/><rect x="31" y="20" width="14" height="12" rx="1"/></svg>',
             content: `
 <section class="gjs-feat gjs-feat-alt">
   <div class="gjs-feat-alt-row">
@@ -130,6 +134,7 @@
         editor.BlockManager.add('feature-steps', {
             label: 'Feature (Numbered Steps)',
             category: 'Features',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="10" y1="14" x2="38" y2="14"/><circle cx="10" cy="14" r="5"/><circle cx="24" cy="14" r="5"/><circle cx="38" cy="14" r="5"/><line x1="14" y1="26" x2="34" y2="26"/></svg>',
             content: `
 <section class="gjs-feat gjs-feat-steps">
   <h2>How it works</h2>

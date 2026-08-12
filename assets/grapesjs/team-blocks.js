@@ -3,6 +3,7 @@
         editor.BlockManager.add('team-grid', {
             label: 'Team (Photo Grid)',
             category: 'Team',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="12" r="5"/><circle cx="20" cy="12" r="5"/><circle cx="31" cy="12" r="5"/><circle cx="42" cy="12" r="5"/><line x1="6" y1="24" x2="12" y2="24"/><line x1="17" y1="24" x2="23" y2="24"/><line x1="28" y1="24" x2="34" y2="24"/><line x1="39" y1="24" x2="45" y2="24"/></svg>',
             content: `
 <section class="gjs-team gjs-team-grid">
   <div class="gjs-team-member"><img src="https://placehold.co/220x220" alt=""><h3>Jamie Ford</h3><p>CEO &amp; Co-founder</p></div>
@@ -22,6 +23,7 @@
         editor.BlockManager.add('team-bio-cards', {
             label: 'Team (With Bio)',
             category: 'Team',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="12" height="24" rx="1"/><rect x="18" y="5" width="12" height="24" rx="1"/><rect x="33" y="5" width="12" height="24" rx="1"/><circle cx="9" cy="12" r="3"/><circle cx="24" cy="12" r="3"/><circle cx="39" cy="12" r="3"/></svg>',
             content: `
 <section class="gjs-team gjs-team-bio">
   <div class="gjs-team-card">
@@ -64,6 +66,7 @@
         editor.BlockManager.add('team-social', {
             label: 'Team (With Social Icons)',
             category: 'Team',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="6"/><circle cx="24" cy="12" r="6"/><circle cx="36" cy="12" r="6"/><g fill="currentColor" stroke="none"><circle cx="9" cy="27" r="1.5"/><circle cx="15" cy="27" r="1.5"/><circle cx="21" cy="27" r="1.5"/><circle cx="27" cy="27" r="1.5"/><circle cx="33" cy="27" r="1.5"/><circle cx="39" cy="27" r="1.5"/></g></svg>',
             content: `
 <section class="gjs-team gjs-team-social-grid">
   <div class="gjs-team-member">
@@ -100,6 +103,7 @@
         editor.BlockManager.add('team-list', {
             label: 'Team (Compact List)',
             category: 'Team',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><line x1="15" y1="8" x2="38" y2="8"/><circle cx="8" cy="18" r="3"/><line x1="15" y1="18" x2="38" y2="18"/><circle cx="8" cy="28" r="3"/><line x1="15" y1="28" x2="38" y2="28"/></svg>',
             content: `
 <section class="gjs-team gjs-team-list">
   <div class="gjs-team-row"><img src="https://placehold.co/56x56" alt=""><div class="gjs-team-row-info"><h3>Noah Sullivan</h3><p>Backend Engineer</p></div><div class="gjs-team-row-social"><a href="#">In</a></div></div>
@@ -120,6 +124,7 @@
         editor.BlockManager.add('team-featured', {
             label: 'Team (Featured Single)',
             category: 'Team',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="18" r="9"/><line x1="25" y1="11" x2="43" y2="11"/><line x1="25" y1="17" x2="40" y2="17"/><line x1="25" y1="23" x2="36" y2="23"/></svg>',
             content: `
 <section class="gjs-team gjs-team-featured">
   <img src="https://placehold.co/280x280" alt="">

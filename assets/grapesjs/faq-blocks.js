@@ -3,6 +3,7 @@
         editor.BlockManager.add('faq-accordion', {
             label: 'FAQ (Accordion)',
             category: 'FAQ',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="42" height="8" rx="1"/><path d="M36 6 L39 9 L42 6"/><rect x="3" y="15" width="42" height="8" rx="1"/><path d="M36 17 L39 20 L42 17"/><rect x="3" y="26" width="42" height="8" rx="1"/><path d="M36 28 L39 31 L42 28"/></svg>',
             content: `
 <section class="gjs-faq gjs-faq-accordion">
   <h2>Frequently Asked Questions</h2>
@@ -38,6 +39,7 @@
         editor.BlockManager.add('faq-two-column', {
             label: 'FAQ (Two Column)',
             category: 'FAQ',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8" stroke-width="3"/><line x1="4" y1="14" x2="20" y2="14"/><line x1="4" y1="22" x2="20" y2="22" stroke-width="3"/><line x1="4" y1="28" x2="20" y2="28"/><line x1="28" y1="8" x2="44" y2="8" stroke-width="3"/><line x1="28" y1="14" x2="44" y2="14"/><line x1="28" y1="22" x2="44" y2="22" stroke-width="3"/><line x1="28" y1="28" x2="44" y2="28"/></svg>',
             content: `
 <section class="gjs-faq gjs-faq-two-col">
   <h2>Common Questions</h2>
@@ -61,6 +63,7 @@
         editor.BlockManager.add('faq-cards', {
             label: 'FAQ (Card Grid)',
             category: 'FAQ',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="8" width="12" height="20" rx="1"/><rect x="18" y="8" width="12" height="20" rx="1"/><rect x="33" y="8" width="12" height="20" rx="1"/></svg>',
             content: `
 <section class="gjs-faq gjs-faq-cards">
   <div class="gjs-faq-card"><h4>Do you offer discounts?</h4><p>Yes, students and nonprofits get 30% off any plan.</p></div>
@@ -79,6 +82,7 @@
         editor.BlockManager.add('faq-with-cta', {
             label: 'FAQ (With Contact CTA)',
             category: 'FAQ',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="42" height="7" rx="1"/><rect x="3" y="13" width="42" height="7" rx="1"/><rect x="16" y="26" width="16" height="6" rx="3"/></svg>',
             content: `
 <section class="gjs-faq gjs-faq-cta-wrap">
   <h2>Questions &amp; Answers</h2>
@@ -112,6 +116,7 @@
         editor.BlockManager.add('faq-simple-list', {
             label: 'FAQ (Simple List)',
             category: 'FAQ',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="30" y2="7" stroke-width="3"/><line x1="4" y1="13" x2="44" y2="13"/><line x1="4" y1="18" x2="30" y2="18" stroke-width="3"/><line x1="4" y1="24" x2="44" y2="24"/><line x1="4" y1="29" x2="30" y2="29" stroke-width="3"/></svg>',
             content: `
 <section class="gjs-faq gjs-faq-simple">
   <div class="gjs-faq-simple-item"><h4>Where can I see pricing?</h4><p>Full pricing details are on the pricing page, updated live.</p></div>

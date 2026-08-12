@@ -3,6 +3,7 @@
         editor.BlockManager.add('contact-form', {
             label: 'Contact (Simple Form)',
             category: 'Contact',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="10" y="3" width="28" height="6" rx="1"/><rect x="10" y="12" width="28" height="6" rx="1"/><rect x="10" y="21" width="28" height="6" rx="1"/><rect x="18" y="30" width="12" height="4" rx="2"/></svg>',
             content: `
 <section class="gjs-contact gjs-contact-form-wrap">
   <h2>Get in touch</h2>
@@ -28,6 +29,7 @@
         editor.BlockManager.add('contact-split', {
             label: 'Contact (Split with Info)',
             category: 'Contact',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="10" x2="19" y2="10"/><line x1="3" y1="16" x2="16" y2="16"/><line x1="3" y1="22" x2="19" y2="22"/><rect x="26" y="6" width="19" height="6" rx="1"/><rect x="26" y="14" width="19" height="6" rx="1"/><rect x="26" y="22" width="12" height="6" rx="1"/></svg>',
             content: `
 <section class="gjs-contact gjs-contact-split">
   <div class="gjs-contact-info">
@@ -63,6 +65,7 @@
         editor.BlockManager.add('contact-info-cards', {
             label: 'Contact (Info Cards)',
             category: 'Contact',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="8" width="12" height="20" rx="1"/><rect x="18" y="8" width="12" height="20" rx="1"/><rect x="33" y="8" width="12" height="20" rx="1"/><circle cx="9" cy="15" r="3"/><circle cx="24" cy="15" r="3"/><circle cx="39" cy="15" r="3"/></svg>',
             content: `
 <section class="gjs-contact gjs-contact-cards">
   <div class="gjs-contact-card"><div class="gjs-contact-card-icon">&#9993;</div><h4>Email</h4><p>hello@brand.com</p></div>
@@ -82,6 +85,7 @@
         editor.BlockManager.add('contact-map-form', {
             label: 'Contact (Map + Form)',
             category: 'Contact',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="42" height="12" rx="1"/><rect x="12" y="19" width="24" height="6" rx="1"/><rect x="18" y="28" width="12" height="4" rx="2"/></svg>',
             content: `
 <section class="gjs-contact gjs-contact-map-wrap">
   <div class="gjs-contact-map"><img src="https://placehold.co/1200x360?text=Map" alt="Map"></div>
@@ -110,6 +114,7 @@
         editor.BlockManager.add('contact-minimal', {
             label: 'Contact (Minimal)',
             category: 'Contact',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="14" x2="36" y2="14"/><line x1="15" y1="22" x2="33" y2="22"/></svg>',
             content: `
 <section class="gjs-contact gjs-contact-minimal">
   <h2>Say hello</h2>

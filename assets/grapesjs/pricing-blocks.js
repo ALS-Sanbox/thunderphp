@@ -3,6 +3,7 @@
         editor.BlockManager.add('pricing-tiers', {
             label: 'Pricing (3 Tiers)',
             category: 'Pricing',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="12" height="20" rx="1"/><rect x="18" y="4" width="12" height="26" rx="1"/><rect x="33" y="10" width="12" height="20" rx="1"/></svg>',
             content: `
 <section class="gjs-price gjs-price-tiers">
   <div class="gjs-price-card">
@@ -65,6 +66,7 @@
         editor.BlockManager.add('pricing-single', {
             label: 'Pricing (Single Card)',
             category: 'Pricing',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="12" y="4" width="24" height="28" rx="2"/><line x1="17" y1="12" x2="31" y2="12"/><rect x="18" y="20" width="12" height="6" rx="3"/></svg>',
             content: `
 <section class="gjs-price gjs-price-single-wrap">
   <div class="gjs-price-single">
@@ -89,6 +91,7 @@
         editor.BlockManager.add('pricing-comparison', {
             label: 'Pricing (Comparison Table)',
             category: 'Pricing',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="42" height="26" rx="1"/><line x1="3" y1="13" x2="45" y2="13"/><line x1="3" y1="21" x2="45" y2="21"/><line x1="19" y1="5" x2="19" y2="31"/><line x1="32" y1="5" x2="32" y2="31"/></svg>',
             content: `
 <section class="gjs-price gjs-price-compare">
   <table class="gjs-price-table">
@@ -118,6 +121,7 @@
         editor.BlockManager.add('pricing-toggle', {
             label: 'Pricing (Monthly / Yearly Toggle)',
             category: 'Pricing',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="16" y="4" width="16" height="8" rx="4"/><circle cx="27" cy="8" r="3" fill="currentColor" stroke="none"/><rect x="12" y="16" width="24" height="16" rx="2"/></svg>',
             content: `
 <section class="gjs-price gjs-price-toggle-wrap">
   <input type="checkbox" id="gjs-price-yearly-toggle" class="gjs-price-toggle-input">
@@ -157,6 +161,7 @@
         editor.BlockManager.add('pricing-minimal', {
             label: 'Pricing (Minimal List)',
             category: 'Pricing',
+            media: '<svg viewBox="0 0 48 36" width="48" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="10" x2="14" y2="10"/><line x1="34" y1="10" x2="44" y2="10"/><line x1="4" y1="18" x2="14" y2="18"/><line x1="34" y1="18" x2="44" y2="18"/><line x1="4" y1="26" x2="14" y2="26"/><line x1="34" y1="26" x2="44" y2="26"/></svg>',
             content: `
 <section class="gjs-price gjs-price-minimal">
   <div class="gjs-price-row"><span>Web Design</span><span class="gjs-price-dots"></span><span>$1,200</span></div>
