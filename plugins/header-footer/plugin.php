@@ -22,6 +22,20 @@ add_action('before_view', function(){
     $link -> icon   = '';
     $links[]        = $link;
     $links = do_filter(plugin_id().'_before_menu_links',$links);
+
+    // If a real (DB-backed) top-level menu item now covers the "home" slug,
+    // it replaces the synthetic fallback above instead of appearing alongside it.
+    $hasRealHomeLink = false;
+    foreach ($links as $existingLink) {
+        if (!empty($existingLink->id) && ($existingLink->slug ?? '') === 'home') {
+            $hasRealHomeLink = true;
+            break;
+        }
+    }
+    if ($hasRealHomeLink) {
+        $links = array_values(array_filter($links, fn($l) => !empty($l->id) || ($l->slug ?? '') !== 'home'));
+    }
+
     require plugin_path('views/header.php');
 },$priority);
 

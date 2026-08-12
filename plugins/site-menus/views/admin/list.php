@@ -27,6 +27,12 @@
                         <i class="bi bi-plus-lg"></i> New Item
                         </button>
                     </a>
+                    <form method="post" action="<?=ROOT?>/<?=$admin_route?>/<?=$plugin_route?>/restore-default" class="d-inline">
+                        <input type="hidden" name="_token" value="<?= csrf() ?>">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm" title="Recreates the default Home link as an editable menu item if it's missing">
+                            <i class="bi bi-arrow-counterclockwise"></i> Restore Default Menu
+                        </button>
+                    </form>
                 </th>
             <?php endif; ?>
         </tr>

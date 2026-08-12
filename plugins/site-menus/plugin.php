@@ -101,17 +101,19 @@ add_action('controller', function(){
                 require plugin_path('controllers/add_controller.php');
                 break;
             case 'edit':
-                dd('here');
                 require plugin_path('controllers/edit_controller.php');
                 break;
             case 'delete':
                 require plugin_path('controllers/delete_controller.php');
                 break;
+            case 'restore-default':
+                require plugin_path('controllers/restore_default_controller.php');
+                break;
             default:
                 break;
         }
 
-        
+
     }
 });
 
