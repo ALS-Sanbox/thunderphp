@@ -38,7 +38,7 @@ add_filter('basic-admin_before_admin_links', function ($links) {
         $links[] = (object)[
             'title'  => 'Images',
             'link'   => ROOT . '/' . $vars['admin_route'] . '/' . $vars['plugin_route'],
-            'icon'   => 'card',
+            'icon'   => 'image',
             'parent' => 0,
         ];
     }
