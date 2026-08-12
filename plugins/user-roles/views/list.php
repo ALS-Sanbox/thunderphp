@@ -14,6 +14,26 @@
     $permissions->limit = 10000;
     $permData = $permissions->where(['role_id' => $selectedRoleId, 'disabled' => 0]);
     $activePermissionsArray = array_column($permData, 'permission');
+
+    // Group permissions by the feature they act on (add_page/edit_page/delete_page -> "Page")
+    // instead of one long alphabetical list, so related checkboxes sit together.
+    $permGroups = [];
+    foreach ($allPermissions as $perm) {
+        if ($perm === '' || $perm === 'all') {
+            $permGroups['General'][] = $perm;
+            continue;
+        }
+        $parts = explode('_', $perm, 2);
+        $noun = $parts[1] ?? $parts[0];
+        if (substr($noun, -3) === 'ies') {
+            $noun = substr($noun, 0, -3) . 'y';
+        } elseif (substr($noun, -1) === 's' && substr($noun, -2) !== 'ss') {
+            $noun = substr($noun, 0, -1);
+        }
+        $groupLabel = ucwords(str_replace('_', ' ', $noun));
+        $permGroups[$groupLabel][] = $perm;
+    }
+    ksort($permGroups);
 ?>
 
 
@@ -60,15 +80,33 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-10">
-                        <div class="scrollable-permissions border p-2" id="permissionsList"
-                            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; align-items: center;">
-                            <?php foreach ($allPermissions as $key => $perm): ?>
-                                <div class="permission-item">
-                                    <h6 class="d-flex align-items-center">
-                                        <input type="checkbox" class="permission-input me-2" name="permissions[]" value="<?= esc($perm) ?>"
-                                            <?= in_array($perm, $activePermissionsArray) ? 'checked' : '' ?> id="perm_<?= esc($perm) ?>">
-                                        <label for="perm_<?= esc($perm) ?>"><?= esc($perm) ?></label>
-                                    </h6>
+                        <h6 class="fw-bold">Permissions</h6>
+                        <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                            <input type="text" id="permissionSearch" class="form-control form-control-sm" style="max-width: 260px;" placeholder="Filter permissions...">
+                            <button type="button" id="selectAllPerms" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-check-all"></i> Select All
+                            </button>
+                            <button type="button" id="clearAllPerms" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-x-lg"></i> Clear All
+                            </button>
+                            <span class="text-muted small ms-auto"><span id="permCheckedCount">0</span> / <?= count($allPermissions) ?> selected</span>
+                        </div>
+                        <div class="permissions-groups border rounded p-3" id="permissionsList" style="max-height: 420px; overflow-y: auto;">
+                            <?php foreach ($permGroups as $groupLabel => $perms): sort($perms); ?>
+                                <div class="permission-group mb-3" data-group>
+                                    <div class="d-flex align-items-center justify-content-between border-bottom pb-1 mb-2">
+                                        <h6 class="fw-bold mb-0 text-uppercase small text-muted"><?= esc($groupLabel) ?></h6>
+                                        <button type="button" class="btn btn-link btn-sm p-0 group-toggle-all">Toggle group</button>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        <?php foreach ($perms as $perm): ?>
+                                            <div class="form-check permission-item" data-perm-name="<?= esc(strtolower($perm)) ?>">
+                                                <input type="checkbox" class="form-check-input permission-input" name="permissions[]" value="<?= esc($perm) ?>"
+                                                    <?= in_array($perm, $activePermissionsArray) ? 'checked' : '' ?> id="perm_<?= esc($perm) ?>">
+                                                <label class="form-check-label" for="perm_<?= esc($perm) ?>" style="cursor:pointer;"><?= esc($perm) ?></label>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>

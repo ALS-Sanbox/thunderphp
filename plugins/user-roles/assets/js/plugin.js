@@ -36,4 +36,60 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("confirmAddBtn")?.addEventListener("click", function () {
         submitForm("add", "add_role");
     });
+
+    const permInputs = Array.from(document.querySelectorAll(".permission-input"));
+    const permItems = Array.from(document.querySelectorAll(".permission-item"));
+    const permGroups = Array.from(document.querySelectorAll(".permission-group"));
+    const permCount = document.getElementById("permCheckedCount");
+
+    function updatePermCount() {
+        if (permCount) {
+            permCount.textContent = permInputs.filter((i) => i.checked).length;
+        }
+    }
+
+    permInputs.forEach((input) => input.addEventListener("change", updatePermCount));
+    updatePermCount();
+
+    document.getElementById("permissionSearch")?.addEventListener("input", function () {
+        const term = this.value.trim().toLowerCase();
+
+        permItems.forEach((item) => {
+            const matches = !term || item.dataset.permName.includes(term);
+            item.style.display = matches ? "" : "none";
+        });
+
+        permGroups.forEach((group) => {
+            const anyVisible = Array.from(group.querySelectorAll(".permission-item")).some((item) => item.style.display !== "none");
+            group.style.display = anyVisible ? "" : "none";
+        });
+    });
+
+    document.getElementById("selectAllPerms")?.addEventListener("click", function () {
+        permItems.forEach((item) => {
+            if (item.style.display !== "none") {
+                item.querySelector(".permission-input").checked = true;
+            }
+        });
+        updatePermCount();
+    });
+
+    document.getElementById("clearAllPerms")?.addEventListener("click", function () {
+        permItems.forEach((item) => {
+            if (item.style.display !== "none") {
+                item.querySelector(".permission-input").checked = false;
+            }
+        });
+        updatePermCount();
+    });
+
+    document.querySelectorAll(".group-toggle-all").forEach((btn) => {
+        btn.addEventListener("click", function () {
+            const group = this.closest(".permission-group");
+            const inputs = Array.from(group.querySelectorAll(".permission-input"));
+            const allChecked = inputs.every((i) => i.checked);
+            inputs.forEach((i) => { i.checked = !allChecked; });
+            updatePermCount();
+        });
+    });
 });
