@@ -63,6 +63,7 @@
     width: 'auto',
     showOffsets: true,
     allowScripts: true,
+    storageManager: false,
     plugins: [
       'gjs-blocks-basic',
       'grapesjs-plugin-forms',

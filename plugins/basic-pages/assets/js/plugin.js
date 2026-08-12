@@ -75,6 +75,7 @@
 		width: 'auto',
 		showOffsets: true,
         allowScripts: true,
+        storageManager: false,
 		plugins: [
 		  'gjs-blocks-basic',
 		  'grapesjs-plugin-forms',
@@ -201,4 +202,11 @@
         form.appendChild(hiddenInput);
       }
     });
+
+    // Editing a page that's already Advanced should open straight into the
+    // GrapesJS editor instead of showing the Basic view first.
+    const advancedCheckbox = document.getElementById('advanced');
+    if (advancedCheckbox && advancedCheckbox.checked) {
+      document.getElementById('showEditorBtn').click();
+    }
   });
