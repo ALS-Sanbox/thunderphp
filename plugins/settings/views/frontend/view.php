@@ -20,6 +20,14 @@
                 <input type="url" name="site_url" value="<?= setting('site_url') ?>">
             </label>
 
+            <label>
+                <span>Site Logo</span>
+                <input type="file" name="site_logo" accept="image/*">
+                <?php if (setting('site_logo') && file_exists(setting('site_logo'))): ?>
+                    <div><img src="<?= get_image(setting('site_logo')) ?>" alt="" style="max-height:60px;margin-top:8px;"></div>
+                <?php endif; ?>
+            </label>
+
 <label>
     <span>Home Page</span>
     <select name="site_homepage">

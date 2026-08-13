@@ -88,33 +88,34 @@ add_action('controller', function () {
     }
 });
 
-add_filter('header-footer_before_menu_links', function ($links) {
+// Renders the account area (Login/Signup, or the logged-in user's avatar +
+// Admin/Profile/Logout) as its own piece, separate from the site's real
+// navigation menu, so the header-footer editor can place it independently
+// via the {{USER_MENU}} block instead of it always being glued to the menu.
+add_action('header-footer_user_menu', function () {
     $ses = new \Core\Session();
     $vars = get_value();
 
     if (!$ses->is_logged_in()) {
-        $links[] = (object)['id' => 1, 'title' => 'Login', 'slug' => $vars['login_page'], 'icon' => '', 'permission' => 'not_logged_in'];
-        $links[] = (object)['id' => 2, 'title' => 'Signup', 'slug' => $vars['signup_page'], 'icon' => '', 'permission' => 'not_logged_in'];
-    } else {
-        $userLink = (object)[
-            'id' => 3,
-            'title' => 'Hi, ' . htmlspecialchars($ses->user('first_name'), ENT_QUOTES, 'UTF-8'),
-            'slug' => '#',
-			'image' => $ses->user('image'),
-            'icon' => '',
-			'list_order' => 50,
-            'permission' => 'logged_in',
-            'children' => []
-        ];
-
-        $userLink->children[] = (object)['id' => 4, 'title' => 'Admin', 'slug' => $vars['admin_plugin_route'], 'icon' => '', 'permission' => 'logged_in'];
-		$userLink->children[] = (object)['id' => 4, 'title' => 'Profile', 'slug' => 'profile/' . $ses->user('id'), 'icon' => '', 'permission' => 'logged_in'];
-        $userLink->children[] = (object)['id' => 5, 'title' => 'Logout', 'slug' => $vars['logout_page'], 'icon' => '', 'permission' => 'logged_in'];
-
-        $links[] = $userLink;
+        ?>
+        <div class="hf-user-menu hf-user-menu-guest" style="display:flex;gap:12px;align-items:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+            <a href="<?= ROOT ?>/<?= $vars['login_page'] ?>">Login</a>
+            <a href="<?= ROOT ?>/<?= $vars['signup_page'] ?>">Signup</a>
+        </div>
+        <?php
+        return;
     }
-
-    return $links;
+    ?>
+    <div class="hf-user-menu hf-user-menu-account" style="display:flex;gap:10px;align-items:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+        <img src="<?= esc(get_image($ses->user('image'))) ?>" alt="" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
+        <span>Hi, <?= esc($ses->user('first_name')) ?></span>
+        <div class="hf-user-menu-links" style="display:flex;gap:10px;">
+            <a href="<?= ROOT ?>/<?= $vars['admin_plugin_route'] ?>">Admin</a>
+            <a href="<?= ROOT ?>/profile/<?= $ses->user('id') ?>">Profile</a>
+            <a href="<?= ROOT ?>/<?= $vars['logout_page'] ?>">Logout</a>
+        </div>
+    </div>
+    <?php
 });
 
 add_action('view', function () {
