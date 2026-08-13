@@ -30,21 +30,10 @@ class Siteusers extends Migration {
 
         $this->createTable('siteusers');
 
-
-        $this->addData([
-        'first_name'=>'Admin',
-        'last_name' =>'admin',
-        'image'     =>'',
-        'email'     =>'email@email.com',
-        'password'  => password_hash('password', PASSWORD_DEFAULT),
-        'date_created' => date("Y-m-d H:i:s"),
-        'date_updated' => date("Y-m-d H:i:s"),
-        'date_deleted' => date("Y-m-d H:i:s"),
-        ]);
-        
-         
-         $this->insert('siteusers');
-         
+        // No seeded admin account here on purpose - the install wizard
+        // (install.php) creates the one real admin account with
+        // credentials the installer actually chooses, instead of every
+        // fresh install shipping the same known email/password.
     }
 
     public function down() {

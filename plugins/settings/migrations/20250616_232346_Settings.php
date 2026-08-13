@@ -26,7 +26,7 @@ class Settings extends Migration {
         $defaultSettings = [
             ['key' => 'site_name',         'value' => 'Thunder PHP',        'type' => 'string', 'environment' => 'production'],
             ['key' => 'site_description',  'value' => 'A clone of wordpress','type' => 'string', 'environment' => 'production'],
-            ['key' => 'debug_mode',        'value' => '1',                  'type' => 'bool',   'environment' => 'production'],
+            ['key' => 'debug_mode',        'value' => '0',                  'type' => 'bool',   'environment' => 'production'],
             ['key' => 'max_upload_size',   'value' => '10',                 'type' => 'int',    'environment' => 'production'],
             ['key' => 'pagination_limit',  'value' => '25',                 'type' => 'int',    'environment' => 'production'],
             ['key' => 'site_homepage',     'value' => 'home',               'type' => 'string', 'environment' => 'production'],

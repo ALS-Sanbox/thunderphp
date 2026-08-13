@@ -10,6 +10,11 @@ if (version_compare(PHP_VERSION, $minPHPVersion, '<')) {
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOTPATH',__DIR__.DS);
 
+if (!file_exists(__DIR__ . DS . 'config.php')) {
+  header('Location: install.php');
+  exit;
+}
+
 require 'config.php';
 require 'app'.DS.'core'.DS.'init.php';
 

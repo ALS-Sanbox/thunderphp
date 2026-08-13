@@ -20,13 +20,11 @@ class Usersrolesmap extends Migration {
 
 		$this->createTable('user_roles_map');
 
-		$this->addData([
-		 	'role_id'	=> 1,
-		 	'user_id'	=> 1,
-		 	'disabled'	=> 0,
-		]);
-
-		$this->insert('user_roles_map');
+		// No seeded row here on purpose - there's no guaranteed user with
+		// id 1 anymore (see the Siteusers migration). The install wizard
+		// creates the real admin-role mapping after it creates the admin
+		// account, looking up the admin role's actual id instead of
+		// assuming it's 1.
 	}
 
 	public function down()
