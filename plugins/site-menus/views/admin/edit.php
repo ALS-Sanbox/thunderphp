@@ -57,8 +57,21 @@
                         <label class="form-check-label" for="active">Active</label>
                     </div>
                     <div class="mb-3">
-                        <label for="title" class="form-label">Permissions</label>
-                        <input type="text" class="form-control" id="permission" name="permission" value="<?= esc($row->permission ?? 'N/A') ?>" required>
+                        <?php $currentPermission = $row->permission ?? ''; ?>
+                        <label class="form-label d-block">Who can see this menu item?</label>
+                        <div class="btn-group" role="group" aria-label="Permission">
+                            <input type="radio" class="btn-check" name="permission" id="perm-everyone" value="" autocomplete="off" <?= $currentPermission === '' ? 'checked' : '' ?>>
+                            <label class="btn btn-outline-secondary" for="perm-everyone">Everyone</label>
+
+                            <input type="radio" class="btn-check" name="permission" id="perm-loggedin" value="logged_in" autocomplete="off" <?= $currentPermission === 'logged_in' ? 'checked' : '' ?>>
+                            <label class="btn btn-outline-secondary" for="perm-loggedin">Logged In</label>
+
+                            <input type="radio" class="btn-check" name="permission" id="perm-loggedout" value="not_logged_in" autocomplete="off" <?= $currentPermission === 'not_logged_in' ? 'checked' : '' ?>>
+                            <label class="btn btn-outline-secondary" for="perm-loggedout">Not Logged In</label>
+                        </div>
+                        <?php if (!in_array($currentPermission, ['', 'logged_in', 'not_logged_in'], true)): ?>
+                            <div class="form-text text-danger">Currently set to an unrecognized value (<code><?= esc($currentPermission) ?></code>), which means nobody can see it right now. Pick one of the buttons above to fix it.</div>
+                        <?php endif; ?>
                     </div>
                     <div class="mb-3">
                         <label for="slug" class="form-label">Slug</label>
