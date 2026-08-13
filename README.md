@@ -1,5 +1,7 @@
 # ThunderPHP - A Plugin-Based PHP Framework
 
+**Current version:** 1.0.0-rc1 &nbsp;|&nbsp; **License:** [MIT](LICENSE)
+
 ThunderPHP is a PHP MVC (Model-View-Controller) framework designed to accelerate your web development projects by harnessing the power of plugins. Unlike starting from scratch with every project, ThunderPHP allows you to build upon a solid foundation, combining the flexibility of WordPress with the simplicity of lightweight frameworks like CodeIgniter.
 
 ## Features
@@ -10,29 +12,35 @@ ThunderPHP is a PHP MVC (Model-View-Controller) framework designed to accelerate
 
 - **Rapid Project Start**: With ThunderPHP, you can kickstart new projects faster, thanks to its pre-built plugins and framework capabilities. Spend less time on boilerplate code and more on creating unique and innovative web applications.
 
+## Getting Started
+
+1. Clone or download this repository and point your webroot at it.
+2. Visit `/install.php` in a browser. The install wizard will:
+   - Check PHP version and required extensions.
+   - Let you choose a **Standard** (all plugins active) or **Minimal** (bare admin shell, no content types) install profile.
+   - Collect your database connection details and run the migrations.
+   - Create the one real admin account for your site — there's no default/shared account shipped with ThunderPHP.
+3. Log in at `/login` with the admin account you just created.
+
+Password reset (`Forgot Password?` on the login page) works out of the box using the server's local mail. For real deliverability (Gmail, SendGrid, etc.), configure SMTP under **Settings** in the admin panel.
+
 ## Important Notice
+
 Some of the core functionality may not work if you download the code branch-wise. To avoid issues, I recommend downloading the **main code file** with all the updated and required plugins. This will ensure that we are on the same page and avoid potential problems.
 
-Branches in ThunderPHP are primarily used for development, flexibility, and readability. They exist to streamline the development process for me. However, the code is designed in such a way that it will run even if you delete a branch. In short, branches are for development ease, and the **main branch** should be your go-to for the complete, functioning framework.
+## Branches
+
+- **`main`**: The stable, release-candidate line. Build production sites against this branch.
+- **`nightly`**: Active plugin development happens here. Expect breaking changes and half-finished features — don't build production sites against it.
 
 ## Overview
 This repository contains the ThunderPHP framework with a complete set of plugins integrated directly into the main branch. From handling home pages to managing authentication and error pages (404), ThunderPHP provides comprehensive solutions for various web development needs.
 
 All functionality is encapsulated within plugins, ensuring modularity, easy customization, and minimal dependencies.
 
-## Current Branches
-
-- **`main`**: Contains updated code and is an default branch.
-- **`basic-auth`**: Handles basic authentication.
-- **`basic-admin`**: Focuses on admin functionalities.
-- **`users-managers`**: Manages user-related features.
-- **`user-roles`**: Handle user roles and permissions, allowing for a more fine-grained control over user access within the application.
-- **`menu`**: Designed to manage dynamic menus across the site, making it easy to create and update navigation structures.
-- **`pages`**: A simple page management system, allowing the creation and organization of static pages such as About, Contact, etc.
-- **`advanced pages`**: A page management system, allowing the creation and organization of static pages through code with abilty to add css and js.
-- **`categories`**: This plugin will organize content by categories, making it easier to classify and display posts, products, or any other categorized content.
-- **`posts`**: A plugin that facilitates the creation and management of posts, typically used for blogs or news sections.
-
 ## Future Plans and Plugins
 - **`slider`**: This plugin will provide the ability to create and manage image sliders, commonly used for homepages or featured content sections.
 
+## License
+
+ThunderPHP is open-sourced software licensed under the [MIT license](LICENSE).

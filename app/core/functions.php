@@ -12,6 +12,18 @@ function APP($key = '') {
     return $key !== '' ? ($APP[$key] ?? null) : $APP;
 }
 
+function app_version(): string {
+    static $version = null;
+
+    if ($version === null) {
+        $path = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'VERSION';
+        $contents = @file_get_contents($path);
+        $version = $contents !== false ? trim($contents) : '0.0.0';
+    }
+
+    return $version;
+}
+
 function load_json_file(string $path) {
     if (!file_exists($path)) return null;
 

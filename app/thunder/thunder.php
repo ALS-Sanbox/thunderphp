@@ -8,7 +8,7 @@ class Thunder
     const PLUGINS_DIR = 'plugins';
 
     public function title(){
-        $VERSION = '1.0.0';
+        $VERSION = function_exists('app_version') ? app_version() : '1.0.0';
 
         echo "
          ___________.__                      .___             __________  ___ _____________ 

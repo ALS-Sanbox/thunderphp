@@ -216,6 +216,8 @@
         <?php endif ?>
 
         <?=do_action(plugin_id().'_main_content')?>
+
+        <footer class="text-muted text-center small mt-5 mb-3">ThunderPHP v<?= esc(app_version()) ?></footer>
     </main>
   </div>
 </div>
