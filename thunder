@@ -9,6 +9,10 @@ if (PHP_SAPI !== 'cli') {
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 chdir(FCPATH);
 
+if (file_exists(FCPATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php')) {
+    require FCPATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+}
+
 require FCPATH . "app" . DIRECTORY_SEPARATOR . "thunder" . DIRECTORY_SEPARATOR . "init.php";
 
 $argv = $_SERVER['argv'] ?? [];

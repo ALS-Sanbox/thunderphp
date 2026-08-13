@@ -26,6 +26,14 @@ if (!file_exists(__DIR__ . DS . 'config.php')) {
 }
 
 require 'config.php';
+
+// Composer isn't required for the app to run - it's currently only used for
+// dev tooling (PHPUnit). Load it if it's there so any future vendor package
+// autoloads correctly; the app works fine without vendor/ present at all.
+if (file_exists(__DIR__ . DS . 'vendor' . DS . 'autoload.php')) {
+  require __DIR__ . DS . 'vendor' . DS . 'autoload.php';
+}
+
 require 'app'.DS.'core'.DS.'init.php';
 
 try {
