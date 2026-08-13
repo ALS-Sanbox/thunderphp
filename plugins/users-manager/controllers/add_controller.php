@@ -19,6 +19,10 @@ if(!empty($filedata['image']) && $filedata['image']['error'] != UPLOAD_ERR_NO_FI
 		$files_ok = false;
 }
 
+if (empty($postdata['image'])) {
+    $postdata['image'] = 'assets/images/no_image.jpg';
+}
+
 if(csrf_verify($req->post('_token')) && $files_ok && $user->validate_insert($postdata)){
     $postdata['password'] = password_hash($postdata['password'], PASSWORD_DEFAULT);
     $postdata['date_created'] = date("Y-m-d H:i:s");
