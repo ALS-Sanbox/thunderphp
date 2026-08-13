@@ -234,7 +234,7 @@ add_action('basic-admin_main_content', function () {
 
 // Admin sidebar link
 add_filter('basic-admin_before_admin_links', function ($links) {
-    if (user_can('view_post')) {
+    if (user_can('view_posts')) {
         $vars = get_value();
         $links[] = (object)[
             'title'  => 'Posts',

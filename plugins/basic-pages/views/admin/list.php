@@ -19,7 +19,8 @@
         <div class="card-body">
             <form class="row g-3" method="get" action="">
                 <div class="col-md-4">
-                    <input type="text" name="search" class="form-control" placeholder="Search by title or description..." value="<?= esc($_GET['search'] ?? '') ?>">
+                    <label for="pages-search" class="form-label visually-hidden">Search</label>
+                    <input type="text" id="pages-search" name="search" class="form-control" placeholder="Search by title or description..." value="<?= esc($_GET['search'] ?? '') ?>">
                 </div>
                 <div class="col-md-2">
                     <select name="status" class="form-select">

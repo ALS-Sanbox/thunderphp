@@ -10,7 +10,8 @@
   <form method="post" action="<?= ROOT ?>/<?= $admin_route ?>/<?= $plugin_route ?>/add" enctype="multipart/form-data" class="card p-3 mb-4">
     <input type="hidden" name="_token" value="<?= csrf() ?>">
     <div class="d-flex gap-2 flex-wrap align-items-center">
-      <input type="file" name="images[]" accept="image/*" multiple class="form-control" style="max-width:400px;">
+      <label for="images-upload" class="visually-hidden">Upload images</label>
+      <input type="file" id="images-upload" name="images[]" accept="image/*" multiple class="form-control" style="max-width:400px;">
       <button type="submit" class="btn btn-bd-primary">
         <i class="bi bi-upload"></i> Upload
       </button>

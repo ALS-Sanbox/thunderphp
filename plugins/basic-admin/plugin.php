@@ -105,6 +105,14 @@ add_action('basic-admin_main_content', function () {
         return $row ? (int) $row->count : 0;
     };
 
+    // NOTE: 'icon' here is a Bootstrap Icons *font* class name (rendered
+    // via <i class="bi bi-{icon}"> in views/dashboard.php), loaded from the
+    // CDN in views/view.php. This is a DIFFERENT icon system from the
+    // sidebar links below (and every other plugin's 'icon' entries added
+    // via the basic-admin_before_admin_links filter), which reference an
+    // id in the local SVG sprite defined in views/view.php instead. Same
+    // key name, not interchangeable - using a sprite id here (or a
+    // Bootstrap Icons name in a sidebar link) renders a blank icon.
     $stat_cards = [];
 
     if (user_can('view_pages')) {

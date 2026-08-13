@@ -4,104 +4,105 @@
 
     <div class="container card shadow mt-6 p-4">
         <form method="POST" enctype="multipart/form-data">
-			<input type="hidden" name="_token" value="<?= csrf() ?>">
-            <label>
-                <span>Site Title</span>
-                <input type="text" name="site_name" value="<?= esc(setting('site_name')) ?>">
-            </label>
+            <input type="hidden" name="_token" value="<?= csrf() ?>">
 
-            <label>
-                <span>Description</span>
-                <input type="text" name="site_description" value="<?= esc(setting('site_description')) ?>">
-            </label>
+            <div class="mb-3">
+                <label class="form-label" for="site_name">Site Title</label>
+                <input type="text" class="form-control" id="site_name" name="site_name" value="<?= esc(setting('site_name')) ?>">
+            </div>
 
-            <label>
-                <span>Site URL</span>
-                <input type="url" name="site_url" value="<?= esc(setting('site_url')) ?>">
-            </label>
+            <div class="mb-3">
+                <label class="form-label" for="site_description">Description</label>
+                <input type="text" class="form-control" id="site_description" name="site_description" value="<?= esc(setting('site_description')) ?>">
+            </div>
 
-            <label>
-                <span>Site Logo</span>
-                <input type="file" name="site_logo" accept="image/*">
+            <div class="mb-3">
+                <label class="form-label" for="site_url">Site URL</label>
+                <input type="url" class="form-control" id="site_url" name="site_url" value="<?= esc(setting('site_url')) ?>">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="site_logo">Site Logo</label>
+                <input type="file" class="form-control" id="site_logo" name="site_logo" accept="image/*">
                 <?php if (setting('site_logo') && file_exists(setting('site_logo'))): ?>
                     <div><img src="<?= get_image(setting('site_logo')) ?>" alt="" style="max-height:60px;margin-top:8px;"></div>
                 <?php endif; ?>
-            </label>
+            </div>
 
-<label>
-    <span>Home Page</span>
-    <select name="site_homepage">
-        <?php foreach ($pages as $page): ?>
-            <option value="<?= esc($page->slug) ?>" <?= setting('site_homepage') === $page->slug ? 'selected' : '' ?>>
-                <?= esc($page->title) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</label>
-			
-            <label>
-                <span>Admin Email</span>
-                <input type="email" name="admin_email" value="<?= esc(setting('admin_email')) ?>">
-            </label>
+            <div class="mb-3">
+                <label class="form-label" for="site_homepage">Home Page</label>
+                <select class="form-select" id="site_homepage" name="site_homepage">
+                    <?php foreach ($pages as $page): ?>
+                        <option value="<?= esc($page->slug) ?>" <?= setting('site_homepage') === $page->slug ? 'selected' : '' ?>>
+                            <?= esc($page->title) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-            <label>
-                <span>Max Upload Size</span>
-				<input type="number" name="max_upload_size" value="<?= (int) setting('max_upload_size') ?>">
-            </label>
+            <div class="mb-3">
+                <label class="form-label" for="admin_email">Admin Email</label>
+                <input type="email" class="form-control" id="admin_email" name="admin_email" value="<?= esc(setting('admin_email')) ?>">
+            </div>
 
-            <label>
-                <span>Pagination Limit</span>
-				<input type="number" name="pagination_limit" value="<?= (int) setting('pagination_limit') ?>">
-            </label>
+            <div class="mb-3">
+                <label class="form-label" for="max_upload_size">Max Upload Size</label>
+                <input type="number" class="form-control" id="max_upload_size" name="max_upload_size" value="<?= (int) setting('max_upload_size') ?>">
+            </div>
 
-			<label>
-				<span>Debug Mode</span>
-				<input type="checkbox" name="debug_mode" value="1" <?= (bool) setting('debug_mode') ? 'checked' : '' ?>>
-			</label>
+            <div class="mb-3">
+                <label class="form-label" for="pagination_limit">Pagination Limit</label>
+                <input type="number" class="form-control" id="pagination_limit" name="pagination_limit" value="<?= (int) setting('pagination_limit') ?>">
+            </div>
 
-            <h3>Outgoing Mail (SMTP)</h3>
-            <p>Leave the host blank to send mail with the server's local mail() function. Fill these in to send through a real SMTP provider (Gmail, SendGrid, etc.) instead.</p>
+            <div class="mb-3 form-check form-switch">
+                <input type="checkbox" class="form-check-input" id="debug_mode" name="debug_mode" value="1" <?= (bool) setting('debug_mode') ? 'checked' : '' ?>>
+                <label class="form-check-label" for="debug_mode">Debug Mode</label>
+            </div>
 
-            <label>
-                <span>SMTP Host</span>
-                <input type="text" name="smtp_host" value="<?= esc(setting('smtp_host')) ?>" placeholder="smtp.example.com">
-            </label>
+            <h3 class="h5 mt-4">Outgoing Mail (SMTP)</h3>
+            <p class="text-muted">Leave the host blank to send mail with the server's local mail() function. Fill these in to send through a real SMTP provider (Gmail, SendGrid, etc.) instead.</p>
 
-            <label>
-                <span>SMTP Port</span>
-                <input type="number" name="smtp_port" value="<?= (int) setting('smtp_port') ?>">
-            </label>
+            <div class="mb-3">
+                <label class="form-label" for="smtp_host">SMTP Host</label>
+                <input type="text" class="form-control" id="smtp_host" name="smtp_host" value="<?= esc(setting('smtp_host')) ?>" placeholder="smtp.example.com">
+            </div>
 
-            <label>
-                <span>Encryption</span>
-                <select name="smtp_encryption">
+            <div class="mb-3">
+                <label class="form-label" for="smtp_port">SMTP Port</label>
+                <input type="number" class="form-control" id="smtp_port" name="smtp_port" value="<?= (int) setting('smtp_port') ?>">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="smtp_encryption">Encryption</label>
+                <select class="form-select" id="smtp_encryption" name="smtp_encryption">
                     <?php foreach (['tls' => 'STARTTLS (587)', 'ssl' => 'Implicit TLS (465)', 'none' => 'None (25)'] as $value => $label): ?>
                         <option value="<?= $value ?>" <?= setting('smtp_encryption') === $value ? 'selected' : '' ?>><?= $label ?></option>
                     <?php endforeach; ?>
                 </select>
-            </label>
+            </div>
 
-            <label>
-                <span>SMTP Username</span>
-                <input type="text" name="smtp_username" value="<?= esc(setting('smtp_username')) ?>" autocomplete="off">
-            </label>
+            <div class="mb-3">
+                <label class="form-label" for="smtp_username">SMTP Username</label>
+                <input type="text" class="form-control" id="smtp_username" name="smtp_username" value="<?= esc(setting('smtp_username')) ?>" autocomplete="off">
+            </div>
 
-            <label>
-                <span>SMTP Password</span>
-                <input type="password" name="smtp_password" value="" autocomplete="new-password" placeholder="<?= setting('smtp_password') ? 'Unchanged' : '' ?>">
-            </label>
+            <div class="mb-3">
+                <label class="form-label" for="smtp_password">SMTP Password</label>
+                <input type="password" class="form-control" id="smtp_password" name="smtp_password" value="" autocomplete="new-password" placeholder="<?= setting('smtp_password') ? 'Unchanged' : '' ?>">
+            </div>
 
-            <label>
-                <span>From Email</span>
-                <input type="email" name="smtp_from_email" value="<?= esc(setting('smtp_from_email')) ?>" placeholder="<?= esc(setting('admin_email')) ?>">
-            </label>
+            <div class="mb-3">
+                <label class="form-label" for="smtp_from_email">From Email</label>
+                <input type="email" class="form-control" id="smtp_from_email" name="smtp_from_email" value="<?= esc(setting('smtp_from_email')) ?>" placeholder="<?= esc(setting('admin_email')) ?>">
+            </div>
 
-            <label>
-                <span>From Name</span>
-                <input type="text" name="smtp_from_name" value="<?= esc(setting('smtp_from_name')) ?>" placeholder="<?= esc(setting('site_name')) ?>">
-            </label>
+            <div class="mb-4">
+                <label class="form-label" for="smtp_from_name">From Name</label>
+                <input type="text" class="form-control" id="smtp_from_name" name="smtp_from_name" value="<?= esc(setting('smtp_from_name')) ?>" placeholder="<?= esc(setting('site_name')) ?>">
+            </div>
 
-            <button type="submit">Save Settings</button>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
         </form>
     </div>
 

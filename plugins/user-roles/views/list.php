@@ -238,5 +238,10 @@
 <script src="<?= plugin_http_path('assets/js/plugin.js') ?>?v=2"></script>
 
 <?php else: ?>
-<div class="alert alert-danger">Access Denied</div>
+<div id="denied" class="card text-center shadow-lg border-danger d-flex justify-content-center align-items-center mx-auto" style="max-width: 400px;">
+    <div class="card-body">
+        <h5 class="card-title text-danger fw-bold">Access Denied</h5>
+        <p class="card-text text-muted">You don't have permission for this action.</p>
+    </div>
+</div>
 <?php endif ?>

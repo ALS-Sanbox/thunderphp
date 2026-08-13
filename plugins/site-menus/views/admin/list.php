@@ -1,7 +1,8 @@
 <?php if(user_can('view_menus')):?>
 <div class="table-responsive">
     <form class="input-group my-3 mx-auto" method="get" action="">
-        <input placeholder="Search" type="text" name="find" class="form-control" value="<?= esc($_GET['find'] ?? '') ?>">
+        <label for="menus-search" class="visually-hidden">Search</label>
+        <input placeholder="Search" type="text" id="menus-search" name="find" class="form-control" value="<?= esc($_GET['find'] ?? '') ?>">
         <button class="input-group-text bg-primary text-white" id="basic-addon1">
             Search
         </button>
@@ -63,8 +64,20 @@
                     <td>
                         <center><img src="<?= esc(get_image($row->mega_image)) ?>" class="img-thumbnail" alt="Mega Image" style="width:50px;height:50px;object-fit: cover;"></center>
                     </td>
-                    <td><?= esc($row->disabled ? 'no' : 'yes') ?></td>
-                    <td><?= esc($row->is_mega ? 'yes' : 'no') ?></td>
+                    <td>
+                        <?php if (empty($row->disabled)): ?>
+                            <span class="badge bg-success">Active</span>
+                        <?php else: ?>
+                            <span class="badge bg-warning">Inactive</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if (!empty($row->is_mega)): ?>
+                            <span class="badge bg-info">Yes</span>
+                        <?php else: ?>
+                            <span class="badge bg-secondary">No</span>
+                        <?php endif; ?>
+                    </td>
                     <td><?= esc($row->permission ?? 'N/A') ?></td>
                     <td><?= esc($row->slug ?? 'N/A') ?></td>
 					<td><?= esc($row->list_order ?? 'N/A') ?></td>

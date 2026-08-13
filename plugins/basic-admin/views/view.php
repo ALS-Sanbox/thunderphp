@@ -74,6 +74,12 @@
     </div>
 
     
+<!-- Sidebar/nav-link 'icon' values (added via the basic-admin_before_admin_links
+     filter, e.g. plugins/*/plugin.php) reference an id in this local SVG
+     sprite. This is a DIFFERENT system from the dashboard's stat-card/
+     quick-action 'icon' values, which are Bootstrap Icons font class names
+     instead (see the NOTE in plugin.php next to $stat_cards). Same key
+     name, not interchangeable. -->
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
   <symbol id="chevron-right" viewBox="0 0 16 16">
     <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
