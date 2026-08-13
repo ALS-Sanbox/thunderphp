@@ -70,9 +70,9 @@ add_action('controller', function(){
 
 
     if(URL(1) == $vars['plugin_route']){
-        $user_map = new \UserRoles\User_roles_map;
-        $user_roles = new \UserRoles\User_role;
-        $permissions = new \UserRoles\Role_permission;
+        $user_map = new \Roles\User_roles_map;
+        $user_roles = new \Roles\User_role;
+        $permissions = new \Roles\Role_permission;
         $ses = new \Core\Session;
         require plugin_path('controllers/list_controller.php');
     }
@@ -84,9 +84,9 @@ add_action('basic-admin_main_content', function(){
 	$admin_route = $vars['admin_route'];
 	$plugin_route = $vars['plugin_route'];
 	$errors = $vars['errors'] ?? [];
-	$user_roles = new \UserRoles\User_role;
-	$user_map = new \UserRoles\User_roles_map;
-    $permissions = new \UserRoles\Role_permission;
+	$user_roles = new \Roles\User_role;
+	$user_map = new \Roles\User_roles_map;
+    $permissions = new \Roles\Role_permission;
     $allPermissions = array_unique(APP('permissions'));
     sort($allPermissions);
     $roles = $user_roles->findAll();
@@ -104,7 +104,7 @@ add_filter('after_query',function($data)
 		return $data;
 
 	if ($data['query_id'] == 'get-roles') {
-		$user_permission = new \UserRoles\Role_permission;
+		$user_permission = new \Roles\Role_permission;
 		foreach ($data['result'] as $key => $row) {
 			$permissions = $user_permission->where(['role_id' => $row->id, 'disabled' => 0]);
 			if($permissions)

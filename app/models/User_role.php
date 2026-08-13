@@ -1,13 +1,16 @@
 <?php
 
-namespace UserManager;
+namespace Roles;
 
-use \Model\Model; 
+use \Model\Model;
 
 defined('ROOT') or die("Direct script access denied");
 
 /**
- * User_role class
+ * Shared across the users-manager and user-roles plugins. Framework-level
+ * (not plugin-owned) because this app's autoloader resolves an unmatched
+ * class from the *calling* plugin's own models/ folder, not the class's
+ * namespace - a plugin-owned model can never be new'd from another plugin.
  */
 class User_role extends Model
 {
@@ -48,7 +51,7 @@ class User_role extends Model
 		$role_arr_not = [
 			$this->primary_key => $data[$this->primary_key] ?? 0
 		];
-		
+
 		if(empty($data['role']))
  		{
  			$this->errors['role'] = 'Role is required';
@@ -56,11 +59,19 @@ class User_role extends Model
  		if($this->first($role_arr, $role_arr_not))
  		{
  			$this->errors['role'] = 'That Role is already in use';
- 		}else 		
+ 		}else
  		if(!preg_match("/^[a-zA-Z ]+$/", $data['role']))
  		{
  		 	$this->errors['role'] = 'Invalid: Role cannot have numbers.';
  		}
 		return empty($this->errors);
 	}
+
+	public function insert(array $data): bool {
+        return $this->create($data);
+    }
+
+	public function update_role(int $id, array $data): mixed {
+        return $this->update($id, $data);
+    }
 }

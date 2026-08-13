@@ -68,8 +68,8 @@ add_action('controller', function(){
     if(URL(1) == $vars['plugin_route'] && $req->posted()){
         $ses = new \Core\Session;
         $user = new \UserManager\Siteusers;
-        $user_roles = new \UserManager\User_role;
-        $user_roles_map = new \UserManager\User_roles_map;
+        $user_roles = new \Roles\User_role;
+        $user_roles_map = new \Roles\User_roles_map;
         
         $id = URL(3) ?? null;
         if($id){
@@ -100,8 +100,8 @@ add_action('basic-admin_main_content', function(){
     $admin_route = $vars['admin_route'];
     $plugin_route = $vars['plugin_route'];
     $siteusers = new \UserManager\Siteusers;
-    $user_roles = new \UserManager\User_role;
-    $user_roles_map = new \UserManager\User_roles_map;
+    $user_roles = new \Roles\User_role;
+    $user_roles_map = new \Roles\User_roles_map;
 
     if (URL(1) == $vars['plugin_route']) {
         
@@ -160,7 +160,7 @@ add_filter('after_query',function($data)
 
         if($data['query_id'] == 'get-users')
         {
-            $role_map = new \UserManager\User_roles_map;
+            $role_map = new \Roles\User_roles_map;
             foreach ($data['result'] as $key => $row) {
                 $query = "SELECT * FROM user_roles WHERE disabled = 0 AND  id IN (SELECT role_id FROM user_roles_map WHERE disabled = 0 AND user_id = :user_id)";
                 $roles = $role_map->query($query, ['user_id' => $row->id]);
@@ -168,7 +168,7 @@ add_filter('after_query',function($data)
                 if ($roles)
                     $data['result'][$key]->roles = array_column($roles, 'role');
             
-                $user_roles_map = new \UserManager\User_roles_map;
+                $user_roles_map = new \Roles\User_roles_map;
                 $role_ids = $user_roles_map->where(['user_id' => $row->id]);
             
                 if ($role_ids) {
