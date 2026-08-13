@@ -5,7 +5,7 @@ $postdata = $req->post();
 $filedata = $req->files();
 $files_ok = true;
 
-if(!empty($filedata))
+if(!empty($filedata['image']) && $filedata['image']['error'] != UPLOAD_ERR_NO_FILE)
 {
     $userIMG = $req->upload_files('image');
 
@@ -35,7 +35,7 @@ if(csrf_verify($req->post('_token')) && $files_ok && $user->validate_insert($pos
 
     if (user_can('edit_role')) {
         foreach ($roledata as $role_id) {
-            $user_roles_map->insert([
+            $user_roles_map->create([
                 'role_id' => $role_id,
                 'user_id' => $new_user_id,
                 'disabled' => 0,
@@ -45,8 +45,10 @@ if(csrf_verify($req->post('_token')) && $files_ok && $user->validate_insert($pos
 
     message("Page added successfully!", "success");
     redirect($admin_route . '/' . $plugin_route . '/view/' . $new_user_id);
+} elseif (!$files_ok) {
+    message(implode(' ', $req->upload_errors), 'fail');
+} else {
+    message(implode(' ', $user->errors),'fail');
 }
-
-message(implode(' ', $user->errors),'fail');
 
 }

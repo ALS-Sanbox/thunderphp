@@ -57,7 +57,7 @@ if(user_can('edit_user')) {
                         if ($result) {
                             $user_roles_map->update($result->id, ['disabled' => 0]);
                         } else {
-                            $user_roles_map->insert([
+                            $user_roles_map->create([
                                 'role_id' => $role_id,
                                 'user_id' => $user_id,
                                 'disabled' => 0
