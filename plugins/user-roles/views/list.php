@@ -235,7 +235,7 @@
   </div>
 </div>
 
-<script src="<?= plugin_http_path('assets/js/plugin.js') ?>"></script>
+<script src="<?= plugin_http_path('assets/js/plugin.js') ?>?v=2"></script>
 
 <?php else: ?>
 <div class="alert alert-danger">Access Denied</div>
