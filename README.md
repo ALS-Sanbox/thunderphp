@@ -38,9 +38,6 @@ This repository contains the ThunderPHP framework with a complete set of plugins
 
 All functionality is encapsulated within plugins, ensuring modularity, easy customization, and minimal dependencies.
 
-## Future Plans and Plugins
-- **`slider`**: This plugin will provide the ability to create and manage image sliders, commonly used for homepages or featured content sections.
-
 ## License
 
 ThunderPHP is open-sourced software licensed under the [MIT license](LICENSE).
