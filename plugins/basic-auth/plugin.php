@@ -109,11 +109,14 @@ add_action('header-footer_user_menu', function () {
     <style>
         .hf-user-menu-account { position: relative; display: inline-block; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
         .hf-user-menu-trigger { display: flex; gap: 8px; align-items: center; cursor: pointer; }
-        .hf-user-menu-links { position: absolute; top: 100%; right: 0; margin-top: 6px; background: #fff; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 6px 16px rgba(0,0,0,.12); min-width: 150px; display: none; flex-direction: column; padding: 6px 0; z-index: 50; }
+        /* padding-top (not margin) bridges the gap to the trigger so hover
+           never drops out while the mouse travels down into the panel. */
+        .hf-user-menu-links { position: absolute; top: 100%; right: 0; padding-top: 6px; display: none; z-index: 50; }
         .hf-user-menu-account:hover .hf-user-menu-links,
-        .hf-user-menu-account:focus-within .hf-user-menu-links { display: flex; }
-        .hf-user-menu-links a { padding: 8px 14px; color: #212529; text-decoration: none; white-space: nowrap; }
-        .hf-user-menu-links a:hover { background: #f1f3f5; }
+        .hf-user-menu-account:focus-within .hf-user-menu-links { display: block; }
+        .hf-user-menu-panel { background: #fff; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 6px 16px rgba(0,0,0,.12); min-width: 150px; display: flex; flex-direction: column; padding: 6px 0; }
+        .hf-user-menu-panel a { display: block; padding: 8px 14px; color: #1a1a1a !important; text-decoration: none !important; white-space: nowrap; font-weight: 500; }
+        .hf-user-menu-panel a:hover { background: #f1f3f5; }
     </style>
     <div class="hf-user-menu hf-user-menu-account">
         <div class="hf-user-menu-trigger" tabindex="0">
@@ -121,9 +124,11 @@ add_action('header-footer_user_menu', function () {
             <span>Hi, <?= esc($ses->user('first_name')) ?></span>
         </div>
         <div class="hf-user-menu-links">
-            <a href="<?= ROOT ?>/<?= $vars['admin_plugin_route'] ?>">Admin</a>
-            <a href="<?= ROOT ?>/profile/<?= $ses->user('id') ?>">Profile</a>
-            <a href="<?= ROOT ?>/<?= $vars['logout_page'] ?>">Logout</a>
+            <div class="hf-user-menu-panel">
+                <a href="<?= ROOT ?>/<?= $vars['admin_plugin_route'] ?>">Admin</a>
+                <a href="<?= ROOT ?>/profile/<?= $ses->user('id') ?>">Profile</a>
+                <a href="<?= ROOT ?>/<?= $vars['logout_page'] ?>">Logout</a>
+            </div>
         </div>
     </div>
     <?php
