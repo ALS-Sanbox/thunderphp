@@ -7,6 +7,10 @@ if (user_can('edit_settings')) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (csrf_verify($postdata['_token'])) {
 
+            if (isset($postdata['smtp_password']) && $postdata['smtp_password'] === '') {
+                unset($postdata['smtp_password']);
+            }
+
             if ($set->validate_settings_data($postdata)) {
                 if ($set->update_settings($postdata)) {
                     message("Settings updated successfully!", "success");

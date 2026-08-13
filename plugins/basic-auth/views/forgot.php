@@ -6,10 +6,17 @@
         <h2 class="mb-4">Forgot Password</h2>
 
         <form method="POST">
+            <input type="hidden" name="_token" value="<?= csrf() ?>">
+            <?php $flash = message(); ?>
+            <?php if ($flash): ?>
+            <div class="alert alert-<?= $flash['type'] === 'success' ? 'success' : 'danger' ?> text-center">
+                <?= esc($flash['text']) ?>
+            </div>
+            <?php endif; ?>
             <div class="column-right">
             <div class="mb-3">
               <label for="email" class="form-label">Email:</label>
-              <input type="email" id="email" name="email" class="form-control" required />
+              <input value="<?=old_value('email')?>" type="email" id="email" name="email" class="form-control" required />
             </div>
             <button type="submit" class="btn btn-custom w-100 py-2 mb-3">Reset Password</button>
             </div>

@@ -14,6 +14,7 @@
     'logout_page'        => 'logout',
     'signup_page'        => 'signup',
     'forgot_page'        => 'forgot',
+    'reset_page'         => 'reset',
     'admin_plugin_route' => 'admin',
     'tables'             => [
         'users_table' => 'siteusers',
@@ -78,6 +79,9 @@ add_action('controller', function () {
             case $vars['forgot_page']:
                 require plugin_path('controllers/forgot_controller.php');
                 break;
+            case $vars['reset_page']:
+                require plugin_path('controllers/reset_controller.php');
+                break;
         }
     } elseif (page() === $vars['logout_page'] && $ses->is_logged_in()) {
         require plugin_path('controllers/logout_controller.php');
@@ -124,6 +128,13 @@ add_action('view', function () {
             break;
         case $vars['forgot_page']:
             require plugin_path('views/forgot.php');
+            break;
+        case $vars['reset_page']:
+            $req = new \Core\Request();
+            $resets = new \PasswordResets\PasswordResets();
+            $token = (string) $req->get('token');
+            $tokenRow = $token !== '' ? $resets->validateToken($token) : false;
+            require plugin_path('views/reset.php');
             break;
     }
 });

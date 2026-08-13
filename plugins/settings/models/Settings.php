@@ -65,7 +65,8 @@ public function validate_settings_data(array $post): bool {
  * Check if a value matches the expected type
  */
 protected function isValidValue(mixed $value, string $type): bool {
-    if ($value === '' || $value === null) return false; // explicitly disallow empty
+    if ($value === null) return false;
+    if ($value === '' && $type !== 'string') return false; // blank is valid for optional string settings
 
     return match ($type) {
         'int'   => filter_var($value, FILTER_VALIDATE_INT) !== false,
