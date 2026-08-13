@@ -42,6 +42,10 @@ class Session {
 
     public function auth(object|array $row): bool {
         $this->startSession();
+        // Issue a fresh session ID on every authentication so a session ID an
+        // attacker fixed before login can't be reused to hijack the now-
+        // authenticated session (session fixation).
+        session_regenerate_id(true);
         $_SESSION[$this->userKey] = $row;
         $_SESSION['last_activity'] = time();
 
@@ -146,7 +150,7 @@ class Session {
     }
 
     public function validateCSRFToken($token) {
-        if (!isset($_SESSION['csrf_token']) || $_SESSION['csrf_token'] !== $token) {
+        if (!isset($_SESSION['csrf_token']) || !is_string($token) || !hash_equals($_SESSION['csrf_token'], $token)) {
             die('CSRF token validation failed');
         }
 

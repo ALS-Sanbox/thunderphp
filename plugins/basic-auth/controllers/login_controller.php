@@ -1,46 +1,64 @@
 <?php
+// Login attempts are tracked per IP+email pair in the database (not in the
+// PHP session) so the lockout can't be bypassed by simply clearing cookies
+// or opening a private window.
+
 $user = new Siteusers\Siteusers();
 
+$lockout_duration = 15 * 60; // seconds
+$max_attempts = 5;
 
-if ($ses->startSession() === 1) { // Ensure the session starts using your custom method
-    // Set time limit (15 minutes)
-    $lockout_duration = 15 * 60; 
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$email = trim((string) ($_POST['email'] ?? ''));
 
-    // Get login attempts and first attempt time from the session using $ses->get()
-    $attempts = $ses->get('login_attempts') ?? 0;
-    $first_attempt_time = $ses->get('first_attempt_time') ?? null;
+$db = new \Core\Database();
+$existing = $db->fetch(
+    "SELECT * FROM login_attempts WHERE ip_address = ? AND email = ?",
+    [$ip, $email]
+);
 
-    if ($first_attempt_time && (time() - $first_attempt_time) > $lockout_duration) {
-        $attempts = 0;
-        $ses->set('first_attempt_time', null);  // Remove first attempt time using $ses
-    }
+$attempts = 0;
+if ($existing) {
+    $elapsed = time() - strtotime($existing->first_attempt_at);
 
-    if ($attempts < 5) {
-        if (csrf_verify($req->post('_token'))) {
-            $postdata = $_POST;
-        
-            $row = $user->first(['email' => $postdata['email']]);
-        
-            if ($row) {
-                if (password_verify($postdata['password'], $row->password)) {
-                    $ses->auth($row);  // Authenticates the user and stores the session data
-                    $ses->set('login_attempts', 0);  // Reset login attempts using $ses
-                    $ses->set('first_attempt_time', null);  // Remove first attempt time on successful login
-                    redirect('home');
-                }
-            }
-        
-            message('Wrong email or password!','fail');
-        } else {
-            message('Form expired! Please refresh','fail');
-        }
-
-        if ($attempts == 0) {
-            $ses->set('first_attempt_time', time());  // Set the first attempt time using $ses
-        }
-
-        $ses->set('login_attempts', $attempts + 1);  // Increment login attempts using $ses
+    if ($elapsed > $lockout_duration) {
+        // Lockout window has passed - start counting fresh.
+        $db->query("DELETE FROM login_attempts WHERE id = ?", [$existing->id]);
+        $existing = null;
     } else {
-        message('Too many failed attempts. Try again later.','fail');
+        $attempts = (int) $existing->attempts;
     }
+}
+
+if ($attempts < $max_attempts) {
+    if (csrf_verify($req->post('_token'))) {
+        $postdata = $_POST;
+
+        $row = $user->first(['email' => $email]);
+
+        if ($row && password_verify($postdata['password'] ?? '', $row->password)) {
+            $ses->auth($row);
+
+            if ($existing) {
+                $db->query("DELETE FROM login_attempts WHERE id = ?", [$existing->id]);
+            }
+
+            redirect('home');
+        }
+
+        message('Wrong email or password!', 'fail');
+    } else {
+        message('Form expired! Please refresh', 'fail');
+    }
+
+    if ($existing) {
+        $db->query("UPDATE login_attempts SET attempts = attempts + 1 WHERE id = ?", [$existing->id]);
+    } else {
+        $db->query(
+            "INSERT INTO login_attempts (ip_address, email, attempts, first_attempt_at) VALUES (?, ?, 1, ?)",
+            [$ip, $email, date('Y-m-d H:i:s')]
+        );
+    }
+} else {
+    message('Too many failed attempts. Try again later.', 'fail');
 }

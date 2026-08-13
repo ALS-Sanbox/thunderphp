@@ -67,7 +67,7 @@ add_action('controller', function(){
     
     if(URL(1) == $vars['plugin_route'] && $req->posted()){
         $ses = new \Core\Session;
-        $user = new \UserManager\Siteusers;
+        $user = new \Siteusers\Siteusers;
         $user_roles = new \Roles\User_role;
         $user_roles_map = new \Roles\User_roles_map;
         
@@ -99,7 +99,7 @@ add_action('basic-admin_main_content', function(){
     $vars = get_value();
     $admin_route = $vars['admin_route'];
     $plugin_route = $vars['plugin_route'];
-    $siteusers = new \UserManager\Siteusers;
+    $siteusers = new \Siteusers\Siteusers;
     $user_roles = new \Roles\User_role;
     $user_roles_map = new \Roles\User_roles_map;
 

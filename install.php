@@ -7,6 +7,11 @@
 // config.php doesn't exist yet. index.php redirects here automatically
 // when it detects that.
 
+session_set_cookie_params([
+    'httponly' => true,
+    'samesite' => 'Lax',
+    'secure'   => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+]);
 session_start();
 
 define('INSTALL_ROOT', __DIR__ . DIRECTORY_SEPARATOR);

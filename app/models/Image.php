@@ -252,7 +252,10 @@ class Image {
 
         foreach ($matches as $match) {
             $base64 = $match[1];
-            $originalFilename = $match[2];
+            // data-filename comes straight from the editor's HTML content -
+            // basename() it before it's ever used to build a filesystem path,
+            // so a crafted "../../whatever" can't write outside $folder.
+            $originalFilename = basename($match[2]);
             $timestamp = time();
             $newFilename = $timestamp . rand(0, 1000) . '_' . $originalFilename;
             $savePath = rtrim($folder, '/') . '/' . $newFilename;

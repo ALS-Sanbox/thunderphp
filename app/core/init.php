@@ -21,7 +21,12 @@ spl_autoload_register(function($classname){
         if(file_exists($plugin_path)){
             require_once $plugin_path;
         } else {
-            die("Class not found: $classname. Expected path: $plugin_path");
+            // Don't die() here - return so PHP can try any other registered
+            // autoloader (e.g. Composer's, for vendor packages) and only
+            // raise its own normal "Class not found" error if none resolve
+            // it either. A hard die() here would kill the whole request
+            // before a later-registered autoloader ever got a chance to run.
+            return false;
         }
     }
 });

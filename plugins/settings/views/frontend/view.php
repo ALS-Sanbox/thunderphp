@@ -7,17 +7,17 @@
 			<input type="hidden" name="_token" value="<?= csrf() ?>">
             <label>
                 <span>Site Title</span>
-                <input type="text" name="site_name" value="<?= setting('site_name') ?>">
+                <input type="text" name="site_name" value="<?= esc(setting('site_name')) ?>">
             </label>
 
             <label>
                 <span>Description</span>
-                <input type="text" name="site_description" value="<?= setting('site_description') ?>">
+                <input type="text" name="site_description" value="<?= esc(setting('site_description')) ?>">
             </label>
 
             <label>
                 <span>Site URL</span>
-                <input type="url" name="site_url" value="<?= setting('site_url') ?>">
+                <input type="url" name="site_url" value="<?= esc(setting('site_url')) ?>">
             </label>
 
             <label>
@@ -41,7 +41,7 @@
 			
             <label>
                 <span>Admin Email</span>
-                <input type="email" name="admin_email" value="<?= setting('admin_email') ?>">
+                <input type="email" name="admin_email" value="<?= esc(setting('admin_email')) ?>">
             </label>
 
             <label>

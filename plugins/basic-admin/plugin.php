@@ -10,6 +10,7 @@
 set_value([
     'admin_plugin_route'  =>'admin',
     'logout_page'         =>'logout',
+    'login_page'          =>'login',
 ]);
 
 add_filter('permissions', function($permissions){
@@ -20,12 +21,24 @@ add_filter('permissions', function($permissions){
 });
 
 add_action('controller', function(){
+    // config.json restricts this whole plugin.php to the /admin route, but
+    // nothing inside it previously checked whether the visitor was actually
+    // allowed to be there - the full admin shell (and the generic controller
+    // dispatch below) was reachable by anyone, logged in or not.
+    if (!user_can('view_admin_page')) {
+        return;
+    }
+
     do_action(plugin_id().'_controller');
 
 });
 
 add_action('view', function(){
     $vars = get_value();
+
+    if (!user_can('view_admin_page')) {
+        redirect($vars['login_page']);
+    }
 
     $section_title = ucfirst(str_replace("-"," ",(URL(1)??'')));
 
@@ -66,7 +79,7 @@ add_action('view', function(){
 
     $logout_link = (object)[
         'title'       => 'Logout',
-        'link'        => ROOT . '/' . $vars['logout_page'],
+        'link'        => ROOT . '/' . $vars['logout_page'] . '?_token=' . csrf(),
         'icon'        => 'door-closed',
         'parent'      => 0,
     ];

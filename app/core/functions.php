@@ -329,8 +329,8 @@ function redirect($url) {
     die;
 }
 
-function esc(?string $str): string|null {
-    return htmlspecialchars($str);
+function esc(?string $str): string {
+    return htmlspecialchars($str ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
 function get_date(string $date): string {

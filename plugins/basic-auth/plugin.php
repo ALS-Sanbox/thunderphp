@@ -127,7 +127,7 @@ add_action('header-footer_user_menu', function () {
             <div class="hf-user-menu-panel">
                 <a href="<?= ROOT ?>/<?= $vars['admin_plugin_route'] ?>">Admin</a>
                 <a href="<?= ROOT ?>/profile/<?= $ses->user('id') ?>">Profile</a>
-                <a href="<?= ROOT ?>/<?= $vars['logout_page'] ?>">Logout</a>
+                <a href="<?= ROOT ?>/<?= $vars['logout_page'] ?>?_token=<?= csrf() ?>">Logout</a>
             </div>
         </div>
     </div>
@@ -154,9 +154,4 @@ add_action('view', function () {
             require plugin_path('views/reset.php');
             break;
     }
-});
-
-add_filter('after_query', function ($data) {
-    error_log("Query executed: " . json_encode($data));
-    return $data;
 });

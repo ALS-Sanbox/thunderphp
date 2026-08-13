@@ -1,5 +1,15 @@
-<?php   
+<?php
+session_set_cookie_params([
+  'httponly' => true,
+  'samesite' => 'Lax',
+  'secure'   => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+]);
 session_start();
+
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; img-src 'self' data: https:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';");
 
 $minPHPVersion = '8.0';
 
