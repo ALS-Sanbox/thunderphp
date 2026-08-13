@@ -1,0 +1,15 @@
+{
+    "name"      : "Contact Form",
+    "version"   : "1.0.0",
+    "id"        : "contact-form",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 17,
+    "routes"    : {
+                    "on":["contact-form","admin"]
+                  },
+    "dependencies": {
+                    "basic-admin":"1.0.0"
+                  }
+}

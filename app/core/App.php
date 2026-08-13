@@ -20,6 +20,7 @@ class App
 
         if (strcmp($before_content, $after_content) === 0) {
             if(page() != '404'){
+                do_action('404_not_found', ['url' => URL()]);
                 redirect('404');
             }
         }

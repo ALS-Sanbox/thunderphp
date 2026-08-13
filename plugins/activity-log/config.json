@@ -1,0 +1,15 @@
+{
+    "name"      : "Activity Log",
+    "version"   : "1.0.0",
+    "id"        : "activity-log",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 19,
+    "routes"    : {
+                    "on":["all"]
+                  },
+    "dependencies": {
+                    "basic-admin":"1.0.0"
+                  }
+}

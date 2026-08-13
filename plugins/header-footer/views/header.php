@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="<?=ROOT?>/assets/css/bootstrap.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?=APP_NAME?></title>
+    <title><?= esc(do_filter('page_title', APP_NAME)) ?></title>
+    <?php do_action('before_head_close'); ?>
 </head>
 <body>
 <?php

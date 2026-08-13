@@ -1,0 +1,16 @@
+{
+    "name"      : "SEO",
+    "version"   : "1.0.0",
+    "id"        : "seo",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 15,
+    "routes"    : {
+                    "on":["all"]
+                  },
+    "dependencies": {
+                    "basic-admin":"1.0.0",
+                    "settings":"1.0.0"
+                  }
+}

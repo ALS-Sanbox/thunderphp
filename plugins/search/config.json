@@ -1,0 +1,15 @@
+{
+    "name"      : "Search",
+    "version"   : "1.0.0",
+    "id"        : "search",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 16,
+    "routes"    : {
+                    "on":["search"]
+                  },
+    "dependencies": {
+
+                  }
+}
