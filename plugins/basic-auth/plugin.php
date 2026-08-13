@@ -106,10 +106,21 @@ add_action('header-footer_user_menu', function () {
         return;
     }
     ?>
-    <div class="hf-user-menu hf-user-menu-account" style="display:flex;gap:10px;align-items:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-        <img src="<?= esc(get_image($ses->user('image'))) ?>" alt="" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
-        <span>Hi, <?= esc($ses->user('first_name')) ?></span>
-        <div class="hf-user-menu-links" style="display:flex;gap:10px;">
+    <style>
+        .hf-user-menu-account { position: relative; display: inline-block; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
+        .hf-user-menu-trigger { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+        .hf-user-menu-links { position: absolute; top: 100%; right: 0; margin-top: 6px; background: #fff; border: 1px solid #ddd; border-radius: 6px; box-shadow: 0 6px 16px rgba(0,0,0,.12); min-width: 150px; display: none; flex-direction: column; padding: 6px 0; z-index: 50; }
+        .hf-user-menu-account:hover .hf-user-menu-links,
+        .hf-user-menu-account:focus-within .hf-user-menu-links { display: flex; }
+        .hf-user-menu-links a { padding: 8px 14px; color: #212529; text-decoration: none; white-space: nowrap; }
+        .hf-user-menu-links a:hover { background: #f1f3f5; }
+    </style>
+    <div class="hf-user-menu hf-user-menu-account">
+        <div class="hf-user-menu-trigger" tabindex="0">
+            <img src="<?= esc(get_image($ses->user('image'))) ?>" alt="" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
+            <span>Hi, <?= esc($ses->user('first_name')) ?></span>
+        </div>
+        <div class="hf-user-menu-links">
             <a href="<?= ROOT ?>/<?= $vars['admin_plugin_route'] ?>">Admin</a>
             <a href="<?= ROOT ?>/profile/<?= $ses->user('id') ?>">Profile</a>
             <a href="<?= ROOT ?>/<?= $vars['logout_page'] ?>">Logout</a>

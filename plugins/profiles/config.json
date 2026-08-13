@@ -1,0 +1,15 @@
+{
+    "name"      : "Profiles",
+    "version"   : "1.0.0",
+    "id"        : "profiles",
+    "author"    : "Afro Lion Studios",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 12,
+    "routes"    : {
+                    "on":["all"]
+                  },
+    "dependencies": {
+
+                  }
+}
