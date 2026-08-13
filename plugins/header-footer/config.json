@@ -7,8 +7,7 @@
     "active"    : true,
     "index"     : 3,
     "routes"    : {
-                    "on":["all"],
-                    "off":["admin"]
+                    "on":["all"]
                   },
     "dependencies": {
                     

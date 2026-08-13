@@ -1,0 +1,119 @@
+<?php if (user_can('manage_header_footer')): ?>
+  <link rel="stylesheet" href="<?=ROOT?>/assets/grapesjs/grapes.min.css">
+
+<?php
+  $savedLayout = setting('header_layout');
+  if (!is_array($savedLayout) || empty($savedLayout['html'])) {
+      $savedLayout = [
+          'html' => '<div class="hf-header-wrapper" style="padding:10px 20px;">'
+              . '<div class="hf-dynamic-block hf-site-menu" style="padding:15px;border:2px dashed #999;background:#f8f9fa;text-align:center;color:#666;">{{SITE_MENU}}</div>'
+              . '</div>',
+          'css'  => '',
+      ];
+  }
+?>
+
+<div class="container-fluid mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h4 class="mb-0">Edit Header</h4>
+      <small class="text-muted">Design the header that appears on every page. Drag in a "Site Menu" block from the Dynamic category to mark where your site's real navigation menu will appear.</small>
+    </div>
+    <div>
+      <button id="saveLayoutBtn" class="btn btn-primary">Save Header</button>
+      <button id="resetLayoutBtn" class="btn btn-outline-danger">Reset to Default</button>
+      <a href="<?= ROOT ?>/<?= $admin_route ?>/<?= $plugin_route ?>" class="btn btn-secondary">Back</a>
+    </div>
+  </div>
+
+  <form method="post" action="" id="layoutForm">
+    <input type="hidden" name="_token" value="<?= csrf() ?>">
+    <input type="hidden" name="action" id="formAction" value="save">
+    <input type="hidden" name="layout_html" id="layout_html">
+    <input type="hidden" name="layout_css" id="layout_css">
+  </form>
+
+  <div id="gjs">
+    <?= $savedLayout['html'] ?>
+    <style><?= $savedLayout['css'] ?></style>
+  </div>
+</div>
+
+<script src="<?=ROOT?>/assets/grapesjs/grapes.min.js"></script>
+<script src="<?=ROOT?>/assets/grapesjs/grapesjs-blocks-basic.min.js"></script>
+<script src="<?=ROOT?>/assets/grapesjs/grapesjs-plugin-forms.min.js"></script>
+<script src="<?=ROOT?>/assets/grapesjs/grapesjs-navbar.min.js"></script>
+<script src="<?=ROOT?>/assets/grapesjs/grapesjs-custom-code.min.js"></script>
+<script src="<?=ROOT?>/assets/grapesjs/grapesjs-preset-webpage.min.js"></script>
+<script src="<?=ROOT?>/assets/grapesjs/dynamic-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/nav-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/hero-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/footer-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/feature-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/cta-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/testimonial-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/pricing-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/team-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/faq-blocks.js?v=1"></script>
+<script src="<?=ROOT?>/assets/grapesjs/contact-blocks.js?v=1"></script>
+<script>
+  const layoutEditor = grapesjs.init({
+    container: '#gjs',
+    fromElement: true,
+    height: '80vh',
+    width: 'auto',
+    showOffsets: true,
+    allowScripts: true,
+    storageManager: false,
+    plugins: [
+      'gjs-blocks-basic',
+      'grapesjs-plugin-forms',
+      'grapesjs-custom-code',
+      'grapesjs-navbar',
+      'grapesjs-preset-webpage',
+    ],
+    pluginsOpts: {
+      'grapesjs-custom-code': {
+        modalTitle: 'Edit Custom Code',
+      },
+    },
+  });
+
+  [
+    'registerDynamicBlocks',
+    'registerNavBlocks',
+    'registerHeroBlocks',
+    'registerFooterBlocks',
+    'registerFeatureBlocks',
+    'registerCtaBlocks',
+    'registerTestimonialBlocks',
+    'registerPricingBlocks',
+    'registerTeamBlocks',
+    'registerFaqBlocks',
+    'registerContactBlocks',
+  ].forEach(function (fn) {
+    if (window[fn]) window[fn](layoutEditor);
+  });
+
+  document.getElementById('saveLayoutBtn').addEventListener('click', function () {
+    document.getElementById('formAction').value = 'save';
+    document.getElementById('layout_html').value = layoutEditor.getHtml();
+    document.getElementById('layout_css').value = layoutEditor.getCss();
+    document.getElementById('layoutForm').submit();
+  });
+
+  document.getElementById('resetLayoutBtn').addEventListener('click', function () {
+    if (!confirm('Reset the header to the default layout? This cannot be undone.')) return;
+    document.getElementById('formAction').value = 'reset';
+    document.getElementById('layoutForm').submit();
+  });
+</script>
+
+<?php else: ?>
+<div id="denied" class="card text-center shadow-lg border-danger d-flex justify-content-center align-items-center mx-auto" style="max-width: 400px;">
+  <div class="card-body">
+    <h5 class="card-title text-danger fw-bold">Access Denied</h5>
+    <p class="card-text text-muted">You don't have permission for this action.</p>
+  </div>
+</div>
+<?php endif ?>

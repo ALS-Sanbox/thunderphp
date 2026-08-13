@@ -7,5 +7,19 @@
     <title><?=APP_NAME?></title>
 </head>
 <body>
-<?php do_action(plugin_id().'_main_menu',['links'=>$links])?>
+<?php
+$headerLayout = setting('header_layout');
+$hasHeaderLayout = is_array($headerLayout) && !empty($headerLayout['html']) && strpos($headerLayout['html'], '{{SITE_MENU}}') !== false;
+
+ob_start();
+do_action(plugin_id().'_main_menu', ['links' => $links]);
+$menuMarkup = ob_get_clean();
+
+if ($hasHeaderLayout) {
+    echo '<style>' . ($headerLayout['css'] ?? '') . '</style>';
+    echo str_replace('{{SITE_MENU}}', $menuMarkup, $headerLayout['html']);
+} else {
+    echo $menuMarkup;
+}
+?>
 
