@@ -15,6 +15,18 @@ class Request {
         'image/png',
     ];
 
+    // The destination file extension is always derived from this map, keyed
+    // by the *detected* MIME type - never from the client-supplied filename.
+    // A file can be renamed to anything (e.g. "shell.php") before upload; only
+    // the actual file content decides what extension it's saved with.
+    private $mime_extension_map = [
+        'image/jpeg' => 'jpg',
+        'image/jpg'  => 'jpg',
+        'image/webp' => 'webp',
+        'image/gif'  => 'gif',
+        'image/png'  => 'png',
+    ];
+
     private function getSuperGlobalValue(string $key = '', string|array $superGlobal = ''): mixed {
         if (empty($key)) {
             return $superGlobal;
@@ -67,8 +79,13 @@ class Request {
             }
         }
 
-        $file_name = pathinfo($files['name'], PATHINFO_FILENAME);
-        $file_extension = pathinfo($files['name'], PATHINFO_EXTENSION);
+        // Strip anything but alphanumerics/dash/underscore from the client's
+        // filename - it's only ever used for the human-readable part of the
+        // saved name, so this is defense-in-depth, not the primary fix below.
+        $file_name = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($files['name'], PATHINFO_FILENAME));
+        if ($file_name === '') {
+            $file_name = 'file';
+        }
         $file_tmp  = $files['tmp_name'];
 
         if (!file_exists($file_tmp) || empty($file_tmp)) {
@@ -80,10 +97,16 @@ class Request {
         $file_type = mime_content_type($file_tmp);
 
         // Validate file type
-        if (!in_array($file_type, $this->upload_file_types)) {
+        if (!in_array($file_type, $this->upload_file_types) || !isset($this->mime_extension_map[$file_type])) {
             $this->upload_errors[] = "Invalid file type: " . $file_type;
             return $this->upload_errors;
         }
+
+        // The extension is derived solely from the detected MIME type above -
+        // never from the client-supplied filename - so a file can't be saved
+        // with an executable extension (e.g. .php) regardless of what it was
+        // named before upload.
+        $file_extension = $this->mime_extension_map[$file_type];
 
         // Validate file size
         if ($file_size > $this->upload_max_size) {
