@@ -23,9 +23,6 @@
           <a href="<?=ROOT?>/<?=$vars['forgot_page']?>">Forgot Password?</a>
         </div>
         <button type="submit" class="btn btn-custom w-100 py-2 mb-3">Login</button>
-        <button type="button" class="btn btn-google w-100 py-2">
-          <img src="https://img.icons8.com/color/16/000000/google-logo.png" class="me-2" alt="Google Icon"/> Sign in with Google
-        </button>
       </form>
       <div class="mt-3">
         <p>Don't have an account? <a href="<?=ROOT?>/<?=$vars['signup_page']?>">Sign up</a></p>

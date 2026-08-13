@@ -54,9 +54,6 @@
             </div>
 
             <button type="submit" class="btn btn-custom w-100 py-2 mb-3">Sign Up</button>
-            <button type="button" class="btn btn-google w-100 py-2">
-                <img src="https://img.icons8.com/color/16/000000/google-logo.png" class="me-2" alt="Google Icon"/> Sign up with Google
-            </button>
         </form>
     </section>
 </main>
