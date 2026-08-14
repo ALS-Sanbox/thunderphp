@@ -1,0 +1,16 @@
+{
+    "name"      : "Update Checker",
+    "version"   : "1.0.0",
+    "id"        : "update-checker",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 21,
+    "routes"    : {
+                    "on":["admin"]
+                  },
+    "dependencies": {
+                    "basic-admin":"1.0.0",
+                    "settings":"1.0.0"
+                  }
+}
