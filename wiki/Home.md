@@ -8,11 +8,15 @@ ThunderPHP is a plugin-based PHP MVC framework — every feature, including the 
 - **[Plugin Development](Plugin-Development.md)** — the plugin architecture, the hook system, and two easy-to-hit gotchas in the migration and autoloading systems.
 - **[Site Overrides](Site-Overrides.md)** — customizing a plugin's views, assets, or behavior without editing its files directly, so updates never destroy your customizations.
 - **[Versioning](Versioning.md)** — how ThunderPHP's version number works.
+- **[Branches](Branches.md)** — `main`, `beta`, and `release`, and how a change moves between them.
 
 ## Branches
 
-- `main` — the stable, release-candidate line.
-- `nightly` — active plugin development. Expect breaking changes.
+- `main` — active development. Expect breaking changes.
+- `beta` — next version, in testing. Should be stable, but not yet promoted to `release`.
+- `release` — stable, production. What the HestiaCP Quick Install app and any packaged downloads ship from.
+
+See [Branches](Branches.md) for how work moves between them.
 
 ## License
 

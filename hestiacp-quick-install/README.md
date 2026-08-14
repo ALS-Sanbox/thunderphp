@@ -42,14 +42,19 @@ is needed here (unlike, e.g., `GravSetup.php`, which does need one).
 
 ## Source archive
 
-`resources.archive.src` currently points at `nightly`'s tarball
-(`archive/refs/heads/nightly.tar.gz`), **not** `main` - `do:install` (what
-this class runs) only exists on `nightly` right now. Switch this to `main`
-(or a tagged release, `archive/refs/tags/vX.Y.Z.tar.gz`) once that work is
-promoted to the stable branch; installing from `main` today would extract
-the old `app/thunder/init.php` that unconditionally requires `config.php`,
-which fails outright for exactly the reason `do:install` exists to fix.
-Confirmed live, not theoretical - see the verification section below.
+`resources.archive.src` points at `release`'s tarball
+(`archive/refs/heads/release.tar.gz`) - the stable, production branch (see
+[wiki/Branches.md](../wiki/Branches.md)), matching the same convention
+HestiaCP itself uses (`main` = dev, `beta` = testing, `release` =
+production, same code as the compiled packages). `do:install` (what this
+class runs) has to actually be on `release` for this to work - it wasn't
+when this integration was first built, and installing from a branch
+without it fails outright, extracting an `app/thunder/init.php` that
+unconditionally requires `config.php`. Confirmed live, not theoretical -
+see the verification section below. If `release` is ever behind `main` on
+a promotion (a `do:install` fix landed but hasn't been promoted yet), this
+will break the same way until that promotion happens - point this at
+`main` or `beta` temporarily if that ever happens and testing can't wait.
 
 ## The `v-run-cli-cmd` space-truncation issue
 

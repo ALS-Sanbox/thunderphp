@@ -28,12 +28,12 @@ class ThunderPHPSetup extends BaseSetup {
 		"database" => true,
 		"resources" => [
 			"archive" => [
-				// do:install (what this class runs below) only exists on
-				// `nightly` right now - `main` doesn't have it yet. Point
-				// this at `main` once that work is promoted to the stable
-				// branch; nightly's tarball is the only one this actually
-				// works against today.
-				"src" => "https://github.com/ALS-Sanbox/thunderphp/archive/refs/heads/nightly.tar.gz",
+				// `release` is the stable, production branch (see
+				// wiki/Branches.md) - the same one the compiled/packaged
+				// downloads ship from. `main` is the active development
+				// snapshot and `beta` is next-version testing; neither is
+				// meant for a production Quick Install.
+				"src" => "https://github.com/ALS-Sanbox/thunderphp/archive/refs/heads/release.tar.gz",
 			],
 		],
 		"server" => [

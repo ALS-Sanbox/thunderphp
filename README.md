@@ -53,8 +53,11 @@ Some of the core functionality may not work if you download the code branch-wise
 
 ## Branches
 
-- **`main`**: The stable, release-candidate line. Build production sites against this branch.
-- **`nightly`**: Active plugin development happens here. Expect breaking changes and half-finished features — don't build production sites against it.
+- **`main`**: Active development. Expect breaking changes and half-finished features — don't build production sites against it.
+- **`beta`**: Next version, in testing. Should be stable, but not yet promoted to `release`.
+- **`release`**: Stable, production. Build production sites against this branch — it's what the HestiaCP Quick Install app and any packaged downloads ship from.
+
+See [wiki/Branches.md](wiki/Branches.md) for how a change moves between them.
 
 ## Overview
 This repository contains the ThunderPHP framework with a complete set of plugins integrated directly into the main branch. From handling home pages to managing authentication and error pages (404), ThunderPHP provides comprehensive solutions for various web development needs.
