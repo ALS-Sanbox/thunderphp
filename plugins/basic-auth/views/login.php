@@ -27,6 +27,7 @@
       <div class="mt-3">
         <p>Don't have an account? <a href="<?=ROOT?>/<?=$vars['signup_page']?>">Sign up</a></p>
       </div>
+      <?php do_action('login_form_after'); ?>
     </section>
 </main>
 

@@ -1,0 +1,16 @@
+{
+    "name"      : "Google Sign-In",
+    "version"   : "1.0.0",
+    "id"        : "google-auth",
+    "author"    : "Afro Lion",
+    "thumbnail" : "",
+    "active"    : true,
+    "index"     : 20,
+    "routes"    : {
+                    "on":["login","google-auth","admin"]
+                  },
+    "dependencies": {
+                    "basic-admin":"1.0.0",
+                    "basic-auth":"1.0.0"
+                  }
+}
