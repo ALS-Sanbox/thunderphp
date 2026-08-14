@@ -83,8 +83,18 @@
                 <h5 class="card-title mb-0"><i class="bi bi-info-circle"></i> Site Info</h5>
             </div>
             <div class="card-body">
-                <p class="mb-1"><strong>App:</strong> <?= esc(APP_NAME) ?></p>
-                <p class="mb-0"><strong>PHP:</strong> <?= esc(PHP_VERSION) ?></p>
+                <p class="mb-1"><strong>Site:</strong> <?= esc(setting('site_name') ?: APP_NAME) ?></p>
+                <p class="mb-1"><strong>URL:</strong> <a href="<?= esc(ROOT) ?>" target="_blank" rel="noopener"><?= esc(setting('site_url') ?: ROOT) ?></a></p>
+                <p class="mb-1"><strong>ThunderPHP:</strong> v<?= esc(app_version()) ?></p>
+                <p class="mb-1"><strong>PHP:</strong> <?= esc(PHP_VERSION) ?></p>
+                <p class="mb-0">
+                    <strong>Debug Mode:</strong>
+                    <?php if (setting('debug_mode')): ?>
+                        <span class="badge bg-warning text-dark">On</span>
+                    <?php else: ?>
+                        <span class="badge bg-success">Off</span>
+                    <?php endif; ?>
+                </p>
             </div>
         </div>
     </div>
