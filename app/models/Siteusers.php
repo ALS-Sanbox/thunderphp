@@ -68,6 +68,8 @@ class Siteusers extends Model {
             $this->errors['password'] = "Password must be at least 8 characters long.";
         } elseif (!preg_match('/[\W]/', $data['password'])) {
             $this->errors['password'] = "Password must contain at least one special character.";
+        } elseif (array_key_exists('confirmPassword', $data) && $data['password'] !== $data['confirmPassword']) {
+            $this->errors['confirmPassword'] = "Passwords do not match.";
         }
 
         return empty($this->errors);

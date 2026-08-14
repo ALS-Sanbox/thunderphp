@@ -13,12 +13,6 @@
                 <?= esc($msg['text']) ?>
             </div>
         <?php endif ?>
-
-        <?php if(!empty($errors['first_name']) && $msg = message()):?>
-            <div class="alert alert-danger text-center">
-                <?=esc(message('<?=$errors["first_name"]?>',true))?>
-            </div>
-        <?php endif ?>
             <div class="row">
                 <div class="column-left">
                     <img src="<?=ROOT?>/assets/images/no_image.jpg" alt="Profile Picture" id="profilePicPreview">

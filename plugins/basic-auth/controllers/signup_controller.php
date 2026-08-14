@@ -9,17 +9,21 @@ if ($csrf = csrf_verify($req->post('_token')) && $user->validate_insert($req->po
             'last_name' =>$postdata['last_name'],
             'image'     =>'',
             'email'     =>$postdata['email'],
-            'password'     => password_hash($postdata['confirmPassword'] ?? '', PASSWORD_DEFAULT),
+            // Hash the actual "Password" field - not "confirmPassword", which
+            // is only ever compared against it in validate_insert(), never
+            // meant to be the value that's actually stored.
+            'password'     => password_hash($postdata['password'] ?? '', PASSWORD_DEFAULT),
     ]);
 
     $user->insert($newData);
 
+    message("Account created! Please log in.", "success");
     redirect($vars['login_page']);
 } else {
 
     if(!$csrf){
         $user->errors['email'] = "Form expired! Please Refresh";
-        message("Form expired! Please Refresh");
     }
+    message(implode(' ', $user->errors), 'fail');
     set_value('errors', $user->errors);
 }
