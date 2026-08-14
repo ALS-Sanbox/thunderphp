@@ -43,6 +43,10 @@ The `google-auth` plugin adds a "Sign in with Google" button to the login page, 
 
 The "Sign in with Google" button will now appear on `/login`. If someone signs in with an email that already matches an existing account on your site, it's linked automatically (Google only reports an email back once it's verified on their end); otherwise a new account is created for them.
 
+## Customizing without losing it to updates
+
+Never edit a plugin's own files directly if you want your changes to survive an update. Put customizations — views, assets, even behavior — in `site-overrides/<plugin-id>/...` instead; it mirrors the plugin's own folder structure and takes priority automatically. See the wiki's [Site Overrides](wiki/Site-Overrides.md) page for details, including how to fully replace a plugin's behavior rather than just its templates.
+
 ## Important Notice
 
 Some of the core functionality may not work if you download the code branch-wise. To avoid issues, I recommend downloading the **main code file** with all the updated and required plugins. This will ensure that we are on the same page and avoid potential problems.

@@ -373,13 +373,27 @@ function valid_route(object $json): bool {
 function plugin_path(string $path = ''): string {
     $called_from = debug_backtrace();
     $key = array_search(__FUNCTION__, array_column($called_from, 'function'));
-    return get_plugin_dir(debug_backtrace()[$key]['file']) . $path;
+    $caller_file = debug_backtrace()[$key]['file'];
+
+    $override = get_override_path($caller_file, $path);
+    if ($override !== null) {
+        return $override;
+    }
+
+    return get_plugin_dir($caller_file) . $path;
 }
 
 function plugin_http_path(string $path = ''): string {
     $called_from = debug_backtrace();
     $key = array_search(__FUNCTION__, array_column($called_from, 'function'));
-    $base = ROOT . DIRECTORY_SEPARATOR . get_plugin_dir(debug_backtrace()[$key]['file']);
+    $caller_file = debug_backtrace()[$key]['file'];
+
+    $override = get_override_path($caller_file, $path);
+    if ($override !== null) {
+        return ROOT . '/' . str_replace(DIRECTORY_SEPARATOR, '/', $override);
+    }
+
+    $base = ROOT . DIRECTORY_SEPARATOR . get_plugin_dir($caller_file);
     $base_path = str_replace("views\\", "", $base);
     return $base_path . $path;
 }
@@ -389,6 +403,24 @@ function get_plugin_dir(string $filepath): string {
         return 'plugins' . DIRECTORY_SEPARATOR . $matches[1] . DIRECTORY_SEPARATOR;
     }
     return '';
+}
+
+/**
+ * Site-specific customizations (views, assets, even whole controllers) live
+ * in site-overrides/{plugin-id}/... - completely outside plugins/ - so an
+ * update can safely replace every plugin file wholesale without touching
+ * anything a site owner has customized. Checked first by plugin_path()/
+ * plugin_http_path(); returns null (falls through to the plugin's own file)
+ * when no override exists for the given path.
+ */
+function get_override_path(string $caller_file, string $path): ?string {
+    if (!preg_match('#plugins[/\\\\]([^/\\\\]+)#', $caller_file, $matches)) {
+        return null;
+    }
+
+    $override_path = 'site-overrides' . DIRECTORY_SEPARATOR . $matches[1] . DIRECTORY_SEPARATOR . $path;
+
+    return file_exists($override_path) ? $override_path : null;
 }
 
 function plugin_id(): string {

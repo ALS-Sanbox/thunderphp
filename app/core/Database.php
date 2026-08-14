@@ -95,7 +95,12 @@ class Database {
 
     public function fetchAll($sql, $params = []) {
         return $this->query($sql, $params);
-        
+
+    }
+
+    /** Safely quotes a literal for raw SQL text (e.g. writing a backup/dump file) - NULL passthrough, everything else via PDO::quote(). */
+    public function quote(?string $value): string {
+        return $value === null ? 'NULL' : $this->pdo->quote($value);
     }
 
     public function lastInsertId(): ?int

@@ -48,7 +48,7 @@ $this->insert('user_roles');
 
 This exact ordering bug shipped in the `user-roles` plugin's own migration and meant fresh installs got an empty `user_roles` table with no `admin` role to assign — found and fixed while building the install wizard.
 
-Also note: `doMigrate()` has no "already ran" tracking. It re-executes every migration file in a plugin's folder every time it's invoked. `createTable()` is idempotent (`CREATE TABLE IF NOT EXISTS`), but `insert()` is not — running a migration twice against an already-migrated database can duplicate or error on seed rows. Migrations are meant to run once per environment, via the installer or `php thunder do:migrate`.
+`do:migrate` tracks what's already run in a `migrations_log` table (self-bootstrapped by `app/thunder/thunder.php`, not tied to any one plugin) keyed on plugin + migration filename, so re-running `php thunder do:migrate <plugin>` — or `do:migrate all` — is safe and skips anything already applied instead of re-running `up()` and duplicating seed rows. Rolling a migration back (`do:rollback`) removes its log entry so it can be cleanly re-applied.
 
 ### 2. Classes resolve relative to the *calling* plugin, not their own namespace
 

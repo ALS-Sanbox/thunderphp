@@ -257,9 +257,9 @@ class Thunder
         $pluginMigrationsFolder = self::PLUGINS_DIR . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'migrations';
 
         if ($migrationFile) {
-            $this->runSingleMigration($pluginMigrationsFolder, $migrationFile);
+            $this->runSingleMigration($pluginName, $pluginMigrationsFolder, $migrationFile);
         } else {
-            $this->runAllMigrations($pluginMigrationsFolder);
+            $this->runAllMigrations($pluginName, $pluginMigrationsFolder);
         }
     }
 
@@ -281,7 +281,7 @@ class Thunder
             }
 
             echo "\n-- Plugin: $pluginName --\n";
-            $this->runAllMigrations($pluginMigrationsFolder);
+            $this->runAllMigrations($pluginName, $pluginMigrationsFolder);
         }
 
         echo "\nAll plugin migrations completed successfully.\n";
@@ -304,14 +304,14 @@ class Thunder
         }
     }
 
-    private function runSingleMigration($pluginMigrationsFolder, $migrationFile)
+    private function runSingleMigration($pluginName, $pluginMigrationsFolder, $migrationFile)
     {
         echo "Running migration: $migrationFile\n";
         require_once $pluginMigrationsFolder . DIRECTORY_SEPARATOR . $migrationFile;
-        $this->executeMigration($migrationFile);
+        $this->executeMigration($pluginName, $migrationFile);
     }
 
-    private function runAllMigrations($pluginMigrationsFolder)
+    private function runAllMigrations($pluginName, $pluginMigrationsFolder)
     {
         $migrations = glob($pluginMigrationsFolder . DIRECTORY_SEPARATOR . '*.php');
 
@@ -325,7 +325,7 @@ class Thunder
         foreach ($migrations as $migration) {
             echo "Running migration: " . basename($migration) . "\n";
             require_once $migration;
-            $this->executeMigration(basename($migration));
+            $this->executeMigration($pluginName, basename($migration));
         }
 
         echo "All migrations completed successfully.\n";
@@ -365,9 +365,9 @@ class Thunder
         $pluginMigrationsFolder = self::PLUGINS_DIR . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'migrations';
 
         if ($migrationFile) {
-            $this->runSingleRollback($pluginMigrationsFolder, $migrationFile);
+            $this->runSingleRollback($pluginName, $pluginMigrationsFolder, $migrationFile);
         } else {
-            $this->runAllRollbacks($pluginMigrationsFolder);
+            $this->runAllRollbacks($pluginName, $pluginMigrationsFolder);
         }
     }
 
@@ -383,20 +383,20 @@ class Thunder
             }
 
             echo "\n-- Plugin: $pluginName --\n";
-            $this->runAllRollbacks($pluginMigrationsFolder);
+            $this->runAllRollbacks($pluginName, $pluginMigrationsFolder);
         }
 
         echo "\nAll plugin migrations rolled back successfully.\n";
     }
 
-    private function runSingleRollback($pluginMigrationsFolder, $migrationFile)
+    private function runSingleRollback($pluginName, $pluginMigrationsFolder, $migrationFile)
     {
         echo "\nRolling back migration: $migrationFile\n";
         require_once $pluginMigrationsFolder . DIRECTORY_SEPARATOR . $migrationFile;
-        $this->executeRollback($migrationFile);
+        $this->executeRollback($pluginName, $migrationFile);
     }
 
-    private function runAllRollbacks($pluginMigrationsFolder)
+    private function runAllRollbacks($pluginName, $pluginMigrationsFolder)
     {
         $migrations = glob($pluginMigrationsFolder . DIRECTORY_SEPARATOR . '*.php');
 
@@ -410,13 +410,13 @@ class Thunder
         foreach ($migrations as $migration) {
             echo "\nRolling back migration: " . basename($migration) . "\n";
             require_once $migration;
-            $this->executeRollback(basename($migration));
+            $this->executeRollback($pluginName, basename($migration));
         }
 
         echo "\nAll migrations rolled back successfully.\n";
     }
 
-    private function executeMigration($migrationFile)
+    private function executeMigration($pluginName, $migrationFile)
     {
         // Strip off the timestamp (e.g., '20250130_163917_')
         $className = pathinfo($migrationFile, PATHINFO_FILENAME);
@@ -426,6 +426,11 @@ class Thunder
             die("\nError: Class '$className' not found in migration file '$migrationFile'.\n");
         }
 
+        if ($this->isMigrationLogged($pluginName, $migrationFile)) {
+            echo "\nMigration '$className' already applied - skipping.\n";
+            return;
+        }
+
         $migrationInstance = new $className();
 
         if (!method_exists($migrationInstance, 'up')) {
@@ -433,11 +438,12 @@ class Thunder
         }
 
         $migrationInstance->up();
+        $this->logMigration($pluginName, $migrationFile);
         echo "\nMigration '$className' applied successfully.\n";
     }
 
 
-    private function executeRollback($migrationFile)
+    private function executeRollback($pluginName, $migrationFile)
     {
         // Strip off the timestamp (e.g., '20250130_163917_')
         $className = pathinfo($migrationFile, PATHINFO_FILENAME);
@@ -454,7 +460,56 @@ class Thunder
         }
 
         $migrationInstance->down();
+        $this->unlogMigration($pluginName, $migrationFile);
         echo "Migration '$className' rolled back successfully.\n";
+    }
+
+    /**
+     * do:migrate has no "already ran" tracking beyond this table - without
+     * it, re-running a migration with seed data (addData()+insert()) creates
+     * duplicate rows every time, since createTable() alone is idempotent but
+     * insert() isn't. Self-bootstrapping (created here, not via any plugin's
+     * own migration) so it always exists before the first check, regardless
+     * of which plugin's migrations happen to run first.
+     */
+    private function migrationsLogDb(): \Core\Database
+    {
+        static $db = null;
+
+        if ($db === null) {
+            $db = new \Core\Database();
+            $db->query("CREATE TABLE IF NOT EXISTS migrations_log (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                plugin VARCHAR(255) NOT NULL,
+                migration_file VARCHAR(255) NOT NULL,
+                applied_at DATETIME NOT NULL,
+                UNIQUE KEY plugin_migration (plugin, migration_file)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        }
+
+        return $db;
+    }
+
+    private function isMigrationLogged(string $pluginName, string $migrationFile): bool
+    {
+        $db = $this->migrationsLogDb();
+        $row = $db->fetch("SELECT id FROM migrations_log WHERE plugin = ? AND migration_file = ?", [$pluginName, $migrationFile]);
+        return (bool) $row;
+    }
+
+    private function logMigration(string $pluginName, string $migrationFile): void
+    {
+        $db = $this->migrationsLogDb();
+        $db->query(
+            "INSERT INTO migrations_log (plugin, migration_file, applied_at) VALUES (?, ?, ?)",
+            [$pluginName, $migrationFile, date('Y-m-d H:i:s')]
+        );
+    }
+
+    private function unlogMigration(string $pluginName, string $migrationFile): void
+    {
+        $db = $this->migrationsLogDb();
+        $db->query("DELETE FROM migrations_log WHERE plugin = ? AND migration_file = ?", [$pluginName, $migrationFile]);
     }
 
 

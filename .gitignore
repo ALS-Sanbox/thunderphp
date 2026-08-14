@@ -2,3 +2,5 @@
 config.php
 /vendor/
 /.phpunit.cache/
+/update-staging/
+/update-backups/
