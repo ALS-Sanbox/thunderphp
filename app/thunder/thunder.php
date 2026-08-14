@@ -26,6 +26,10 @@ class Thunder
 
         echo "
 
+        Install Commands:
+        - do:install --db-host=... --db-name=... --db-user=... --db-password=... --site-url=... --admin-email=... --admin-password=... --admin-first-name=... --admin-last-name=... [--site-name=...] [--site-contact-email=...] [--profile=standard|minimal]
+              Non-interactive install: writes config.php, runs migrations, creates the admin account. Refuses to run if the site is already installed.
+
         Database Commands:
         - do:migrate <plugin|all> [file] : Run migrations for a plugin, or 'all' to migrate every plugin.
         - do:refresh <plugin|all> [file] : Rollback and rerun migrations for a plugin, or 'all'.
@@ -266,7 +270,18 @@ class Thunder
     private function getAllPluginNames()
     {
         $pluginDirs = glob(self::PLUGINS_DIR . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR);
-        return array_map('basename', $pluginDirs);
+        $names = array_map('basename', $pluginDirs);
+
+        // Plugins otherwise migrate in alphabetical folder order. Many
+        // plugins seed rows into the shared `settings` table as part of
+        // their own migration, so on a fresh database `settings` has to run
+        // first or those inserts fail against a table that doesn't exist
+        // yet - and since insert() logs the migration as applied even when
+        // an individual insert fails, a failed seed here never gets a
+        // second chance on a retry.
+        usort($names, fn($a, $b) => ($b === 'settings') <=> ($a === 'settings') ?: $a <=> $b);
+
+        return $names;
     }
 
     private function migrateAllPlugins()
@@ -512,6 +527,173 @@ class Thunder
         $db->query("DELETE FROM migrations_log WHERE plugin = ? AND migration_file = ?", [$pluginName, $migrationFile]);
     }
 
+
+    public function doInstall(array $args)
+    {
+        $options = $this->parseInstallArgs($args);
+
+        if (!defined('INSTALL_ROOT')) {
+            define('INSTALL_ROOT', FCPATH);
+        }
+        require_once FCPATH . 'install' . DIRECTORY_SEPARATOR . 'functions.php';
+
+        if (install_already_completed()) {
+            echo "This site is already installed - do:install refuses to run again.\n";
+            echo "(config.php exists and the database already has an admin account.)\n";
+            exit(1);
+        }
+
+        $required = ['db-host', 'db-name', 'db-user', 'site-url', 'admin-email', 'admin-password', 'admin-first-name', 'admin-last-name'];
+        $missing = array_filter($required, fn($key) => !isset($options[$key]) || $options[$key] === '');
+
+        if (!empty($missing)) {
+            echo "Missing required arguments: --" . implode(', --', $missing) . "\n\n";
+            echo $this->installUsage();
+            exit(1);
+        }
+
+        $db = [
+            'host'     => $options['db-host'],
+            'name'     => $options['db-name'],
+            'user'     => $options['db-user'],
+            'password' => $options['db-password'] ?? '',
+        ];
+
+        $connectionError = install_test_db_connection($db['host'], $db['name'], $db['user'], $db['password']);
+        if ($connectionError !== null) {
+            echo "Database connection failed: $connectionError\n";
+            exit(1);
+        }
+
+        $adminData = [
+            'first_name'       => $options['admin-first-name'],
+            'last_name'        => $options['admin-last-name'],
+            'email'            => $options['admin-email'],
+            'password'         => $options['admin-password'],
+            'confirm_password' => $options['admin-password'],
+        ];
+
+        $errors = install_validate_admin_account($adminData);
+        if (!empty($errors)) {
+            echo "Invalid admin account details:\n";
+            foreach ($errors as $field => $msg) {
+                echo "  - $field: $msg\n";
+            }
+            exit(1);
+        }
+
+        $root = rtrim($options['site-url'], '/');
+        $siteName = $options['site-name'] ?? 'ThunderPHP';
+        $siteContactEmail = $options['site-contact-email'] ?? $options['admin-email'];
+        $requestedProfile = $options['profile'] ?? 'standard';
+        $profile = in_array($requestedProfile, ['standard', 'minimal'], true) ? $requestedProfile : 'standard';
+
+        if (!install_write_config($db, $root)) {
+            echo "Could not write config.php - check that the application root is writable.\n";
+            exit(1);
+        }
+        echo "config.php written.\n";
+
+        require_once FCPATH . 'config.php';
+        require_once FCPATH . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'functions.php';
+        require_once FCPATH . 'app' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Database.php';
+        require_once FCPATH . 'app' . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'Migration.php';
+
+        echo "Running migrations ($profile profile)...\n";
+
+        if ($profile === 'minimal') {
+            foreach (INSTALL_MINIMAL_PLUGINS as $pluginName) {
+                $migrationsFolder = FCPATH . 'plugins' . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'migrations';
+                if (!is_dir($migrationsFolder) || empty(glob($migrationsFolder . DIRECTORY_SEPARATOR . '*.php'))) {
+                    continue;
+                }
+                $this->doMigrate([$pluginName]);
+            }
+
+            foreach (install_get_all_plugin_folders() as $pluginFolder) {
+                install_set_plugin_active($pluginFolder, in_array($pluginFolder, INSTALL_MINIMAL_PLUGINS, true));
+            }
+        } else {
+            $this->doMigrate(['all']);
+        }
+
+        echo "Creating admin account...\n";
+
+        try {
+            $pdo = new \PDO(DB_DRIVER . ':host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4', DB_USER, DB_PASSWORD, [
+                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            ]);
+
+            $stmt = $pdo->prepare("INSERT INTO siteusers (first_name, last_name, email, password, date_created) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([
+                $adminData['first_name'],
+                $adminData['last_name'],
+                $adminData['email'],
+                password_hash($adminData['password'], PASSWORD_DEFAULT),
+                date('Y-m-d H:i:s'),
+            ]);
+            $newUserId = (int) $pdo->lastInsertId();
+
+            $roleStmt = $pdo->prepare("SELECT id FROM user_roles WHERE role = 'admin' LIMIT 1");
+            $roleStmt->execute();
+            $adminRoleId = $roleStmt->fetchColumn();
+
+            if ($adminRoleId !== false) {
+                $pdo->prepare("INSERT INTO user_roles_map (role_id, user_id, disabled) VALUES (?, ?, 0)")
+                    ->execute([(int) $adminRoleId, $newUserId]);
+            }
+
+            $settingsStmt = $pdo->prepare("UPDATE settings SET value = ? WHERE `key` = ?");
+            $settingsStmt->execute([$siteName, 'site_name']);
+            $settingsStmt->execute([$siteContactEmail, 'admin_email']);
+            $settingsStmt->execute([$root, 'site_url']);
+        } catch (\Throwable $e) {
+            echo "Could not create the admin account: " . $e->getMessage() . "\n";
+            exit(1);
+        }
+
+        echo "\nInstall complete. Log in at {$root}/login with {$adminData['email']}\n";
+    }
+
+    private function installUsage(): string
+    {
+        return "Usage: php thunder do:install --db-host=HOST --db-name=NAME --db-user=USER --db-password=PASS --site-url=URL --admin-email=EMAIL --admin-password=PASS --admin-first-name=NAME --admin-last-name=NAME [--site-name=NAME] [--site-contact-email=EMAIL] [--profile=standard|minimal]\n";
+    }
+
+    private function parseInstallArgs(array $args): array
+    {
+        $options = [];
+        $i = 0;
+        $count = count($args);
+
+        while ($i < $count) {
+            $arg = $args[$i];
+
+            if (str_starts_with($arg, '--')) {
+                $key = substr($arg, 2);
+
+                if (str_contains($key, '=')) {
+                    [$key, $value] = explode('=', $key, 2);
+                    $options[$key] = $value;
+                    $i++;
+                    continue;
+                }
+
+                $next = $args[$i + 1] ?? null;
+                if ($next !== null && !str_starts_with($next, '--')) {
+                    $options[$key] = $next;
+                    $i += 2;
+                } else {
+                    $options[$key] = '';
+                    $i++;
+                }
+            } else {
+                $i++;
+            }
+        }
+
+        return $options;
+    }
 
     private function createFolder($path)
     {

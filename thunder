@@ -13,15 +13,20 @@ if (file_exists(FCPATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php')) {
     require FCPATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 }
 
-require FCPATH . "app" . DIRECTORY_SEPARATOR . "thunder" . DIRECTORY_SEPARATOR . "init.php";
-
 $argv = $_SERVER['argv'] ?? [];
 $action = $argv[1] ?? '';
+
+if (!file_exists(FCPATH . 'config.php') && $action !== 'do:install') {
+    die("config.php not found. Run 'php thunder do:install ...' for a fresh, non-interactive install, or open install.php in a browser for the interactive wizard.\n");
+}
+
+require FCPATH . "app" . DIRECTORY_SEPARATOR . "thunder" . DIRECTORY_SEPARATOR . "init.php";
 
 $thunder = new \Thunder\Thunder();
 
 $commands = [
     'help'           => 'help',
+    'do:install'     => 'doInstall',
     'do:migrate'     => 'doMigrate',
     'do:refresh'     => 'doRefresh',
     'do:rollback'    => 'doRollback',
