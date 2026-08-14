@@ -24,6 +24,25 @@ ThunderPHP is a PHP MVC (Model-View-Controller) framework designed to accelerate
 
 Password reset (`Forgot Password?` on the login page) works out of the box using the server's local mail. For real deliverability (Gmail, SendGrid, etc.), configure SMTP under **Settings** in the admin panel.
 
+## Google Sign-In (optional)
+
+The `google-auth` plugin adds a "Sign in with Google" button to the login page, alongside the regular email/password form. It ships disabled — visitors won't see the button, and email/password login is unaffected, until you configure it with your own Google OAuth credentials.
+
+**Setup:**
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/) and create or select a project.
+2. **APIs & Services → OAuth consent screen** — choose External (unless you're on Google Workspace), fill in the app name and support email. While the app is in "Testing" mode, add any Google accounts you want to be able to sign in as test users.
+3. **APIs & Services → Credentials → Create Credentials → OAuth client ID** → Application type: **Web application**.
+4. Under **Authorized redirect URIs**, add your site's callback URL:
+   ```
+   https://your-domain.com/google-auth/callback
+   ```
+   (replace `your-domain.com` with your actual site — the exact URL is also shown for you on the settings screen in step 6)
+5. Save. Google shows you a **Client ID** and **Client Secret**.
+6. In your site's admin panel, go to **Google Sign-In** in the sidebar (`/admin/google-auth`), paste in the Client ID and Client Secret, check **Enabled**, and save.
+
+The "Sign in with Google" button will now appear on `/login`. If someone signs in with an email that already matches an existing account on your site, it's linked automatically (Google only reports an email back once it's verified on their end); otherwise a new account is created for them.
+
 ## Important Notice
 
 Some of the core functionality may not work if you download the code branch-wise. To avoid issues, I recommend downloading the **main code file** with all the updated and required plugins. This will ensure that we are on the same page and avoid potential problems.
