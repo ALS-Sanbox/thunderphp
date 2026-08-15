@@ -12,6 +12,6 @@ ThunderPHP's version number lives in a single file: `VERSION`, at the repository
 
 Edit the `VERSION` file. There's no build step or generated file that needs to stay in sync — `app_version()` reads it directly.
 
-## What this doesn't do (yet)
+## Update checking
 
-This is just a version *identifier*, not an update-checker. ThunderPHP doesn't currently check GitHub (or anywhere else) for newer releases and notify you — that would be a natural thing to build on top of this, but isn't part of what's here today.
+The `update-checker` plugin builds on this file: it compares it against GitHub's releases API once a day and can download, back up, and apply a newer release — manually or automatically. See its admin screen at `/admin/update-checker`.
