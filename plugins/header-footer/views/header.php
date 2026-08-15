@@ -38,8 +38,63 @@ if ($hasHeaderLayout) {
     echo '<style>' . ($headerLayout['css'] ?? '') . '</style>';
     echo $merged;
 } else {
-    echo $menuMarkup;
-    echo $userMenuMarkup;
+    // No custom header layout saved yet (true for every fresh install,
+    // until an admin builds one in the header editor) - $menuMarkup is a
+    // complete, self-contained <nav> from site-menus with nowhere for the
+    // account area to plug into, so without this it just falls to a new
+    // line below the nav, left-aligned. Pins it to the nav's own top-right
+    // corner instead, matching site-menus' nav height (50px) and dark
+    // background (#242526) - both hardcoded here since this fallback only
+    // has to look right against site-menus' own default nav, not any
+    // possible custom one. Below the 970px breakpoint where that nav
+    // collapses to a hamburger menu, drops back to static/stacked instead
+    // of risking an overlap with the menu button.
+    //
+    // site-menus' own nav also needs one nudge here: its .wrapper uses
+    // justify-content:space-between against a dead, non-functional
+    // ("href=#") "Logo" placeholder, which pushes the real menu links
+    // (Home, by default) to the *right* edge of the bar - competing with
+    // the slot below for the same corner instead of sitting on the left
+    // the way a primary nav normally does. Hiding that placeholder here
+    // leaves nav-links as .wrapper's only flex child, which - under
+    // space-between with a single item - lands at flex-start (left) on
+    // its own, no further override needed.
+    ?>
+    <div style="position:relative;">
+        <?= $menuMarkup ?>
+        <div class="hf-default-user-menu-slot"><?= $userMenuMarkup ?></div>
+    </div>
+    <style>
+        .wrapper .logo {
+            display: none;
+        }
+        .hf-default-user-menu-slot {
+            position: absolute;
+            top: 0;
+            right: 20px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            color: #f2f2f2;
+        }
+        .hf-default-user-menu-slot a,
+        .hf-default-user-menu-slot span {
+            color: #f2f2f2;
+        }
+        @media screen and (max-width: 970px) {
+            .hf-default-user-menu-slot {
+                position: static;
+                height: auto;
+                padding: 10px 20px;
+                color: initial;
+            }
+            .hf-default-user-menu-slot a,
+            .hf-default-user-menu-slot span {
+                color: initial;
+            }
+        }
+    </style>
+    <?php
 }
 ?>
 
