@@ -6,6 +6,7 @@ ThunderPHP is a plugin-based PHP MVC framework — every feature, including the 
 
 - **[Installation](Installation.md)** — running the install wizard, Standard vs. Minimal profiles, requirements.
 - **[Plugin Development](Plugin-Development.md)** — the plugin architecture, the hook system, and two easy-to-hit gotchas in the migration and autoloading systems.
+- **[Header & Footer Editor](Header-Footer-Editor.md)** — the GrapesJS editor for your site's header/footer, the four dynamic tokens, and what a fresh site looks like before you've saved a layout.
 - **[Site Overrides](Site-Overrides.md)** — customizing a plugin's views, assets, or behavior without editing its files directly, so updates never destroy your customizations.
 - **[Versioning](Versioning.md)** — how ThunderPHP's version number works.
 - **[Branches](Branches.md)** — `main`, `beta`, and `release`, and how a change moves between them.
