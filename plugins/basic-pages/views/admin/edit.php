@@ -14,7 +14,8 @@
   <script src="<?=ROOT?>/assets/grapesjs/team-blocks.js?v=1"></script>
   <script src="<?=ROOT?>/assets/grapesjs/faq-blocks.js?v=1"></script>
   <script src="<?=ROOT?>/assets/grapesjs/contact-blocks.js?v=1"></script>
-  
+  <script src="<?=ROOT?>/assets/grapesjs/coloring-book-block.js?v=1"></script>
+
 <!-- Progress Bar Container -->
 <div class="progress my-3 d-none" style="height: 25px;">
   <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
@@ -120,7 +121,11 @@
     listUrl: "<?= ROOT ?>/<?= $admin_route ?>/images/json",
     uploadUrl: "<?= ROOT ?>/<?= $admin_route ?>/images/add",
   };
-  const editImagePath = "<?= plugin_http_path('uploads/') ?>";
+  window.coloringBooksList = <?= json_encode(
+      $pages->tableExists('coloring_books')
+          ? $pages->query("SELECT slug, title FROM coloring_books WHERE status = 'published' ORDER BY title ASC")
+          : []
+  ) ?>;
   // Character counter for description field
   document.getElementById('description').addEventListener('input', function () {
   const maxLength = 155;

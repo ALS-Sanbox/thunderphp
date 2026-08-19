@@ -67,6 +67,13 @@
 
   let grapesEditor;
 
+	// Reads the same _token the page's own form already renders via csrf()
+	// (id="pageForm") rather than duplicating the CMS's CSRF issuing logic.
+	function getPageCsrfToken() {
+	  const field = document.querySelector('#pageForm input[name="_token"]');
+	  return field ? field.value : '';
+	}
+
 	function initGrapesEditor() {
 	  grapesEditor = grapesjs.init({
 		container: '#gjs',
@@ -90,20 +97,34 @@
 		},
 		assets: {
 		  storageType: 'self',
-		  uploadName: 'files',
+		  uploadName: 'images',
 		  onUpload: async ({ files }) => {
 			const body = new FormData();
 			for (const file of files) {
-			  body.append('files[]', file);
+			  body.append('images[]', file);
 			}
+			body.append('ajax', '1');
+			body.append('_token', getPageCsrfToken());
 
-			const response = await fetch(editImagePath, {
+			const response = await fetch(window.imageLibraryUrls.uploadUrl, {
 			  method: 'POST',
 			  body,
 			});
 
+			if (!response.ok) {
+			  throw new Error('Image upload failed (HTTP ' + response.status + ')');
+			}
+
 			const result = await response.json();
-			return result.data; // should be [{src: 'url1'}, {src: 'url2'}, ...]
+			if (!result.success) {
+			  throw new Error((result.errors && result.errors.join(' ')) || 'Image upload failed');
+			}
+
+			// The Images plugin's own upload endpoint - the same one Summernote's
+			// image library already uses via imageLibraryUrls - returns
+			// {images: [{id, url, name}]}, not the {src} shape GrapesJS's asset
+			// manager expects back from onUpload.
+			return result.images.map((image) => ({ src: image.url, name: image.name }));
 		  },
 		}
 	  });
@@ -146,6 +167,10 @@
 
 	  if (window.registerContactBlocks) {
 		window.registerContactBlocks(grapesEditor);
+	  }
+
+	  if (window.registerColoringBookBlocks) {
+		window.registerColoringBookBlocks(grapesEditor);
 	  }
 	}
 
